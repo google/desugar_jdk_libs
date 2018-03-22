@@ -93,6 +93,8 @@ final class Ser implements Externalizable {
     static final byte ZOT = 2;
     /** Type for ZoneOffsetTransition. */
     static final byte ZOTRULE = 3;
+    /** For desugar: type for j.u.TimeZone-based ZoneRules */
+    static final byte TZRULES = 100;
 
     /** The type being serialized. */
     private byte type;
@@ -153,6 +155,9 @@ final class Ser implements Externalizable {
             case ZOTRULE:
                 ((ZoneOffsetTransitionRule) object).writeExternal(out);
                 break;
+            case TZRULES:
+                ((ZoneRules) object).writeExternalTimeZone(out);
+                break;
             default:
                 throw new InvalidClassException("Unknown serialized type");
         }
@@ -196,6 +201,8 @@ final class Ser implements Externalizable {
                 return ZoneOffsetTransition.readExternal(in);
             case ZOTRULE:
                 return ZoneOffsetTransitionRule.readExternal(in);
+            case TZRULES:
+                return ZoneRules.readExternalTimeZone(in);
             default:
                 throw new StreamCorruptedException("Unknown serialized type");
         }

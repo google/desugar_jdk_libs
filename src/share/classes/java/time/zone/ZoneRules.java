@@ -67,6 +67,7 @@ import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -79,6 +80,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -144,6 +146,13 @@ public final class ZoneRules implements Serializable {
      * The last rule.
      */
     private final ZoneOffsetTransitionRule[] lastRules;
+
+    /**
+     * For desugar: {@link TimeZone} to infer zone rules from. If this field is set then all other
+     * fields will have default values.
+     */
+    private final TimeZone timeZone;
+
     /**
      * The map of recent transitions.
      */
@@ -254,6 +263,7 @@ public final class ZoneRules implements Serializable {
             throw new IllegalArgumentException("Too many transition rules");
         }
         this.lastRules = lastRules.toArray(new ZoneOffsetTransitionRule[lastRules.size()]);
+        this.timeZone = null;  // for desugar: initialize added field
     }
 
     /**
@@ -297,6 +307,7 @@ public final class ZoneRules implements Serializable {
             }
             this.savingsLocalTransitions = localTransitionList.toArray(new LocalDateTime[localTransitionList.size()]);
         }
+        this.timeZone = null;  // for desugar: initialize added field
     }
 
     /**
@@ -314,6 +325,24 @@ public final class ZoneRules implements Serializable {
         this.savingsLocalTransitions = EMPTY_LDT_ARRAY;
         this.wallOffsets = standardOffsets;
         this.lastRules = EMPTY_LASTRULES;
+        this.timeZone = null;  // For desugar: initialize added field
+    }
+
+    // For desugar: constructor based on j.u.TimeZone
+    ZoneRules(TimeZone tz) {
+        this.standardOffsets = new ZoneOffset[1];
+        this.standardOffsets[0] = offsetFromMillis(tz.getRawOffset());
+        this.standardTransitions = EMPTY_LONG_ARRAY;
+        this.savingsInstantTransitions = EMPTY_LONG_ARRAY;
+        this.savingsLocalTransitions = EMPTY_LDT_ARRAY;
+        this.wallOffsets = standardOffsets;
+        this.lastRules = EMPTY_LASTRULES;
+        this.timeZone = tz;
+    }
+
+    // For desugar: converts a timezone offset in milliseconds to a ZoneOffset
+    private static ZoneOffset offsetFromMillis(int offsetMillis) {
+        return ZoneOffset.ofTotalSeconds(offsetMillis / 1000);
     }
 
     /**
@@ -389,7 +418,9 @@ public final class ZoneRules implements Serializable {
      * @return the replacing object, not null
      */
     private Object writeReplace() {
-        return new Ser(Ser.ZRULES, this);
+        // For desugar: handle TimeZone-based rules
+        // return new Ser(Ser.ZRULES, this);
+        return new Ser(timeZone != null ? Ser.TZRULES : Ser.ZRULES, this);
     }
 
     /**
@@ -417,6 +448,11 @@ public final class ZoneRules implements Serializable {
         for (ZoneOffsetTransitionRule rule : lastRules) {
             rule.writeExternal(out);
         }
+    }
+
+    // For desugar: serialize TimeZone-based zone rules
+    void writeExternalTimeZone(DataOutput out) throws IOException {
+        out.writeUTF(timeZone.getID());
     }
 
     /**
@@ -456,13 +492,22 @@ public final class ZoneRules implements Serializable {
         return new ZoneRules(stdTrans, stdOffsets, savTrans, savOffsets, rules);
     }
 
+    // For desugar: serialize TimeZone-based zone rules
+    static ZoneRules readExternalTimeZone(DataInput in) throws IOException {
+        TimeZone timeZone = TimeZone.getTimeZone(in.readUTF());
+        return new ZoneRules(timeZone);
+    }
+
     /**
      * Checks of the zone rules are fixed, such that the offset never varies.
      *
      * @return true if the time-zone is fixed and the offset never changes
      */
     public boolean isFixedOffset() {
-        return savingsInstantTransitions.length == 0;
+        // For desugar: check any underlying TimeZone
+        // return savingsInstantTransitions.length;
+        return savingsInstantTransitions.length == 0 &&
+                (timeZone == null || timeZone.getDSTSavings() == 0);
     }
 
     /**
@@ -477,6 +522,10 @@ public final class ZoneRules implements Serializable {
      * @return the offset, not null
      */
     public ZoneOffset getOffset(Instant instant) {
+        // For desugar: use TimeZone if given
+        if (timeZone != null) {
+            return offsetFromMillis(timeZone.getOffset(instant.toEpochMilli()));
+        }
         if (savingsInstantTransitions.length == 0) {
             return standardOffsets[0];
         }
@@ -632,6 +681,26 @@ public final class ZoneRules implements Serializable {
     }
 
     private Object getOffsetInfo(LocalDateTime dt) {
+        // For desugar: use TimeZone if given
+        if (timeZone != null) {
+            ZoneOffsetTransition[] transArray = findTransitionArray(dt.getYear());
+            if (transArray.length == 0) {
+                // No transitions in the given year, so just convert to an instant using the zone's
+                // "raw" offset and return the actual offset in that year, which must be fixed
+                // throughout the year
+                return offsetFromMillis(
+                        timeZone.getOffset(dt.toEpochSecond(standardOffsets[0]) * 1000L));
+            }
+            // This code copied from below
+            Object info = null;
+            for (ZoneOffsetTransition trans : transArray) {
+                info = findOffsetInfo(dt, trans);
+                if (info instanceof ZoneOffsetTransition || info.equals(trans.getOffsetBefore())) {
+                    return info;
+                }
+            }
+            return info;
+        }
         if (savingsInstantTransitions.length == 0) {
             return standardOffsets[0];
         }
@@ -712,6 +781,8 @@ public final class ZoneRules implements Serializable {
         }
     }
 
+    private static final ZoneOffsetTransition[] NO_TRANSITIONS = new ZoneOffsetTransition[0];
+
     /**
      * Finds the appropriate transition array for the given year.
      *
@@ -722,6 +793,49 @@ public final class ZoneRules implements Serializable {
         Integer yearObj = year;  // should use Year class, but this saves a class load
         ZoneOffsetTransition[] transArray = lastRulesCache.get(yearObj);
         if (transArray != null) {
+            return transArray;
+        }
+        // For desugar: use TimeZone if given
+        if (timeZone != null) {
+            if (year < 1800) {
+                return NO_TRANSITIONS;
+            }
+            LocalDateTime newYearsEve = LocalDateTime.of(year - 1, 12, 31, 0, 0);
+            // Since offsets are between < +- 16 hours this should be in the previous year
+            long lower = newYearsEve.toEpochSecond(standardOffsets[0]);
+            int curOffsetMillis = timeZone.getOffset(lower * 1000L);
+            final long max = lower + (370L * 86400L); // definitely in the following year
+            transArray = NO_TRANSITIONS;
+            while (lower < max) {
+                long upper = lower + (90L * 86400L); // advance in 3 month increments
+                if (curOffsetMillis != timeZone.getOffset(upper * 1000L)) {
+                    // binary search the transition
+                    while (upper - lower > 1) {
+                        long middle = Math8.floorDiv(upper + lower, 2L);
+                        if (timeZone.getOffset(middle * 1000L) == curOffsetMillis) {
+                            lower = middle;
+                        } else {
+                            upper = middle;
+                        }
+                    }
+                    if (timeZone.getOffset(lower * 1000L) != curOffsetMillis) {
+                        upper = lower; // set upper to the transition point
+                    }
+                    ZoneOffset old = offsetFromMillis(curOffsetMillis);
+                    curOffsetMillis = timeZone.getOffset(upper * 1000L);
+                    ZoneOffset next = offsetFromMillis(curOffsetMillis);
+                    if (findYear(upper, next) == year) {
+                        transArray = Arrays.copyOf(transArray, transArray.length + 1);
+                        transArray[transArray.length - 1] =
+                                new ZoneOffsetTransition(upper, old, next);
+                    }
+                }
+                lower = upper;
+            }
+            // First daylight saving occurred 1916, don't cache sparse data before that
+            if (1916 <= year && year < LAST_CACHED_YEAR) {
+                lastRulesCache.putIfAbsent(yearObj, transArray);
+            }
             return transArray;
         }
         ZoneOffsetTransitionRule[] ruleArray = lastRules;
@@ -748,6 +862,11 @@ public final class ZoneRules implements Serializable {
      * @return the standard offset, not null
      */
     public ZoneOffset getStandardOffset(Instant instant) {
+        // For desugar: use TimeZone if given.  Note this always the returns the time zone's current
+        // standard offset and doesn't work for historical dates where the standard offset differed.
+        if (timeZone != null) {
+            return offsetFromMillis(timeZone.getRawOffset());
+        }
         if (savingsInstantTransitions.length == 0) {
             return standardOffsets[0];
         }
@@ -778,6 +897,12 @@ public final class ZoneRules implements Serializable {
      * @return the difference between the standard and actual offset, not null
      */
     public Duration getDaylightSavings(Instant instant) {
+        // For desugar: use TimeZone if given.  Note this only works right for the timezone's
+        // current standard offset but not for historical dates where the standard offset differed.
+        if (timeZone != null) {
+            int offset = timeZone.getOffset(instant.toEpochMilli());
+            return Duration.ofMillis(offset - timeZone.getRawOffset());
+        }
         if (savingsInstantTransitions.length == 0) {
             return Duration.ZERO;
         }
@@ -834,6 +959,52 @@ public final class ZoneRules implements Serializable {
      * @return the next transition after the specified instant, null if this is after the last transition
      */
     public ZoneOffsetTransition nextTransition(Instant instant) {
+        // For desugar: use TimeZone if given
+        if (timeZone != null) {
+            long epochSec = instant.getEpochSecond();
+            int year = findYear(epochSec, getOffset(instant));
+            ZoneOffsetTransition[] transArray = findTransitionArray(year);
+            for (ZoneOffsetTransition trans : transArray) {
+                if (epochSec < trans.toEpochSecond()) {
+                    return trans;
+                }
+            }
+            // check next year (this typically works if instant is after the end of daylight saving
+            // in a given year)
+            if (year < Year.MAX_VALUE) {
+                transArray = findTransitionArray(year + 1);
+                for (ZoneOffsetTransition trans : transArray) {
+                    if (epochSec < trans.toEpochSecond()) {
+                        return trans;
+                    }
+                }
+            }
+            // Scan for offset changes in 3-month increments into next year.  This assumes that a
+            // timezone will have any future transition iff it has transitions in the current year.
+            // Conversely, it conservatively assumes any past year could have transitions.  When we
+            // see a transition, find and return it.
+            long probeSec = epochSec + (360L * 86400L);  // skip the year we tried above
+            final int curOffsetMillis = timeZone.getOffset((epochSec + 1L) * 1000L);
+            final long max = (Clock.systemUTC().millis() / 1000L) + (370L * 86400L); // next year
+            while (probeSec <= max) {
+                int probeOffsetMillis = timeZone.getOffset(probeSec * 1000L);
+                if (curOffsetMillis != probeOffsetMillis) {
+                    year = findYear(probeSec, offsetFromMillis(probeOffsetMillis));
+                    // Check previous year first, since transition is in 3 months before probe
+                    transArray = findTransitionArray(year - 1);
+                    for (ZoneOffsetTransition trans : transArray) {
+                        if (epochSec < trans.toEpochSecond()) {
+                            return trans;
+                        }
+                    }
+                    // Must be probe's year
+                    transArray = findTransitionArray(year);
+                    return transArray[0];
+                }
+                probeSec += (90L * 86400L);
+            }
+            return null;
+        }
         if (savingsInstantTransitions.length == 0) {
             return null;
         }
@@ -881,6 +1052,59 @@ public final class ZoneRules implements Serializable {
      * @return the previous transition after the specified instant, null if this is before the first transition
      */
     public ZoneOffsetTransition previousTransition(Instant instant) {
+        // For desugar: use TimeZone if given
+        if (timeZone != null) {
+            long epochSec = instant.getEpochSecond();
+            if (instant.getNano() > 0 && epochSec < Long.MAX_VALUE) {
+                epochSec += 1;  // like below
+            }
+            int year = findYear(epochSec, getOffset(instant));
+            ZoneOffsetTransition[] transArray = findTransitionArray(year);
+            for (int i = transArray.length - 1; i >= 0; i--) {
+                if (epochSec > transArray[i].toEpochSecond()) {
+                    return transArray[i];
+                }
+            }
+            // check previous year (this typically works if instant is before the start of daylight
+            // saving in a given year)
+            if (year > 1800) {
+                transArray = findTransitionArray(year - 1);
+                for (int i = transArray.length - 1; i >= 0; i--) {
+                    if (epochSec > transArray[i].toEpochSecond()) {
+                        return transArray[i];
+                    }
+                }
+            } else {
+                return null;
+            }
+            // Scan for offset changes in 3-month increments back to 1800.  This assumes that a
+            // timezone will have any future transition iff it has transitions in the current year.
+            // Conversely, it conservatively assumes any past year could have transitions.  When we
+            // see a transition, find and return it.
+            long probeSec = Math.min(
+                epochSec - (360L * 86400L), // skip the year we tried above
+                (Clock.systemUTC().millis() / 1000L) + (370L * 86400L));
+            final int curOffsetMillis = timeZone.getOffset((epochSec - 1L) * 1000L);
+            final long min = LocalDate.of(1800, 1, 1).toEpochDay() * 86400L;
+            while (min <= probeSec) {
+                int probeOffsetMillis = timeZone.getOffset(probeSec * 1000L);
+                if (curOffsetMillis != probeOffsetMillis) {
+                    year = findYear(probeSec, offsetFromMillis(probeOffsetMillis));
+                    // check next year first, since transition is in 3 months after probe
+                    transArray = findTransitionArray(year + 1);
+                    for (int i = transArray.length - 1; i >= 0; i--) {
+                        if (epochSec > transArray[i].toEpochSecond()) {
+                            return transArray[i];
+                        }
+                    }
+                    // Must be probe's year
+                    transArray = findTransitionArray(year);
+                    return transArray[transArray.length - 1];
+                }
+                probeSec -= (90 * 86400);
+            }
+            return null;
+        }
         if (savingsInstantTransitions.length == 0) {
             return null;
         }
@@ -992,6 +1216,10 @@ public final class ZoneRules implements Serializable {
         }
         if (otherRules instanceof ZoneRules) {
             ZoneRules other = (ZoneRules) otherRules;
+            // For desugar: compare by underlying TimeZone if given
+            if (this.timeZone != null) {
+                return other.timeZone != null && this.timeZone.hasSameRules(other.timeZone);
+            }
             return Arrays.equals(standardTransitions, other.standardTransitions) &&
                     Arrays.equals(standardOffsets, other.standardOffsets) &&
                     Arrays.equals(savingsInstantTransitions, other.savingsInstantTransitions) &&
@@ -1008,7 +1236,10 @@ public final class ZoneRules implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(standardTransitions) ^
+        // For desugar: work any underlying TimeZone into the hash
+        // return Arrays.hashCode(standardTransitions) ^
+        return Objects.hashCode(timeZone) ^
+                Arrays.hashCode(standardTransitions) ^
                 Arrays.hashCode(standardOffsets) ^
                 Arrays.hashCode(savingsInstantTransitions) ^
                 Arrays.hashCode(wallOffsets) ^
@@ -1022,6 +1253,10 @@ public final class ZoneRules implements Serializable {
      */
     @Override
     public String toString() {
+        // For desugar: print underlying TimeZone if given
+        if (timeZone != null) {
+            return "ZoneRules[timeZone=" + timeZone.getID() + "]";
+        }
         return "ZoneRules[currentStandardOffset=" + standardOffsets[standardOffsets.length - 1] + "]";
     }
 

@@ -66,14 +66,18 @@ import java.security.PrivilegedAction;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -154,7 +158,15 @@ public abstract class ZoneRulesProvider {
                         throw new Error(x);
                     }
                 } else {
-                    registerProvider(new TzdbZoneRulesProvider());
+                    // For desugar: Fall back to j.u.TimeZone-based provider if tzdb file is absent
+                    // registerProvider(new TzdbZoneRulesProvider());
+                    ZoneRulesProvider provider;
+                    try {
+                        provider = new TzdbZoneRulesProvider();
+                    } catch (ZoneRulesException e) {
+                        provider = new TimeZoneRulesProvider();
+                    }
+                    registerProvider(provider);
                 }
                 return null;
             }
@@ -436,4 +448,39 @@ public abstract class ZoneRulesProvider {
         return false;
     }
 
+    // For desugar: ZoneRulesProvider that returns j.u.TimeZone-backed ZoneRules
+    private static final class TimeZoneRulesProvider extends ZoneRulesProvider {
+
+        private final Set<String> zoneIds;
+
+        TimeZoneRulesProvider() {
+            LinkedHashSet<String> availableIds = new LinkedHashSet<>();
+            for (String id : TimeZone.getAvailableIDs()) {
+                availableIds.add(id);
+            }
+            zoneIds = Collections.unmodifiableSet(availableIds);
+        }
+
+        @Override
+        protected Set<String> provideZoneIds() {
+            return zoneIds;
+        }
+
+        @Override
+        protected ZoneRules provideRules(String zoneId, boolean forCaching) {
+            if (zoneIds.contains(zoneId)) {
+                return new ZoneRules(TimeZone.getTimeZone(zoneId));
+            } else {
+                throw new ZoneRulesException("Not a built-in time zone: " + zoneId);
+            }
+        }
+
+        @Override
+        protected NavigableMap<String, ZoneRules> provideVersions(String zoneId) {
+            ZoneRules rules = provideRules(zoneId, false);
+            TreeMap<String, ZoneRules> versionMap = new TreeMap<>();
+            versionMap.put("builtin", rules);
+            return versionMap;
+        }
+    }
 }
