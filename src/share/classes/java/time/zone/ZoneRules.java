@@ -1217,10 +1217,9 @@ public final class ZoneRules implements Serializable {
         if (otherRules instanceof ZoneRules) {
             ZoneRules other = (ZoneRules) otherRules;
             // For desugar: compare by underlying TimeZone if given
-            if (this.timeZone != null) {
-                return other.timeZone != null && this.timeZone.hasSameRules(other.timeZone);
-            }
-            return Arrays.equals(standardTransitions, other.standardTransitions) &&
+            // return Arrays.equals(standardTransitions, other.standardTransitions) &&
+            return Objects.equals(timeZone, other.timeZone) &&
+                    Arrays.equals(standardTransitions, other.standardTransitions) &&
                     Arrays.equals(standardOffsets, other.standardOffsets) &&
                     Arrays.equals(savingsInstantTransitions, other.savingsInstantTransitions) &&
                     Arrays.equals(wallOffsets, other.wallOffsets) &&
