@@ -505,9 +505,15 @@ public final class ZoneRules implements Serializable {
      */
     public boolean isFixedOffset() {
         // For desugar: check any underlying TimeZone
-        // return savingsInstantTransitions.length;
-        return savingsInstantTransitions.length == 0 &&
-                (timeZone == null || timeZone.getDSTSavings() == 0);
+        if (timeZone != null) {
+            if (timeZone.useDaylightTime() || timeZone.getDSTSavings() != 0) {
+                return false;
+            }
+            // Look for any past transition (future should be covered by DST checks above)
+            // TODO(b/73293581): Avoid using j.u.TimeZone for any fixed-offset ZoneId's rules
+            return previousTransition(Instant.now()) == null;
+        }
+        return savingsInstantTransitions.length == 0;
     }
 
     /**
