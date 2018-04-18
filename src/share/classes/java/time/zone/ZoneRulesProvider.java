@@ -150,7 +150,9 @@ public abstract class ZoneRulesProvider {
                 String prop = System.getProperty("java.time.zone.DefaultZoneRulesProvider");
                 if (prop != null) {
                     try {
-                        Class<?> c = Class.forName(prop, true, ClassLoader.getSystemClassLoader());
+                        // For desugar: avoid system class loader
+                        // Class<?> c = Class.forName(prop, true, ClassLoader.getSystemClassLoader());
+                        Class<?> c = Class.forName(prop, true, ZoneRulesProvider.class.getClassLoader());
                         ZoneRulesProvider provider = ZoneRulesProvider.class.cast(c.newInstance());
                         registerProvider(provider);
                         loaded.add(provider);
@@ -158,15 +160,9 @@ public abstract class ZoneRulesProvider {
                         throw new Error(x);
                     }
                 } else {
-                    // For desugar: Fall back to j.u.TimeZone-based provider if tzdb file is absent
+                    // For desugar: Use j.u.TimeZone-based provider to avoid tzdb file by default.
                     // registerProvider(new TzdbZoneRulesProvider());
-                    ZoneRulesProvider provider;
-                    try {
-                        provider = new TzdbZoneRulesProvider();
-                    } catch (ZoneRulesException e) {
-                        provider = new TimeZoneRulesProvider();
-                    }
-                    registerProvider(provider);
+                    registerProvider(new TimeZoneRulesProvider());
                 }
                 return null;
             }
