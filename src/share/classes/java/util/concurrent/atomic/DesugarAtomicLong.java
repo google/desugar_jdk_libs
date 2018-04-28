@@ -34,22 +34,26 @@
  */
 
 package java.util.concurrent.atomic;
-import java.util.function.UnaryOperator;
-import java.util.function.BinaryOperator;
+import java.util.function.LongUnaryOperator;
+import java.util.function.LongBinaryOperator;
 
 /**
- * An object reference that may be updated atomically. See the {@link
- * java.util.concurrent.atomic} package specification for description
- * of the properties of atomic variables.
+ * A {@code long} value that may be updated atomically.  See the
+ * {@link java.util.concurrent.atomic} package specification for
+ * description of the properties of atomic variables. An
+ * {@code AtomicLong} is used in applications such as atomically
+ * incremented sequence numbers, and cannot be used as a replacement
+ * for a {@link java.lang.Long}. However, this class does extend
+ * {@code Number} to allow uniform access by tools and utilities that
+ * deal with numerically-based classes.
+ *
  * @since 1.5
  * @author Doug Lea
- * @param <V> The type of object referred to by this reference
  */
-// For desugar: Copy of j.u.c.a.AtomicReference with methods added with 1.8
-public class AtomicReference8 {
-    // For desugar: no instantiation, static members only
-    private AtomicReference8() {
-    }
+// For desugar: Copy of j.u.c.a.AtomicLong with methods added with 1.8
+public class DesugarAtomicLong {
+    private DesugarAtomicLong() {}  // for desugar: no instantiation, static members only
+
     /**
      * Atomically updates the current value with the results of
      * applying the given function, returning the previous value. The
@@ -60,12 +64,12 @@ public class AtomicReference8 {
      * @return the previous value
      * @since 1.8
      */
-    // For desugar: made static so it can exist outside AtomicReference class
-    public static <V> V getAndUpdate(AtomicReference<V> atomic, UnaryOperator<V> updateFunction) {
-        V prev, next;
+    // For desugar: made static so it can exist outside original class
+    public static long getAndUpdate(AtomicLong atomic, LongUnaryOperator updateFunction) {
+        long prev, next;
         do {
             prev = atomic.get();
-            next = updateFunction.apply(prev);
+            next = updateFunction.applyAsLong(prev);
         } while (!atomic.compareAndSet(prev, next));
         return prev;
     }
@@ -80,12 +84,12 @@ public class AtomicReference8 {
      * @return the updated value
      * @since 1.8
      */
-    // For desugar: made static so it can exist outside AtomicReference class
-    public static <V> V updateAndGet(AtomicReference<V> atomic, UnaryOperator<V> updateFunction) {
-        V prev, next;
+    // For desugar: made static so it can exist outside original class
+    public static long updateAndGet(AtomicLong atomic, LongUnaryOperator updateFunction) {
+        long prev, next;
         do {
             prev = atomic.get();
-            next = updateFunction.apply(prev);
+            next = updateFunction.applyAsLong(prev);
         } while (!atomic.compareAndSet(prev, next));
         return next;
     }
@@ -104,13 +108,13 @@ public class AtomicReference8 {
      * @return the previous value
      * @since 1.8
      */
-    // For desugar: made static so it can exist outside AtomicReference class
-    public static <V> V getAndAccumulate(AtomicReference<V> atomic, V x,
-                                         BinaryOperator<V> accumulatorFunction) {
-        V prev, next;
+    // For desugar: made static so it can exist outside original class
+    public static long getAndAccumulate(AtomicLong atomic, long x,
+                                        LongBinaryOperator accumulatorFunction) {
+        long prev, next;
         do {
             prev = atomic.get();
-            next = accumulatorFunction.apply(prev, x);
+            next = accumulatorFunction.applyAsLong(prev, x);
         } while (!atomic.compareAndSet(prev, next));
         return prev;
     }
@@ -129,13 +133,13 @@ public class AtomicReference8 {
      * @return the updated value
      * @since 1.8
      */
-    // For desugar: made static so it can exist outside AtomicReference class
-    public static <V> V accumulateAndGet(AtomicReference<V> atomic, V x,
-                                         BinaryOperator<V> accumulatorFunction) {
-        V prev, next;
+    // For desugar: made static so it can exist outside original class
+    public static long accumulateAndGet(AtomicLong atomic, long x,
+                                        LongBinaryOperator accumulatorFunction) {
+        long prev, next;
         do {
             prev = atomic.get();
-            next = accumulatorFunction.apply(prev, x);
+            next = accumulatorFunction.applyAsLong(prev, x);
         } while (!atomic.compareAndSet(prev, next));
         return next;
     }
