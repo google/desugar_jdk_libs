@@ -68,13 +68,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NavigableMap;
 import java.util.Objects;
-import java.util.ServiceConfigurationError;
-import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -168,29 +165,30 @@ public abstract class ZoneRulesProvider {
             }
         });
 
-        ServiceLoader<ZoneRulesProvider> sl = ServiceLoader.load(ZoneRulesProvider.class, ClassLoader.getSystemClassLoader());
-        Iterator<ZoneRulesProvider> it = sl.iterator();
-        while (it.hasNext()) {
-            ZoneRulesProvider provider;
-            try {
-                provider = it.next();
-            } catch (ServiceConfigurationError ex) {
-                if (ex.getCause() instanceof SecurityException) {
-                    continue;  // ignore the security exception, try the next provider
-                }
-                throw ex;
-            }
-            boolean found = false;
-            for (ZoneRulesProvider p : loaded) {
-                if (p.getClass() == provider.getClass()) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                registerProvider0(provider);
-                loaded.add(provider);
-            }
-        }
+        // For desugar: don't load additional zone rules through system class loader (b/77949816)
+        // ServiceLoader<ZoneRulesProvider> sl = ServiceLoader.load(ZoneRulesProvider.class, ClassLoader.getSystemClassLoader());
+        // Iterator<ZoneRulesProvider> it = sl.iterator();
+        // while (it.hasNext()) {
+        //     ZoneRulesProvider provider;
+        //     try {
+        //         provider = it.next();
+        //     } catch (ServiceConfigurationError ex) {
+        //         if (ex.getCause() instanceof SecurityException) {
+        //             continue;  // ignore the security exception, try the next provider
+        //         }
+        //         throw ex;
+        //     }
+        //     boolean found = false;
+        //     for (ZoneRulesProvider p : loaded) {
+        //         if (p.getClass() == provider.getClass()) {
+        //             found = true;
+        //         }
+        //     }
+        //     if (!found) {
+        //         registerProvider0(provider);
+        //         loaded.add(provider);
+        //     }
+        // }
         // CopyOnWriteList could be slow if lots of providers and each added individually
         PROVIDERS.addAll(loaded);
     }
