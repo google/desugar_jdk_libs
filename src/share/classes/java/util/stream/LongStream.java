@@ -24,11 +24,7 @@
  */
 package java.util.stream;
 
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays8;
-import java.util.Collection;
+import java.util.DesugarArrays;
 import java.util.LongSummaryStatistics;
 import java.util.Objects;
 import java.util.OptionalDouble;
@@ -36,7 +32,6 @@ import java.util.OptionalLong;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.LongBinaryOperator;
@@ -712,7 +707,7 @@ public interface LongStream extends BaseStream<Long, LongStream> {
      * @return the new stream
      */
     public static LongStream of(long... values) {
-        return Arrays8.stream(values);
+        return DesugarArrays.stream(values);
     }
 
     /**

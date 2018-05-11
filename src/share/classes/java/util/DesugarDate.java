@@ -116,10 +116,10 @@ import java.time.Instant;
  * @since   JDK1.0
  */
 // for desugar: copy of java.util.Date with conversion methods for java.time.Instant
-public final class Date8
+public class DesugarDate
 {
     // for desugar: static methods only
-    private Date8() {
+    private DesugarDate() {
     }
 
     /**

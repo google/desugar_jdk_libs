@@ -61,10 +61,10 @@ import java.util.stream.StreamSupport;
  * @since  1.2
  */
 // for desugar: partial copy of new methods in java.util.Arrays used in stream package
-public class Arrays8 {
+public class DesugarArrays {
 
     // Suppresses default constructor, ensuring non-instantiability.
-    private Arrays8() {}
+    private DesugarArrays() {}
 
     // For desugar: included in Arrays8 so we can call it from Objects
     static boolean deepEquals0(Object e1, Object e2) {

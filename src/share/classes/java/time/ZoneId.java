@@ -77,13 +77,13 @@ import java.time.zone.ZoneRules;
 import java.time.zone.ZoneRulesException;
 import java.time.zone.ZoneRulesProvider;
 import java.util.Collections;
+import java.util.DesugarTimeZone;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.TimeZone8;
 
 /**
  * A time-zone ID, such as {@code Europe/Paris}.
@@ -272,7 +272,7 @@ public abstract class ZoneId implements Serializable {
      * @throws ZoneRulesException if the converted zone region ID cannot be found
      */
     public static ZoneId systemDefault() {
-        return TimeZone8.toZoneId(TimeZone.getDefault());  // for desugar: method moved to helper
+        return DesugarTimeZone.toZoneId(TimeZone.getDefault());  // for desugar: method moved to helper
     }
 
     /**

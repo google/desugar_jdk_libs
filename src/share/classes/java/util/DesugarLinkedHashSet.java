@@ -115,9 +115,9 @@ package java.util;
  * @since   1.4
  */
 // For desugar: JDK8 additions to LinkedHashSet we wish to use
-public final class LinkedHashSet8 {
+public class DesugarLinkedHashSet {
 
-    private LinkedHashSet8() {}  // for desugar: no instantiation, static methods only
+    private DesugarLinkedHashSet() {}  // for desugar: no instantiation, static methods only
 
     /**
      * Creates a <em><a href="Spliterator.html#binding">late-binding</a></em>

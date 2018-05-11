@@ -26,10 +26,9 @@ package java.util.stream;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Arrays8;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.List;
+import java.util.DesugarArrays;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -657,7 +656,7 @@ final class Nodes {
 
         @Override
         public Spliterator<T> spliterator() {
-            return Arrays8.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override
@@ -1330,7 +1329,7 @@ final class Nodes {
 
         @Override
         public Spliterator.OfInt spliterator() {
-            return Arrays8.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override
@@ -1384,7 +1383,7 @@ final class Nodes {
 
         @Override
         public Spliterator.OfLong spliterator() {
-            return Arrays8.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override
@@ -1438,7 +1437,7 @@ final class Nodes {
 
         @Override
         public Spliterator.OfDouble spliterator() {
-            return Arrays8.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override

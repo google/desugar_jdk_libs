@@ -124,13 +124,13 @@ import java.time.ZoneId;
  * @since        JDK1.1
  */
 // for desugar: copy of java.util.TimeZone with conversion methods for java.time.ZoneId
-public final class TimeZone8 {
+public class DesugarTimeZone {
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
      * implicit.)
      */
-    // for desugar: static methods only
-    private TimeZone8() {
+    // For desugar: static methods only
+    private DesugarTimeZone() {
     }
 
     /**
