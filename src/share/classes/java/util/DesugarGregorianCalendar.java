@@ -336,7 +336,7 @@ public class DesugarGregorianCalendar {
      * @since 1.8
      */
     // For desugar: made static so it can exist outside original class
-    public ZonedDateTime toZonedDateTime(GregorianCalendar instance) {
+    public static ZonedDateTime toZonedDateTime(GregorianCalendar instance) {
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(instance.getTimeInMillis()),
                                        // For desugar: use TimeZone helper for @since 1.8 methods
                                        // getTimeZone().toZoneId();

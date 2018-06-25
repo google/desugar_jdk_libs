@@ -161,7 +161,7 @@ public class DesugarDate
      * @since 1.8
      */
     // for desugar: static method since it's declared outside of java.util.Date here
-    public Instant toInstant(Date date) {
+    public static Instant toInstant(Date date) {
         return Instant.ofEpochMilli(date.getTime());
     }
 }
