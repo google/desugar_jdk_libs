@@ -196,15 +196,18 @@ public class ThreadLocalRandom extends Random {
     // Hence, the fields are isolated with @Contended.
 
     /** The current seed for a ThreadLocalRandom */
-    @sun.misc.Contended("tlr")
+    // For desugar: @Contended not always defined
+    // @sun.misc.Contended("tlr")
     long threadLocalRandomSeed;
 
     /** Probe hash value; nonzero if threadLocalRandomSeed initialized */
-    @sun.misc.Contended("tlr")
+    // For desugar: @Contended not always defined
+    // @sun.misc.Contended("tlr")
     int threadLocalRandomProbe;
 
     /** Secondary seed isolated from public ThreadLocalRandom sequence */
-    @sun.misc.Contended("tlr")
+    // For desugar: @Contended not always defined
+    // @sun.misc.Contended("tlr")
     int threadLocalRandomSecondarySeed;
 
     /**
