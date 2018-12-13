@@ -368,7 +368,9 @@ public class DesugarGregorianCalendar {
      * @since 1.8
      */
     public static GregorianCalendar from(ZonedDateTime zdt) {
-        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone(zdt.getZone()));
+        // For desugar: use TimeZone helper for @since 1.8 methods
+        // GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone(zdt.getZone()));
+        GregorianCalendar cal = new GregorianCalendar(DesugarTimeZone.getTimeZone(zdt.getZone()));
         cal.setGregorianChange(new Date(Long.MIN_VALUE));
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.setMinimalDaysInFirstWeek(4);
