@@ -134,6 +134,21 @@ public class DesugarTimeZone {
     }
 
     /**
+     * Gets the <code>TimeZone</code> for the given ID.
+     *
+     * @param ID the ID for a <code>TimeZone</code>, either an abbreviation
+     * such as "PST", a full name such as "America/Los_Angeles", or a custom
+     * ID such as "GMT-8:00". Note that the support of abbreviations is
+     * for JDK 1.1.x compatibility only and full names should be used.
+     *
+     * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
+     * cannot be understood.
+     */
+    public static /* for desugar: not synchronized */ TimeZone getTimeZone(String ID) {
+        return TimeZone.getTimeZone(ID);  // for desugar: call appropriate public TimeZone method
+    }
+
+    /**
      * Gets the {@code TimeZone} for the given {@code zoneId}.
      *
      * @param zoneId a {@link ZoneId} from which the time zone ID is obtained
