@@ -227,7 +227,7 @@ public final class OptionalDouble {
      */
     @Override
     public int hashCode() {
-        return isPresent ? Double.hashCode(value) : 0;
+        return isPresent ? Double8.hashCode(value) : 0;  // for desugar: Double->Double8
     }
 
     /**
