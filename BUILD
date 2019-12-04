@@ -9,12 +9,15 @@ genrule(
     srcs = [
         ":desugar_jdk_libs",
         "VERSION.txt",
+        "DEPENDENCIES.txt",
     ],
     outs = ["desugar_jdk_libs.zip"],
     cmd = "$(location :build_maven_artifact)" +
           " --jar $(location :desugar_jdk_libs)" +
           " --artifact_id desugar_jdk_libs" +
-          " --version_file $(location VERSION.txt) --out $@",
+          " --version_file $(location VERSION.txt)" +
+          " --dependencies_file $(location DEPENDENCIES.txt)" +
+          " --out $@",
     tools = [":build_maven_artifact"],
 )
 

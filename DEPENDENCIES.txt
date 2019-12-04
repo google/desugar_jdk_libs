@@ -1,0 +1,2 @@
+# Dependencies for add when releasing as Maven artifact.
+com.android.tools:desugar_jdk_libs_configuration:0.9.0

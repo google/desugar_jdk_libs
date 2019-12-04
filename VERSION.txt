@@ -1,0 +1,2 @@
+# Version for releasing Maven artifact.
+1.0.3
