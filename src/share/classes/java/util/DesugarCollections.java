@@ -90,7 +90,6 @@ public class DesugarCollections {
 
   private static final Field MUTEX_FIELD;
   private static final Field COLLECTION_FIELD;
-  private static final Field LIST_FIELD;
   // For Desugar: For instantiation inside the synchronized maps.
   private static final Constructor<? extends Collection> SYNCHRONIZED_COLLECTION_CONSTRUCTOR;
   private static final Constructor<? extends Set> SYNCHRONIZED_SET_CONSTRUCTOR;
@@ -100,17 +99,17 @@ public class DesugarCollections {
   static {
     SYNCHRONIZED_COLLECTION = Collections.synchronizedCollection(new ArrayList<>()).getClass();
     SYNCHRONIZED_LIST = Collections.synchronizedList(new LinkedList<>()).getClass();
-    MUTEX_FIELD = getField(SYNCHRONIZED_COLLECTION, "mutex", Object.class);
+    MUTEX_FIELD = getField(SYNCHRONIZED_COLLECTION, "mutex");
     if (MUTEX_FIELD != null) {
       MUTEX_FIELD.setAccessible(true);
     }
-    COLLECTION_FIELD = getField(SYNCHRONIZED_COLLECTION, "c", Collection.class);
-    COLLECTION_FIELD.setAccessible(true);
-    LIST_FIELD = getField(SYNCHRONIZED_LIST, "list", List.class);
-    LIST_FIELD.setAccessible(true);
+    COLLECTION_FIELD = getField(SYNCHRONIZED_COLLECTION, "c");
+    if (COLLECTION_FIELD != null) {
+      COLLECTION_FIELD.setAccessible(true);
+    }
     Class<? extends Set> synchronizedSet = Collections.synchronizedSet(new HashSet<>()).getClass();
     SYNCHRONIZED_SET_CONSTRUCTOR = getConstructor(synchronizedSet, Set.class, Object.class);
-        if (SYNCHRONIZED_SET_CONSTRUCTOR != null) {
+    if (SYNCHRONIZED_SET_CONSTRUCTOR != null) {
       SYNCHRONIZED_SET_CONSTRUCTOR.setAccessible(true);
     }
     SYNCHRONIZED_COLLECTION_CONSTRUCTOR =
@@ -120,7 +119,7 @@ public class DesugarCollections {
     }
   }
 
-  private static Field getField(Class<?> clazz, String name, Class<?> type) {
+  private static Field getField(Class<?> clazz, String name) {
     try {
       return clazz.getDeclaredField(name);
     } catch (NoSuchFieldException e) {
@@ -184,7 +183,7 @@ public class DesugarCollections {
     // Fall-back to non-synchronized set-up on instrumented devices.
     if (MUTEX_FIELD == null) {
       try {
-        ((List<E>) LIST_FIELD.get(list)).replaceAll(operator);
+        ((List<E>) COLLECTION_FIELD.get(list)).replaceAll(operator);
         return;
       } catch (IllegalAccessException e) {
         throw new Error("Runtime illegal access in synchronized list replaceAll fall-back.", e);
@@ -192,7 +191,7 @@ public class DesugarCollections {
     }
     try {
       synchronized (MUTEX_FIELD.get(list)) {
-        ((List<E>) LIST_FIELD.get(list)).replaceAll(operator);
+        ((List<E>) COLLECTION_FIELD.get(list)).replaceAll(operator);
       }
     } catch (IllegalAccessException e) {
       throw new Error("Runtime illegal access in synchronized list replaceAll.", e);
@@ -204,7 +203,7 @@ public class DesugarCollections {
     // Fall-back to non-synchronized set-up on instrumented devices.
     if (MUTEX_FIELD == null) {
       try {
-        ((List<E>) LIST_FIELD.get(list)).sort(comparator);
+        ((List<E>) COLLECTION_FIELD.get(list)).sort(comparator);
         return;
       } catch (IllegalAccessException e) {
         throw new Error("Runtime illegal access in synchronized collection sort fall-back.", e);
@@ -212,7 +211,7 @@ public class DesugarCollections {
     }
     try {
       synchronized (MUTEX_FIELD.get(list)) {
-        ((List<E>) LIST_FIELD.get(list)).sort(comparator);
+        ((List<E>) COLLECTION_FIELD.get(list)).sort(comparator);
       }
     } catch (IllegalAccessException e) {
       throw new Error("Runtime illegal access in synchronized list sort.", e);
