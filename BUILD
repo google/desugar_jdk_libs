@@ -18,11 +18,12 @@ genrule(
           " --version_file $(location VERSION.txt)" +
           " --dependencies_file $(location DEPENDENCIES.txt)" +
           " --out $@",
-    tools = [":build_maven_artifact"],
+    exec_tools = [":build_maven_artifact"],
 )
 
 py_binary(
     name = "build_maven_artifact",
     srcs = ["tools/build_maven_artifact.py"],
-    python_version = "PY2",
+    python_version = "PY3",
+    srcs_version = "PY3",
 )
