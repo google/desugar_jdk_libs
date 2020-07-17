@@ -202,6 +202,20 @@ public final class Math8 {
     }
 
     /**
+     * Returns the product of the arguments, throwing an exception if the result
+     * overflows a {@code long}.
+     *
+     * @param x the first value
+     * @param y the second value
+     * @return the result
+     * @throws ArithmeticException if the result overflows a long
+     * @since 9
+     */
+    public static long multiplyExact(long x, int y) {
+        return multiplyExact(x, (long) y);
+    }
+
+    /**
      * Returns the product of the arguments,
      * throwing an exception if the result overflows a {@code long}.
      *
@@ -389,6 +403,35 @@ public final class Math8 {
         return r;
     }
 
+   /**
+     * Returns the largest (closest to positive infinity)
+     * {@code long} value that is less than or equal to the algebraic quotient.
+     * There is one special case, if the dividend is the
+     * {@linkplain Long#MIN_VALUE Long.MIN_VALUE} and the divisor is {@code -1},
+     * then integer overflow occurs and
+     * the result is equal to {@code Long.MIN_VALUE}.
+     * <p>
+     * Normal integer division operates under the round to zero rounding mode
+     * (truncation).  This operation instead acts under the round toward
+     * negative infinity (floor) rounding mode.
+     * The floor rounding mode gives different results from truncation
+     * when the exact result is negative.
+     * <p>
+     * For examples, see {@link #floorDiv(int, int)}.
+     *
+     * @param x the dividend
+     * @param y the divisor
+     * @return the largest (closest to positive infinity)
+     * {@code int} value that is less than or equal to the algebraic quotient.
+     * @throws ArithmeticException if the divisor {@code y} is zero
+     * @see #floorMod(long, int)
+     * @see #floor(double)
+     * @since 9
+     */
+    public static long floorDiv(long x, int y) {
+        return floorDiv(x, (long) y);
+    }
+
     /**
      * Returns the largest (closest to positive infinity)
      * {@code long} value that is less than or equal to the algebraic quotient.
@@ -470,6 +513,33 @@ public final class Math8 {
     public static int floorMod(int x, int y) {
         int r = x - floorDiv(x, y) * y;
         return r;
+    }
+
+    /**
+     * Returns the floor modulus of the {@code long} and {@code int} arguments.
+     * <p>
+     * The floor modulus is {@code x - (floorDiv(x, y) * y)},
+     * has the same sign as the divisor {@code y}, and
+     * is in the range of {@code -abs(y) < r < +abs(y)}.
+     *
+     * <p>
+     * The relationship between {@code floorDiv} and {@code floorMod} is such that:
+     * <ul>
+     *   <li>{@code floorDiv(x, y) * y + floorMod(x, y) == x}
+     * </ul>
+     * <p>
+     * For examples, see {@link #floorMod(int, int)}.
+     *
+     * @param x the dividend
+     * @param y the divisor
+     * @return the floor modulus {@code x - (floorDiv(x, y) * y)}
+     * @throws ArithmeticException if the divisor {@code y} is zero
+     * @see #floorDiv(long, int)
+     * @since 9
+     */
+    public static int floorMod(long x, int y) {
+        // Result cannot overflow the range of int.
+        return (int) (x - floorDiv(x, y) * y);
     }
 
     /**
