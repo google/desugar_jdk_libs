@@ -26,6 +26,7 @@
 package java.util;
 
 import java.util.function.Consumer;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -251,6 +252,45 @@ public interface Collection<E> extends Iterable<E> {
      * @throws NullPointerException if the specified array is null
      */
     <T> T[] toArray(T[] a);
+
+    /**
+     * Returns an array containing all of the elements in this collection,
+     * using the provided {@code generator} function to allocate the returned array.
+     *
+     * <p>If this collection makes any guarantees as to what order its elements
+     * are returned by its iterator, this method must return the elements in
+     * the same order.
+     *
+     * @apiNote
+     * This method acts as a bridge between array-based and collection-based APIs.
+     * It allows creation of an array of a particular runtime type. Use
+     * {@link #toArray()} to create an array whose runtime type is {@code Object[]},
+     * or use {@link #toArray(Object[]) toArray(T[])} to reuse an existing array.
+     *
+     * <p>Suppose {@code x} is a collection known to contain only strings.
+     * The following code can be used to dump the collection into a newly
+     * allocated array of {@code String}:
+     *
+     * <pre>
+     *     String[] y = x.toArray(String[]::new);</pre>
+     *
+     * @implSpec
+     * The default implementation calls the generator function with zero
+     * and then passes the resulting array to {@link #toArray(Object[]) toArray(T[])}.
+     *
+     * @param <T> the component type of the array to contain the collection
+     * @param generator a function which produces a new array of the desired
+     *                  type and the provided length
+     * @return an array containing all of the elements in this collection
+     * @throws ArrayStoreException if the runtime type of any element in this
+     *         collection is not assignable to the {@linkplain Class#getComponentType
+     *         runtime component type} of the generated array
+     * @throws NullPointerException if the generator function is null
+     * @since 11
+     */
+    default <T> T[] toArray(IntFunction<T[]> generator) {
+        return toArray(generator.apply(0));
+    }
 
     // Modification Operations
 
