@@ -81,8 +81,8 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.time.chrono.ChronoLocalDate;
-import java.time.chrono.Era;
 import java.time.chrono.IsoChronology;
+import java.time.chrono.IsoEra;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
@@ -712,15 +712,12 @@ public final class LocalDate
      * Users of this class should typically ignore this method as it exists primarily
      * to fulfill the {@link ChronoLocalDate} contract where it is necessary to support
      * the Japanese calendar system.
-     * <p>
-     * The returned era will be a singleton capable of being compared with the constants
-     * in {@link IsoChronology} using the {@code ==} operator.
      *
-     * @return the {@code IsoChronology} era constant applicable at this date, not null
+     * @return the IsoEra applicable at this date, not null
      */
     @Override // override for Javadoc
-    public Era getEra() {
-        return ChronoLocalDate.super.getEra();
+    public IsoEra getEra() {
+        return (getYear() >= 1 ? IsoEra.CE : IsoEra.BCE);
     }
 
     /**
