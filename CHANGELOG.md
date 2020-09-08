@@ -4,8 +4,7 @@ Version 1.0.11 *(2020-07-29)*
 -----------------------------
 
  * Disable SummaryStatistics conversions. The implementation was relying on
-   reflection on members under [Restrictions on non-SDK interfaces]
-   (https://developer.android.com/distribute/best-practices/develop/restrictions-non-sdk-interfaces)
+   reflection on members under [Restrictions on non-SDK interfaces](https://developer.android.com/distribute/best-practices/develop/restrictions-non-sdk-interfaces)
    ([Change 52441](https://r8-review.googlesource.com/c/r8/+/52441)).
 
 Version 1.0.10 *(2020-07-28)*
