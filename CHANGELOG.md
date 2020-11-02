@@ -1,10 +1,21 @@
 Change Log
 ==========
+
+Version 1.1.0 *(2020-11-02)*
+-----------------------------
+
+* Support GSON deserialization of desugared `List` and `Map` types
+  ([issue 167649682](https://r8-review.googlesource.com/c/r8/+/52441)).
+  This also requires D8 version 2.1.70.
+* Updated the Lint configuration to not include methods which are not
+  implemented by the defugared library implementation. This was mainly methods
+  on `ConcurrentHashMap`.
+
 Version 1.0.11 *(2020-07-29)*
 -----------------------------
 
- * Disable SummaryStatistics conversions. The implementation was relying on
-   reflection on members under [Restrictions on non-SDK interfaces](https://developer.android.com/distribute/best-practices/develop/restrictions-non-sdk-interfaces)
+ * Disable `SummaryStatistics` conversions. The implementation was relying on
+   reflection on members under[Restrictions on non-SDK interfaces](https://developer.android.com/distribute/best-practices/develop/restrictions-non-sdk-interfaces)
    ([Change 52441](https://r8-review.googlesource.com/c/r8/+/52441)).
 
 Version 1.0.10 *(2020-07-28)*
