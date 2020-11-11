@@ -1,11 +1,17 @@
 Change Log
 ==========
 
+Version 1.1.1 *(2020-11-11)*
+-----------------------------
+
+* Don't remove remove or obfuscate `enum` values from referenced `enum`s
+  ([issue 172834444](https://issuetracker.google.com/172834444)).
+
 Version 1.1.0 *(2020-11-02)*
 -----------------------------
 
 * Support GSON deserialization of desugared `List` and `Map` types
-  ([issue 167649682](https://r8-review.googlesource.com/c/r8/+/52441)).
+  ([issue 167649682](https://issuetracker.google.com/167649682)).
   This also requires D8 version 2.1.70.
 * Updated the Lint configuration to not include methods which are not
   implemented by the defugared library implementation. This was mainly methods
