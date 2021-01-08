@@ -227,7 +227,7 @@ public final class OptionalInt {
      */
     @Override
     public int hashCode() {
-        return isPresent ? Integer8.hashCode(value) : 0;  // for desugar: Integer->Integer8
+        return isPresent ? Integer.hashCode(value) : 0;
     }
 
     /**

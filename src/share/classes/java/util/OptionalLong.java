@@ -227,7 +227,7 @@ public final class OptionalLong {
      */
     @Override
     public int hashCode() {
-        return isPresent ? Long8.hashCode(value) : 0;  // for desugar: Long->Long8
+        return isPresent ? Long.hashCode(value) : 0;
     }
 
     /**

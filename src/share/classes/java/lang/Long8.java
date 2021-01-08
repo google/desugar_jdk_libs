@@ -67,8 +67,8 @@ public final class Long8 {
             int lower = (int) i;
 
             // return (upper << 32) + lower
-            return (BigInteger.valueOf(Integer8.toUnsignedLong(upper))).shiftLeft(32).
-                add(BigInteger.valueOf(Integer8.toUnsignedLong(lower)));
+            return (BigInteger.valueOf(Integer.toUnsignedLong(upper))).shiftLeft(32).
+                add(BigInteger.valueOf(Integer.toUnsignedLong(lower)));
         }
     }
 

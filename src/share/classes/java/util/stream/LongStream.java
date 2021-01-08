@@ -787,7 +787,7 @@ public interface LongStream extends BaseStream<Long, LongStream> {
             // Split the range in two and concatenate
             // Note: if the range is [Long.MIN_VALUE, Long.MAX_VALUE) then
             // the lower range, [Long.MIN_VALUE, 0) will be further split in two
-            long m = startInclusive + Long8.divideUnsigned(endExclusive - startInclusive, 2) + 1;
+            long m = startInclusive + Long.divideUnsigned(endExclusive - startInclusive, 2) + 1;
             return concat(range(startInclusive, m), range(m, endExclusive));
         } else {
             return StreamSupport.longStream(
@@ -821,7 +821,7 @@ public interface LongStream extends BaseStream<Long, LongStream> {
             // Note: if the range is [Long.MIN_VALUE, Long.MAX_VALUE] then
             // the lower range, [Long.MIN_VALUE, 0), and upper range,
             // [0, Long.MAX_VALUE], will both be further split in two
-            long m = startInclusive + Long8.divideUnsigned(endInclusive - startInclusive, 2) + 1;
+            long m = startInclusive + Long.divideUnsigned(endInclusive - startInclusive, 2) + 1;
             return concat(range(startInclusive, m), rangeClosed(m, endInclusive));
         } else {
             return StreamSupport.longStream(
