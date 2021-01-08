@@ -807,10 +807,10 @@ public final class YearMonth
             switch ((ChronoUnit) unit) {
                 case MONTHS: return plusMonths(amountToAdd);
                 case YEARS: return plusYears(amountToAdd);
-                case DECADES: return plusYears(Math8.multiplyExact(amountToAdd, 10));
-                case CENTURIES: return plusYears(Math8.multiplyExact(amountToAdd, 100));
-                case MILLENNIA: return plusYears(Math8.multiplyExact(amountToAdd, 1000));
-                case ERAS: return with(ERA, Math8.addExact(getLong(ERA), amountToAdd));
+                case DECADES: return plusYears(Math.multiplyExact(amountToAdd, 10));
+                case CENTURIES: return plusYears(Math.multiplyExact(amountToAdd, 100));
+                case MILLENNIA: return plusYears(Math.multiplyExact(amountToAdd, 1000));
+                case ERAS: return with(ERA, Math.addExact(getLong(ERA), amountToAdd));
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
@@ -849,8 +849,8 @@ public final class YearMonth
         }
         long monthCount = year * 12L + (month - 1);
         long calcMonths = monthCount + monthsToAdd;  // safe overflow
-        int newYear = YEAR.checkValidIntValue(Math8.floorDiv(calcMonths, 12));
-        int newMonth = (int) Math8.floorMod(calcMonths, 12) + 1;
+        int newYear = YEAR.checkValidIntValue(Math.floorDiv(calcMonths, 12));
+        int newMonth = (int) Math.floorMod(calcMonths, 12) + 1;
         return with(newYear, newMonth);
     }
 

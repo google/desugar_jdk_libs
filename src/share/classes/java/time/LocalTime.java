@@ -276,7 +276,7 @@ public final class LocalTime
         final Instant now = clock.instant();  // called once
         ZoneOffset offset = clock.getZone().getRules().getOffset(now);
         long localSecond = now.getEpochSecond() + offset.getTotalSeconds();  // overflow caught later
-        int secsOfDay = (int) Math8.floorMod(localSecond, SECONDS_PER_DAY);
+        int secsOfDay = (int) Math.floorMod(localSecond, SECONDS_PER_DAY);
         return ofNanoOfDay(secsOfDay * NANOS_PER_SECOND + now.getNano());
     }
 

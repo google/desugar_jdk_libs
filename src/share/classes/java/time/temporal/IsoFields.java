@@ -349,8 +349,8 @@ public final class IsoFields {
                 ensureIso(partialTemporal);
                 LocalDate date;
                 if (resolverStyle == ResolverStyle.LENIENT) {
-                    date = LocalDate.of(y, 1, 1).plusMonths(Math8.multiplyExact(Math8.subtractExact(qoyLong, 1), 3));
-                    doq = Math8.subtractExact(doq, 1);
+                    date = LocalDate.of(y, 1, 1).plusMonths(Math.multiplyExact(Math.subtractExact(qoyLong, 1), 3));
+                    doq = Math.subtractExact(doq, 1);
                 } else {
                     int qoy = QUARTER_OF_YEAR.range().checkValidIntValue(qoyLong, QUARTER_OF_YEAR);  // validated
                     date = LocalDate.of(y, ((qoy - 1) * 3) + 1, 1);
@@ -458,7 +458,7 @@ public final class IsoFields {
             public <R extends Temporal> R adjustInto(R temporal, long newValue) {
                 // calls getFrom() to check if supported
                 range().checkValidValue(newValue, this);  // lenient range
-                return (R) temporal.plus(Math8.subtractExact(newValue, getFrom(temporal)), WEEKS);
+                return (R) temporal.plus(Math.subtractExact(newValue, getFrom(temporal)), WEEKS);
             }
             @Override
             public ChronoLocalDate resolve(
@@ -478,10 +478,10 @@ public final class IsoFields {
                         date = date.plusWeeks((dow - 1) / 7);
                         dow = ((dow - 1) % 7) + 1;
                     } else if (dow < 1) {
-                        date = date.plusWeeks(Math8.subtractExact(dow,  7) / 7);
+                        date = date.plusWeeks(Math.subtractExact(dow,  7) / 7);
                         dow = ((dow + 6) % 7) + 1;
                     }
-                    date = date.plusWeeks(Math8.subtractExact(wowby, 1)).with(DAY_OF_WEEK, dow);
+                    date = date.plusWeeks(Math.subtractExact(wowby, 1)).with(DAY_OF_WEEK, dow);
                 } else {
                     int dow = DAY_OF_WEEK.checkValidIntValue(dowLong);  // validated
                     if (wowby < 1 || wowby > 52) {
@@ -688,7 +688,7 @@ public final class IsoFields {
             switch (this) {
                 case WEEK_BASED_YEARS:
                     return (R) temporal.with(WEEK_BASED_YEAR,
-                            Math8.addExact(temporal.get(WEEK_BASED_YEAR), amount));
+                            Math.addExact(temporal.get(WEEK_BASED_YEAR), amount));
                 case QUARTER_YEARS:
                     // no overflow (256 is multiple of 4)
                     return (R) temporal.plus(amount / 256, YEARS)
@@ -705,7 +705,7 @@ public final class IsoFields {
             }
             switch(this) {
                 case WEEK_BASED_YEARS:
-                    return Math8.subtractExact(temporal2Exclusive.getLong(WEEK_BASED_YEAR),
+                    return Math.subtractExact(temporal2Exclusive.getLong(WEEK_BASED_YEAR),
                             temporal1Inclusive.getLong(WEEK_BASED_YEAR));
                 case QUARTER_YEARS:
                     return temporal1Inclusive.until(temporal2Exclusive, MONTHS) / 3;

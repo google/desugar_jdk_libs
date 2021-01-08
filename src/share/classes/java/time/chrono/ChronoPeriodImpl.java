@@ -177,9 +177,9 @@ final class ChronoPeriodImpl
         ChronoPeriodImpl amount = validateAmount(amountToAdd);
         return new ChronoPeriodImpl(
                 chrono,
-                Math8.addExact(years, amount.years),
-                Math8.addExact(months, amount.months),
-                Math8.addExact(days, amount.days));
+                Math.addExact(years, amount.years),
+                Math.addExact(months, amount.months),
+                Math.addExact(days, amount.days));
     }
 
     @Override
@@ -187,9 +187,9 @@ final class ChronoPeriodImpl
         ChronoPeriodImpl amount = validateAmount(amountToSubtract);
         return new ChronoPeriodImpl(
                 chrono,
-                Math8.subtractExact(years, amount.years),
-                Math8.subtractExact(months, amount.months),
-                Math8.subtractExact(days, amount.days));
+                Math.subtractExact(years, amount.years),
+                Math.subtractExact(months, amount.months),
+                Math.subtractExact(days, amount.days));
     }
 
     /**
@@ -218,9 +218,9 @@ final class ChronoPeriodImpl
         }
         return new ChronoPeriodImpl(
                 chrono,
-                Math8.multiplyExact(years, scalar),
-                Math8.multiplyExact(months, scalar),
-                Math8.multiplyExact(days, scalar));
+                Math.multiplyExact(years, scalar),
+                Math.multiplyExact(months, scalar),
+                Math.multiplyExact(days, scalar));
     }
 
     //-----------------------------------------------------------------------
@@ -234,7 +234,7 @@ final class ChronoPeriodImpl
             if (splitYears == years && splitMonths == months) {
                 return this;
             }
-            return new ChronoPeriodImpl(chrono, Math8.toIntExact(splitYears), splitMonths, days);
+            return new ChronoPeriodImpl(chrono, Math.toIntExact(splitYears), splitMonths, days);
 
         }
         return this;

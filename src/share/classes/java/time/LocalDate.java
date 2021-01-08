@@ -224,7 +224,7 @@ public final class LocalDate
         final Instant now = clock.instant();  // called once
         ZoneOffset offset = clock.getZone().getRules().getOffset(now);
         long epochSec = now.getEpochSecond() + offset.getTotalSeconds();  // overflow caught later
-        long epochDay = Math8.floorDiv(epochSec, SECONDS_PER_DAY);
+        long epochDay = Math.floorDiv(epochSec, SECONDS_PER_DAY);
         return LocalDate.ofEpochDay(epochDay);
     }
 
@@ -799,7 +799,7 @@ public final class LocalDate
      * @return the day-of-week, not null
      */
     public DayOfWeek getDayOfWeek() {
-        int dow0 = (int) Math8.floorMod(toEpochDay() + 3, 7);
+        int dow0 = (int) Math.floorMod(toEpochDay() + 3, 7);
         return DayOfWeek.of(dow0 + 1);
     }
 
@@ -1236,10 +1236,10 @@ public final class LocalDate
                 case WEEKS: return plusWeeks(amountToAdd);
                 case MONTHS: return plusMonths(amountToAdd);
                 case YEARS: return plusYears(amountToAdd);
-                case DECADES: return plusYears(Math8.multiplyExact(amountToAdd, 10));
-                case CENTURIES: return plusYears(Math8.multiplyExact(amountToAdd, 100));
-                case MILLENNIA: return plusYears(Math8.multiplyExact(amountToAdd, 1000));
-                case ERAS: return with(ERA, Math8.addExact(getLong(ERA), amountToAdd));
+                case DECADES: return plusYears(Math.multiplyExact(amountToAdd, 10));
+                case CENTURIES: return plusYears(Math.multiplyExact(amountToAdd, 100));
+                case MILLENNIA: return plusYears(Math.multiplyExact(amountToAdd, 1000));
+                case ERAS: return with(ERA, Math.addExact(getLong(ERA), amountToAdd));
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
@@ -1301,8 +1301,8 @@ public final class LocalDate
         }
         long monthCount = year * 12L + (month - 1);
         long calcMonths = monthCount + monthsToAdd;  // safe overflow
-        int newYear = YEAR.checkValidIntValue(Math8.floorDiv(calcMonths, 12));
-        int newMonth = (int) Math8.floorMod(calcMonths, 12) + 1;
+        int newYear = YEAR.checkValidIntValue(Math.floorDiv(calcMonths, 12));
+        int newMonth = (int) Math.floorMod(calcMonths, 12) + 1;
         return resolvePreviousValid(newYear, newMonth, day);
     }
 
@@ -1322,7 +1322,7 @@ public final class LocalDate
      * @throws DateTimeException if the result exceeds the supported date range
      */
     public LocalDate plusWeeks(long weeksToAdd) {
-        return plusDays(Math8.multiplyExact(weeksToAdd, 7));
+        return plusDays(Math.multiplyExact(weeksToAdd, 7));
     }
 
     /**
@@ -1344,7 +1344,7 @@ public final class LocalDate
         if (daysToAdd == 0) {
             return this;
         }
-        long mjDay = Math8.addExact(toEpochDay(), daysToAdd);
+        long mjDay = Math.addExact(toEpochDay(), daysToAdd);
         return LocalDate.ofEpochDay(mjDay);
     }
 
@@ -1670,7 +1670,7 @@ public final class LocalDate
         }
         long years = totalMonths / 12;  // safe
         int months = (int) (totalMonths % 12);  // safe
-        return Period.of(Math8.toIntExact(years), months, days);
+        return Period.of(Math.toIntExact(years), months, days);
     }
 
     /**

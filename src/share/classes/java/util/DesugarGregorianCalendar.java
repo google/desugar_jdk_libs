@@ -376,7 +376,7 @@ public class DesugarGregorianCalendar {
         cal.setMinimalDaysInFirstWeek(4);
         try {
             // For desugar: use j.l.Math helper for @since 1.8 methods
-            cal.setTimeInMillis(Math8.addExact(Math8.multiplyExact(zdt.toEpochSecond(), 1000),
+            cal.setTimeInMillis(Math.addExact(Math.multiplyExact(zdt.toEpochSecond(), 1000),
                                               zdt.get(ChronoField.MILLI_OF_SECOND)));
         } catch (ArithmeticException ex) {
             throw new IllegalArgumentException(ex);

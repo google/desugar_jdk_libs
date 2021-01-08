@@ -176,7 +176,7 @@ public final class Duration
      * @throws ArithmeticException if the input days exceeds the capacity of {@code Duration}
      */
     public static Duration ofDays(long days) {
-        return create(Math8.multiplyExact(days, SECONDS_PER_DAY), 0);
+        return create(Math.multiplyExact(days, SECONDS_PER_DAY), 0);
     }
 
     /**
@@ -191,7 +191,7 @@ public final class Duration
      * @throws ArithmeticException if the input hours exceeds the capacity of {@code Duration}
      */
     public static Duration ofHours(long hours) {
-        return create(Math8.multiplyExact(hours, SECONDS_PER_HOUR), 0);
+        return create(Math.multiplyExact(hours, SECONDS_PER_HOUR), 0);
     }
 
     /**
@@ -206,7 +206,7 @@ public final class Duration
      * @throws ArithmeticException if the input minutes exceeds the capacity of {@code Duration}
      */
     public static Duration ofMinutes(long minutes) {
-        return create(Math8.multiplyExact(minutes, SECONDS_PER_MINUTE), 0);
+        return create(Math.multiplyExact(minutes, SECONDS_PER_MINUTE), 0);
     }
 
     //-----------------------------------------------------------------------
@@ -242,8 +242,8 @@ public final class Duration
      * @throws ArithmeticException if the adjustment causes the seconds to exceed the capacity of {@code Duration}
      */
     public static Duration ofSeconds(long seconds, long nanoAdjustment) {
-        long secs = Math8.addExact(seconds, Math8.floorDiv(nanoAdjustment, NANOS_PER_SECOND));
-        int nos = (int) Math8.floorMod(nanoAdjustment, NANOS_PER_SECOND);
+        long secs = Math.addExact(seconds, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND));
+        int nos = (int) Math.floorMod(nanoAdjustment, NANOS_PER_SECOND);
         return create(secs, nos);
     }
 
@@ -423,7 +423,7 @@ public final class Duration
         }
         try {
             long val = Long.parseLong(parsed);
-            return Math8.multiplyExact(val, multiplier);
+            return Math.multiplyExact(val, multiplier);
         } catch (NumberFormatException | ArithmeticException ex) {
             throw (DateTimeParseException) new DateTimeParseException("Text cannot be parsed to a Duration: " + errorText, text, 0).initCause(ex);
         }
@@ -443,7 +443,7 @@ public final class Duration
     }
 
     private static Duration create(boolean negate, long daysAsSecs, long hoursAsSecs, long minsAsSecs, long secs, int nanos) {
-        long seconds = Math8.addExact(daysAsSecs, Math8.addExact(hoursAsSecs, Math8.addExact(minsAsSecs, secs)));
+        long seconds = Math.addExact(daysAsSecs, Math.addExact(hoursAsSecs, Math.addExact(minsAsSecs, secs)));
         if (negate) {
             return ofSeconds(seconds, nanos).negated();
         }
@@ -699,7 +699,7 @@ public final class Duration
     public Duration plus(long amountToAdd, TemporalUnit unit) {
         Objects.requireNonNull(unit, "unit");
         if (unit == DAYS) {
-            return plus(Math8.multiplyExact(amountToAdd, SECONDS_PER_DAY), 0);
+            return plus(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY), 0);
         }
         if (unit.isDurationEstimated()) {
             throw new UnsupportedTemporalTypeException("Unit must not have an estimated duration");
@@ -714,7 +714,7 @@ public final class Duration
                 case MILLIS: return plusMillis(amountToAdd);
                 case SECONDS: return plusSeconds(amountToAdd);
             }
-            return plusSeconds(Math8.multiplyExact(unit.getDuration().seconds, amountToAdd));
+            return plusSeconds(Math.multiplyExact(unit.getDuration().seconds, amountToAdd));
         }
         Duration duration = unit.getDuration().multipliedBy(amountToAdd);
         return plusSeconds(duration.getSeconds()).plusNanos(duration.getNano());
@@ -734,7 +734,7 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Duration plusDays(long daysToAdd) {
-        return plus(Math8.multiplyExact(daysToAdd, SECONDS_PER_DAY), 0);
+        return plus(Math.multiplyExact(daysToAdd, SECONDS_PER_DAY), 0);
     }
 
     /**
@@ -747,7 +747,7 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Duration plusHours(long hoursToAdd) {
-        return plus(Math8.multiplyExact(hoursToAdd, SECONDS_PER_HOUR), 0);
+        return plus(Math.multiplyExact(hoursToAdd, SECONDS_PER_HOUR), 0);
     }
 
     /**
@@ -760,7 +760,7 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Duration plusMinutes(long minutesToAdd) {
-        return plus(Math8.multiplyExact(minutesToAdd, SECONDS_PER_MINUTE), 0);
+        return plus(Math.multiplyExact(minutesToAdd, SECONDS_PER_MINUTE), 0);
     }
 
     /**
@@ -816,8 +816,8 @@ public final class Duration
         if ((secondsToAdd | nanosToAdd) == 0) {
             return this;
         }
-        long epochSec = Math8.addExact(seconds, secondsToAdd);
-        epochSec = Math8.addExact(epochSec, nanosToAdd / NANOS_PER_SECOND);
+        long epochSec = Math.addExact(seconds, secondsToAdd);
+        epochSec = Math.addExact(epochSec, nanosToAdd / NANOS_PER_SECOND);
         nanosToAdd = nanosToAdd % NANOS_PER_SECOND;
         long nanoAdjustment = nanos + nanosToAdd;  // safe int+NANOS_PER_SECOND
         return ofSeconds(epochSec, nanoAdjustment);
@@ -1172,8 +1172,8 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public long toMillis() {
-        long millis = Math8.multiplyExact(seconds, 1000);
-        millis = Math8.addExact(millis, nanos / 1000_000);
+        long millis = Math.multiplyExact(seconds, 1000);
+        millis = Math.addExact(millis, nanos / 1000_000);
         return millis;
     }
 
@@ -1187,8 +1187,8 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public long toNanos() {
-        long totalNanos = Math8.multiplyExact(seconds, NANOS_PER_SECOND);
-        totalNanos = Math8.addExact(totalNanos, nanos);
+        long totalNanos = Math.multiplyExact(seconds, NANOS_PER_SECOND);
+        totalNanos = Math.addExact(totalNanos, nanos);
         return totalNanos;
     }
 

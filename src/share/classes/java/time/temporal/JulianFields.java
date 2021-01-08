@@ -283,7 +283,7 @@ public final class JulianFields {
             if (range().isValidValue(newValue) == false) {
                 throw new DateTimeException("Invalid value: " + name + " " + newValue);
             }
-            return (R) temporal.with(EPOCH_DAY, Math8.subtractExact(newValue, offset));
+            return (R) temporal.with(EPOCH_DAY, Math.subtractExact(newValue, offset));
         }
 
         //-----------------------------------------------------------------------
@@ -293,7 +293,7 @@ public final class JulianFields {
             long value = fieldValues.remove(this);
             Chronology chrono = Chronology.from(partialTemporal);
             if (resolverStyle == ResolverStyle.LENIENT) {
-                return chrono.dateEpochDay(Math8.subtractExact(value, offset));
+                return chrono.dateEpochDay(Math.subtractExact(value, offset));
             }
             range().checkValidValue(value, this);
             return chrono.dateEpochDay(value - offset);

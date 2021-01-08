@@ -258,7 +258,7 @@ public final class OffsetTime
         ZoneRules rules = zone.getRules();
         ZoneOffset offset = rules.getOffset(instant);
         long localSecond = instant.getEpochSecond() + offset.getTotalSeconds();  // overflow caught later
-        int secsOfDay = (int) Math8.floorMod(localSecond, SECONDS_PER_DAY);
+        int secsOfDay = (int) Math.floorMod(localSecond, SECONDS_PER_DAY);
         LocalTime time = LocalTime.ofNanoOfDay(secsOfDay * NANOS_PER_SECOND + instant.getNano());
         return new OffsetTime(time, offset);
     }

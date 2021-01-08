@@ -532,7 +532,7 @@ public abstract class AbstractChronology implements Chronology {
             if (resolverStyle != ResolverStyle.LENIENT) {
                 yoe = range(YEAR_OF_ERA).checkValidIntValue(yoeLong, YEAR_OF_ERA);
             } else {
-                yoe = Math8.toIntExact(yoeLong);
+                yoe = Math.toIntExact(yoeLong);
             }
             if (eraLong != null) {
                 Era eraObj = eraOf(range(ERA).checkValidIntValue(eraLong, ERA));
@@ -565,8 +565,8 @@ public abstract class AbstractChronology implements Chronology {
     ChronoLocalDate resolveYMD(Map<TemporalField, Long> fieldValues, ResolverStyle resolverStyle) {
         int y = range(YEAR).checkValidIntValue(fieldValues.remove(YEAR), YEAR);
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long months = Math8.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
-            long days = Math8.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1);
+            long months = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
+            long days = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1);
             return date(y, 1, 1).plus(months, MONTHS).plus(days, DAYS);
         }
         int moy = range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR);
@@ -585,7 +585,7 @@ public abstract class AbstractChronology implements Chronology {
     ChronoLocalDate resolveYD(Map<TemporalField, Long> fieldValues, ResolverStyle resolverStyle) {
         int y = range(YEAR).checkValidIntValue(fieldValues.remove(YEAR), YEAR);
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long days = Math8.subtractExact(fieldValues.remove(DAY_OF_YEAR), 1);
+            long days = Math.subtractExact(fieldValues.remove(DAY_OF_YEAR), 1);
             return dateYearDay(y, 1).plus(days, DAYS);
         }
         int doy = range(DAY_OF_YEAR).checkValidIntValue(fieldValues.remove(DAY_OF_YEAR), DAY_OF_YEAR);
@@ -595,9 +595,9 @@ public abstract class AbstractChronology implements Chronology {
     ChronoLocalDate resolveYMAA(Map<TemporalField, Long> fieldValues, ResolverStyle resolverStyle) {
         int y = range(YEAR).checkValidIntValue(fieldValues.remove(YEAR), YEAR);
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long months = Math8.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
-            long weeks = Math8.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1);
-            long days = Math8.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1);
+            long months = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
+            long weeks = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1);
+            long days = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1);
             return date(y, 1, 1).plus(months, MONTHS).plus(weeks, WEEKS).plus(days, DAYS);
         }
         int moy = range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR);
@@ -613,9 +613,9 @@ public abstract class AbstractChronology implements Chronology {
     ChronoLocalDate resolveYMAD(Map<TemporalField, Long> fieldValues, ResolverStyle resolverStyle) {
         int y = range(YEAR).checkValidIntValue(fieldValues.remove(YEAR), YEAR);
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long months = Math8.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
-            long weeks = Math8.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1);
-            long dow = Math8.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1);
+            long months = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
+            long weeks = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1);
+            long dow = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1);
             return resolveAligned(date(y, 1, 1), months, weeks, dow);
         }
         int moy = range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR);
@@ -631,8 +631,8 @@ public abstract class AbstractChronology implements Chronology {
     ChronoLocalDate resolveYAA(Map<TemporalField, Long> fieldValues, ResolverStyle resolverStyle) {
         int y = range(YEAR).checkValidIntValue(fieldValues.remove(YEAR), YEAR);
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long weeks = Math8.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1);
-            long days = Math8.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1);
+            long weeks = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1);
+            long days = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1);
             return dateYearDay(y, 1).plus(weeks, WEEKS).plus(days, DAYS);
         }
         int aw = range(ALIGNED_WEEK_OF_YEAR).checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), ALIGNED_WEEK_OF_YEAR);
@@ -647,8 +647,8 @@ public abstract class AbstractChronology implements Chronology {
     ChronoLocalDate resolveYAD(Map<TemporalField, Long> fieldValues, ResolverStyle resolverStyle) {
         int y = range(YEAR).checkValidIntValue(fieldValues.remove(YEAR), YEAR);
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long weeks = Math8.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1);
-            long dow = Math8.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1);
+            long weeks = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1);
+            long dow = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1);
             return resolveAligned(dateYearDay(y, 1), 0, weeks, dow);
         }
         int aw = range(ALIGNED_WEEK_OF_YEAR).checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), ALIGNED_WEEK_OF_YEAR);
@@ -666,7 +666,7 @@ public abstract class AbstractChronology implements Chronology {
             date = date.plus((dow - 1) / 7, WEEKS);
             dow = ((dow - 1) % 7) + 1;
         } else if (dow < 1) {
-            date = date.plus(Math8.subtractExact(dow,  7) / 7, WEEKS);
+            date = date.plus(Math.subtractExact(dow,  7) / 7, WEEKS);
             dow = ((dow + 6) % 7) + 1;
         }
         return date.with(nextOrSame(DayOfWeek.of((int) dow)));

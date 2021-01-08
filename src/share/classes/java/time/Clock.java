@@ -564,7 +564,7 @@ public abstract class Clock {
         }
         @Override
         public long millis() {
-            return Math8.addExact(baseClock.millis(), offset.toMillis());
+            return Math.addExact(baseClock.millis(), offset.toMillis());
         }
         @Override
         public Instant instant() {
@@ -615,17 +615,17 @@ public abstract class Clock {
         @Override
         public long millis() {
             long millis = baseClock.millis();
-            return millis - Math8.floorMod(millis, tickNanos / 1000_000L);
+            return millis - Math.floorMod(millis, tickNanos / 1000_000L);
         }
         @Override
         public Instant instant() {
             if ((tickNanos % 1000_000) == 0) {
                 long millis = baseClock.millis();
-                return Instant.ofEpochMilli(millis - Math8.floorMod(millis, tickNanos / 1000_000L));
+                return Instant.ofEpochMilli(millis - Math.floorMod(millis, tickNanos / 1000_000L));
             }
             Instant instant = baseClock.instant();
             long nanos = instant.getNano();
-            long adjust = Math8.floorMod(nanos, tickNanos);
+            long adjust = Math.floorMod(nanos, tickNanos);
             return instant.minusNanos(adjust);
         }
         @Override
