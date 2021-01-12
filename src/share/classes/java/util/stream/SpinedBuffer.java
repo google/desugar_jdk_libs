@@ -26,7 +26,6 @@ package java.util.stream;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.DesugarArrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -387,7 +386,7 @@ class SpinedBuffer<E>
                     if (t == 0)
                         return null;
                     else {
-                        Spliterator<E> ret = DesugarArrays.spliterator(splChunk, splElementIndex, splElementIndex + t);
+                        Spliterator<E> ret = Arrays.spliterator(splChunk, splElementIndex, splElementIndex + t);
                         splElementIndex += t;
                         return ret;
                     }
@@ -835,7 +834,7 @@ class SpinedBuffer<E>
 
                 @Override
                 Spliterator.OfInt arraySpliterator(int[] array, int offset, int len) {
-                    return DesugarArrays.spliterator(array, offset, offset+len);
+                    return Arrays.spliterator(array, offset, offset+len);
                 }
             }
             return new Splitr(0, spineIndex, 0, elementIndex);
@@ -949,7 +948,7 @@ class SpinedBuffer<E>
 
                 @Override
                 Spliterator.OfLong arraySpliterator(long[] array, int offset, int len) {
-                    return DesugarArrays.spliterator(array, offset, offset+len);
+                    return Arrays.spliterator(array, offset, offset+len);
                 }
             }
             return new Splitr(0, spineIndex, 0, elementIndex);
@@ -1063,7 +1062,7 @@ class SpinedBuffer<E>
 
                 @Override
                 Spliterator.OfDouble arraySpliterator(double[] array, int offset, int len) {
-                    return DesugarArrays.spliterator(array, offset, offset+len);
+                    return Arrays.spliterator(array, offset, offset+len);
                 }
             }
             return new Splitr(0, spineIndex, 0, elementIndex);

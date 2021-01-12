@@ -338,9 +338,7 @@ public class DesugarGregorianCalendar {
     // For desugar: made static so it can exist outside original class
     public static ZonedDateTime toZonedDateTime(GregorianCalendar instance) {
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(instance.getTimeInMillis()),
-                                       // For desugar: use TimeZone helper for @since 1.8 methods
-                                       // getTimeZone().toZoneId();
-                                       DesugarTimeZone.toZoneId(instance.getTimeZone()));
+                                       instance.getTimeZone().toZoneId());
     }
 
     /**
@@ -368,14 +366,11 @@ public class DesugarGregorianCalendar {
      * @since 1.8
      */
     public static GregorianCalendar from(ZonedDateTime zdt) {
-        // For desugar: use TimeZone helper for @since 1.8 methods
-        // GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone(zdt.getZone()));
-        GregorianCalendar cal = new GregorianCalendar(DesugarTimeZone.getTimeZone(zdt.getZone()));
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone(zdt.getZone()));
         cal.setGregorianChange(new Date(Long.MIN_VALUE));
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.setMinimalDaysInFirstWeek(4);
         try {
-            // For desugar: use j.l.Math helper for @since 1.8 methods
             cal.setTimeInMillis(Math.addExact(Math.multiplyExact(zdt.toEpochSecond(), 1000),
                                               zdt.get(ChronoField.MILLI_OF_SECOND)));
         } catch (ArithmeticException ex) {
