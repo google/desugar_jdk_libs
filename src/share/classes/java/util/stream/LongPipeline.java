@@ -393,7 +393,7 @@ abstract class LongPipeline<E_IN>
     @Override
     public final long sum() {
         // use better algorithm to compensate for intermediate overflow?
-        return reduce(0, Long8::sum);  // for desugar: Long -> Long8
+        return reduce(0, Long::sum);
     }
 
     @Override

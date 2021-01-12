@@ -411,7 +411,7 @@ abstract class IntPipeline<E_IN>
 
     @Override
     public final int sum() {
-        return reduce(0, Integer8::sum);  // for desugar: Integer -> Integer8
+        return reduce(0, Integer::sum);
     }
 
     @Override

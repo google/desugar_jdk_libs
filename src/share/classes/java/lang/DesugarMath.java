@@ -98,12 +98,12 @@ package java.lang;
  * @since   JDK1.0
  */
 // for desugar: select static members introduced with 1.8
-public final class Math8 {
+public final class DesugarMath {
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private Math8() {}
+    private DesugarMath() {}
 
     /**
      * Returns the sum of its arguments,

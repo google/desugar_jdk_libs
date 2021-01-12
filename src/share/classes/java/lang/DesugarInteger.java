@@ -48,9 +48,9 @@ package java.lang;
  * @since JDK1.0
  */
 // for desugar: select static members introduced with 1.7 and 1.8
-public final class Integer8 {
+public final class DesugarInteger {
 
-    private Integer8() {} // for desugar: prevent instantiation
+    private DesugarInteger() {} // for desugar: prevent instantiation
 
     /**
      * Returns a hash code for a {@code int} value; compatible with

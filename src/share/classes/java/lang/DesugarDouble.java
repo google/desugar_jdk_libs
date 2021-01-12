@@ -43,9 +43,9 @@ package java.lang;
  * @since JDK1.0
  */
 // for desugar: select static members introduced with 1.8
-public final class Double8 {
+public final class DesugarDouble {
 
-    private Double8() {} // for desugar: prevent instantiation
+    private DesugarDouble() {} // for desugar: prevent instantiation
 
     /**
      * Returns {@code true} if the argument is a finite floating-point

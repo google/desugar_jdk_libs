@@ -51,9 +51,9 @@ import java.math.*;
  * @since   JDK1.0
  */
 // for desugar: select static members introduced with 1.7 and 1.8
-public final class Long8 {
+public final class DesugarLong {
 
-    private Long8() {} // for desugar: prevent instantiation
+    private DesugarLong() {} // for desugar: prevent instantiation
 
     /**
      * Return a BigInteger equal to the unsigned value of the

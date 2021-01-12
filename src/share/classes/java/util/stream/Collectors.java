@@ -410,7 +410,7 @@ public final class Collectors {
      */
     public static <T> Collector<T, ?, Long>
     counting() {
-        return reducing(0L, e -> 1L, Long8::sum);  // for desugar: Long -> Long8
+        return reducing(0L, e -> 1L, Long::sum);
     }
 
     /**
