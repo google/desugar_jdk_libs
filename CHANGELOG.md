@@ -1,6 +1,18 @@
 Change Log
 ==========
 
+Version 1.1.3 *(2021-02-10)*
+-----------------------------
+
+* Allow CHM JDK-7 serialization
+  ([issue 179397308](https://issuetracker.google.com/179397308)).
+
+Version 1.1.2 *(2020-12-09)*
+-----------------------------
+
+* Ensure that all packages in desugared library starts with j$
+  ([Change 56716](https://r8-review.googlesource.com/c/r8/+/56716)).
+
 Version 1.1.1 *(2020-11-11)*
 -----------------------------
 
