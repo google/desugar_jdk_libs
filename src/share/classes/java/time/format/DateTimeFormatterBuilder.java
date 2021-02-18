@@ -218,7 +218,10 @@ public final class DateTimeFormatterBuilder {
             format = DateFormat.getDateTimeInstance(dateStyle.ordinal(), timeStyle.ordinal(), locale);
         }
         if (format instanceof SimpleDateFormat) {
-            return ((SimpleDateFormat) format).toPattern();
+            String pattern = ((SimpleDateFormat) format).toPattern();
+            // For desugar: Transform the pattern to avoid unsupported symbols which causes
+            // throwing IllegalArgumentException.
+            return DateTimeFormatterBuilderHelper.transformAndroidJavaTextDateTimePattern(pattern);
         }
         throw new UnsupportedOperationException("Can't determine pattern from " + format);
     }
