@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 1.1.4 *(2021-02-12)*
+-----------------------------
+
+* Update configuration for compilation with L8 after updates to how
+  missing classes are reported
+  ([issue 72683872](https://issuetracker.google.com/72683872)).
+
 Version 1.1.3 *(2021-02-10)*
 -----------------------------
 
