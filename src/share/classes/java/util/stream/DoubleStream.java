@@ -24,7 +24,7 @@
  */
 package java.util.stream;
 
-import java.util.Arrays;
+import java.util.DesugarArrays;
 import java.util.DoubleSummaryStatistics;
 import java.util.Objects;
 import java.util.OptionalDouble;
@@ -748,7 +748,7 @@ public interface DoubleStream extends BaseStream<Double, DoubleStream> {
      * @return the new stream
      */
     public static DoubleStream of(double... values) {
-        return Arrays.stream(values);
+        return DesugarArrays.stream(values);
     }
 
     /**

@@ -24,7 +24,7 @@
  */
 package java.util.stream;
 
-import java.util.Arrays;
+import java.util.DesugarArrays;
 import java.util.LongSummaryStatistics;
 import java.util.Objects;
 import java.util.OptionalDouble;
@@ -707,7 +707,7 @@ public interface LongStream extends BaseStream<Long, LongStream> {
      * @return the new stream
      */
     public static LongStream of(long... values) {
-        return Arrays.stream(values);
+        return DesugarArrays.stream(values);
     }
 
     /**

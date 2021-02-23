@@ -77,6 +77,7 @@ import java.time.zone.ZoneRules;
 import java.time.zone.ZoneRulesException;
 import java.time.zone.ZoneRulesProvider;
 import java.util.Collections;
+import java.util.DesugarTimeZone;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -271,7 +272,7 @@ public abstract class ZoneId implements Serializable {
      * @throws ZoneRulesException if the converted zone region ID cannot be found
      */
     public static ZoneId systemDefault() {
-        return TimeZone.getDefault().toZoneId();
+        return DesugarTimeZone.toZoneId(TimeZone.getDefault());  // for desugar: method moved to helper
     }
 
     /**

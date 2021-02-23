@@ -27,9 +27,9 @@ package java.util.stream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.DesugarArrays;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
@@ -997,7 +997,7 @@ public interface Stream<T> extends BaseStream<T, Stream<T>> {
     @SafeVarargs
     @SuppressWarnings("varargs") // Creating a stream from an array is safe
     public static<T> Stream<T> of(T... values) {
-        return Arrays.stream(values);
+        return DesugarArrays.stream(values);
     }
 
     /**

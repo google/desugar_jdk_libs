@@ -24,7 +24,7 @@
  */
 package java.util.stream;
 
-import java.util.Arrays;
+import java.util.DesugarArrays;
 import java.util.IntSummaryStatistics;
 import java.util.Objects;
 import java.util.OptionalDouble;
@@ -719,7 +719,7 @@ public interface IntStream extends BaseStream<Integer, IntStream> {
      * @return the new stream
      */
     public static IntStream of(int... values) {
-        return Arrays.stream(values);
+        return DesugarArrays.stream(values);
     }
 
     /**

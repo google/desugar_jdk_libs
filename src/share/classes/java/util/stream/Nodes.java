@@ -28,6 +28,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.DesugarArrays;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -655,7 +656,7 @@ final class Nodes {
 
         @Override
         public Spliterator<T> spliterator() {
-            return Arrays.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override
@@ -1328,7 +1329,7 @@ final class Nodes {
 
         @Override
         public Spliterator.OfInt spliterator() {
-            return Arrays.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override
@@ -1382,7 +1383,7 @@ final class Nodes {
 
         @Override
         public Spliterator.OfLong spliterator() {
-            return Arrays.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override
@@ -1436,7 +1437,7 @@ final class Nodes {
 
         @Override
         public Spliterator.OfDouble spliterator() {
-            return Arrays.spliterator(array, 0, curSize);
+            return DesugarArrays.spliterator(array, 0, curSize);
         }
 
         @Override
