@@ -1,12 +1,19 @@
 Change Log
 ==========
 
+Version 1.1.5 *(2021-02-24)*
+-----------------------------
+
+* Revert internal changes incompatible with D8 version 2.2 and 2.1.
+
 Version 1.1.4 *(2021-02-12)*
 -----------------------------
 
 * Update configuration for compilation with L8 after updates to how
   missing classes are reported
   ([issue 72683872](https://issuetracker.google.com/72683872)).
+* Fix `IllegalArgumentException` when formatting time in Burmese with
+  `DateTimeFormatter`.
 
 Version 1.1.3 *(2021-02-10)*
 -----------------------------
