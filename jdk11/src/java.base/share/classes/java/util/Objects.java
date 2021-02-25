@@ -97,7 +97,7 @@ public final class Objects {
         else if (a == null || b == null)
             return false;
         else
-            return Arrays.deepEquals0(a, b);
+            return DesugarArrays.deepEquals0(a, b);
     }
 
     /**
