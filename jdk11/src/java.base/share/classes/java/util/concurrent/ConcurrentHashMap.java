@@ -68,6 +68,7 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongBiFunction;
 import java.util.function.ToLongFunction;
 import java.util.stream.Stream;
+import sun.misc.DesugarUnsafe;
 
 /**
  * A hash table supporting full concurrency of retrievals and
@@ -3288,7 +3289,7 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
             return true;
         }
 
-        private static final DesugarUnsafe U = DesugarUnsafe.getUnsafe();
+    private static final DesugarUnsafe U = DesugarUnsafe.getUnsafe();
         private static final long LOCKSTATE
                 = U.objectFieldOffset(TreeBin.class, "lockState");
     }
@@ -6345,8 +6346,8 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
         }
     }
 
-    // Unsafe mechanics
-    private static final DesugarUnsafe U = DesugarUnsafe.getUnsafe();
+  // Unsafe mechanics
+  private static final DesugarUnsafe U = DesugarUnsafe.getUnsafe();
     private static final long SIZECTL;
     private static final long TRANSFERINDEX;
     private static final long BASECOUNT;

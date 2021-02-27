@@ -23,12 +23,10 @@
  * questions.
  */
 
-package java.util.concurrent;
+package sun.misc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import sun.misc.Unsafe;
-
 
 /**
  * A collection of methods for performing low-level, unsafe operations.
@@ -49,7 +47,7 @@ import sun.misc.Unsafe;
  */
 
 // For desugar: JDK11 wrapper to access to Unsafe
-final class DesugarUnsafe {
+public final class DesugarUnsafe {
 
     private static final DesugarUnsafe theUnsafeWrapper;
     static {
