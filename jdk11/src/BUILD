@@ -3,7 +3,10 @@ load("@rules_java//java:defs.bzl", "java_library")
 java_library(
     name = "java_base_all",
     srcs = glob(["**/*.java"]),
-    javacopts = ["-source 11 -target 11"],
+    javacopts = [
+        "-source 11",
+        "-target 11",
+    ],
     visibility = ["//:__pkg__"],
 )
 
@@ -63,7 +66,8 @@ genrule(
         java/util/concurrent/ConcurrentMap*.class \
         java/util/concurrent/ConcurrentNavigableMap*.class \
         java/util/concurrent/Helpers*.class \
-        java/util/concurrent/ThreadLocalRandom*.class \
+        java/util/concurrent/ThreadLocalRandom.class \
+        java/util/concurrent/ThreadLocalRandom\\$$*.class \
         java/util/concurrent/TransferQueue*.class \
         java/util/concurrent/atomic/ \
         java/util/concurrent/atomic/Desugar*.class \
