@@ -84,4 +84,5 @@ genrule(
       mv "$${TMP_DIR}/java_base_selected.jar" $@
       rm -rf $${TMP_DIR}
     """,
+    visibility = ["//:__pkg__"],
 )
