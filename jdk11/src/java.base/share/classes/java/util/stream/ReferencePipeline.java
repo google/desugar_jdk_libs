@@ -274,7 +274,7 @@ abstract class ReferencePipeline<P_IN, P_OUT>
                                     result.sequential().forEach(downstream);
                                 }
                                 else {
-                                    Spliterator<? extends R> s = result.sequential().spliterator();
+                                    var s = result.sequential().spliterator();
                                     do { } while (!downstream.cancellationRequested() && s.tryAdvance(downstream));
                                 }
                             }
@@ -322,7 +322,7 @@ abstract class ReferencePipeline<P_IN, P_OUT>
                                     result.sequential().forEach(downstreamAsInt);
                                 }
                                 else {
-                                    Spliterator.OfInt s = result.sequential().spliterator();
+                                    var s = result.sequential().spliterator();
                                     do { } while (!downstream.cancellationRequested() && s.tryAdvance(downstreamAsInt));
                                 }
                             }
@@ -366,7 +366,7 @@ abstract class ReferencePipeline<P_IN, P_OUT>
                                     result.sequential().forEach(downstreamAsDouble);
                                 }
                                 else {
-                                    Spliterator.OfDouble s = result.sequential().spliterator();
+                                    var s = result.sequential().spliterator();
                                     do { } while (!downstream.cancellationRequested() && s.tryAdvance(downstreamAsDouble));
                                 }
                             }
@@ -411,7 +411,7 @@ abstract class ReferencePipeline<P_IN, P_OUT>
                                     result.sequential().forEach(downstreamAsLong);
                                 }
                                 else {
-                                    Spliterator.OfLong s = result.sequential().spliterator();
+                                    var s = result.sequential().spliterator();
                                     do { } while (!downstream.cancellationRequested() && s.tryAdvance(downstreamAsLong));
                                 }
                             }

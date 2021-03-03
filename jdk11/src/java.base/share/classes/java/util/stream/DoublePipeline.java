@@ -283,7 +283,7 @@ abstract class DoublePipeline<E_IN>
                                     result.sequential().forEach(downstreamAsDouble);
                                 }
                                 else {
-                                    Spliterator.OfDouble s = result.sequential().spliterator();
+                                    var s = result.sequential().spliterator();
                                     do { } while (!downstream.cancellationRequested() && s.tryAdvance(downstreamAsDouble));
                                 }
                             }

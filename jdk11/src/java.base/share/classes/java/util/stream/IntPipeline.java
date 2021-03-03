@@ -317,7 +317,7 @@ abstract class IntPipeline<E_IN>
                                     result.sequential().forEach(downstreamAsInt);
                                 }
                                 else {
-                                    Spliterator.OfInt s = result.sequential().spliterator();
+                                    var s = result.sequential().spliterator();
                                     do { } while (!downstream.cancellationRequested() && s.tryAdvance(downstreamAsInt));
                                 }
                             }

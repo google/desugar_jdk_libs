@@ -1900,7 +1900,7 @@ public final class Collectors {
 
         @Override
         public Set<Map.Entry<Boolean, T>> entrySet() {
-            return new AbstractSet<Map.Entry<Boolean, T>>() {
+            return new AbstractSet<>() {
                 @Override
                 public Iterator<Map.Entry<Boolean, T>> iterator() {
                     Map.Entry<Boolean, T> falseEntry = new SimpleImmutableEntry<>(false, forFalse);

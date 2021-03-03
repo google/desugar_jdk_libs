@@ -299,7 +299,7 @@ abstract class LongPipeline<E_IN>
                                     result.sequential().forEach(downstreamAsLong);
                                 }
                                 else {
-                                    Spliterator.OfLong s = result.sequential().spliterator();
+                                    var s = result.sequential().spliterator();
                                     do { } while (!downstream.cancellationRequested() && s.tryAdvance(downstreamAsLong));
                                 }
                             }

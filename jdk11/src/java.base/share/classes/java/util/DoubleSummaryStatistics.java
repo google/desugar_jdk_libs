@@ -115,7 +115,7 @@ public class DoubleSummaryStatistics implements DoubleConsumer {
                 throw new IllegalArgumentException("Minimum greater than maximum");
 
             // All NaN or non NaN
-            long ncount = DoubleStream.of(min, max, sum).filter(Double::isNaN).count();
+            var ncount = DoubleStream.of(min, max, sum).filter(Double::isNaN).count();
             if (ncount > 0 && ncount < 3)
                 throw new IllegalArgumentException("Some, not all, of the minimum, maximum, or sum is NaN");
 
