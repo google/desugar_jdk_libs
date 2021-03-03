@@ -6,6 +6,7 @@ java_library(
     javacopts = [
         "-source 11",
         "-target 11",
+        "-XepAllErrorsAsWarnings",
     ],
     visibility = ["//:__pkg__"],
 )
