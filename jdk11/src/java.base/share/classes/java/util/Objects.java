@@ -26,6 +26,7 @@
 package java.util;
 
 import java.util.function.Supplier;
+import jdk.internal.util.Preconditions;
 
 /**
  * This class consists of {@code static} utility methods for operating
@@ -365,7 +366,7 @@ public final class Objects {
      */
     public static
     int checkIndex(int index, int length) {
-        return DesugarPreconditions.checkIndex(index, length, null);
+        return Preconditions.checkIndex(index, length, null);
     }
 
     /**
@@ -391,7 +392,7 @@ public final class Objects {
      */
     public static
     int checkFromToIndex(int fromIndex, int toIndex, int length) {
-        return DesugarPreconditions.checkFromToIndex(fromIndex, toIndex, length, null);
+        return Preconditions.checkFromToIndex(fromIndex, toIndex, length, null);
     }
 
     /**
@@ -417,7 +418,7 @@ public final class Objects {
      */
     public static
     int checkFromIndexSize(int fromIndex, int size, int length) {
-        return DesugarPreconditions.checkFromIndexSize(fromIndex, size, length, null);
+        return Preconditions.checkFromIndexSize(fromIndex, size, length, null);
     }
 
 }

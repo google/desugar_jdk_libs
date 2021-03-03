@@ -50,3 +50,14 @@ py_binary(
     python_version = "PY3",
     srcs_version = "PY3",
 )
+
+java_binary(
+    name = "tools/jdk_type_selector",
+    srcs = ["tools/com/google/devtools/JarFileClassEntrySelector.java"],
+    javacopts = [
+        "-source 11",
+        "-target 11",
+    ],
+    main_class = "com.google.devtools.JarFileClassEntrySelector",
+    visibility = ["//visibility:public"],
+)
