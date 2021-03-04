@@ -53,11 +53,11 @@ py_binary(
 
 java_binary(
     name = "tools/jdk_type_selector",
-    srcs = ["tools/com/google/devtools/JarFileClassEntrySelector.java"],
+    srcs = ["tools/com/google/devtools/build/android/JarFileClassEntrySelector.java"],
     javacopts = [
         "-source 11",
         "-target 11",
     ],
-    main_class = "com.google.devtools.JarFileClassEntrySelector",
+    main_class = "com.google.devtools.build.android.JarFileClassEntrySelector",
     visibility = ["//visibility:public"],
 )
