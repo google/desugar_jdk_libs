@@ -816,7 +816,7 @@ public final class ZoneRules implements Serializable {
                 if (curOffsetMillis != timeZone.getOffset(upper * 1000L)) {
                     // binary search the transition
                     while (upper - lower > 1) {
-                        long middle = DesugarMath.floorDiv(upper + lower, 2L);
+                        long middle = Math.floorDiv(upper + lower, 2L);
                         if (timeZone.getOffset(middle * 1000L) == curOffsetMillis) {
                             lower = middle;
                         } else {
@@ -1153,7 +1153,7 @@ public final class ZoneRules implements Serializable {
     private int findYear(long epochSecond, ZoneOffset offset) {
         // inline for performance
         long localSecond = epochSecond + offset.getTotalSeconds();
-        long localEpochDay = DesugarMath.floorDiv(localSecond, 86400);
+        long localEpochDay = Math.floorDiv(localSecond, 86400);
         return LocalDate.ofEpochDay(localEpochDay).getYear();
     }
 

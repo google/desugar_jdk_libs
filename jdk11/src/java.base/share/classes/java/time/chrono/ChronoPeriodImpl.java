@@ -174,9 +174,9 @@ final class ChronoPeriodImpl
         ChronoPeriodImpl amount = validateAmount(amountToAdd);
         return new ChronoPeriodImpl(
                 chrono,
-                DesugarMath.addExact(years, amount.years),
-                DesugarMath.addExact(months, amount.months),
-                DesugarMath.addExact(days, amount.days));
+                Math.addExact(years, amount.years),
+                Math.addExact(months, amount.months),
+                Math.addExact(days, amount.days));
     }
 
     @Override
@@ -184,9 +184,9 @@ final class ChronoPeriodImpl
         ChronoPeriodImpl amount = validateAmount(amountToSubtract);
         return new ChronoPeriodImpl(
                 chrono,
-                DesugarMath.subtractExact(years, amount.years),
-                DesugarMath.subtractExact(months, amount.months),
-                DesugarMath.subtractExact(days, amount.days));
+                Math.subtractExact(years, amount.years),
+                Math.subtractExact(months, amount.months),
+                Math.subtractExact(days, amount.days));
     }
 
     /**
@@ -215,9 +215,9 @@ final class ChronoPeriodImpl
         }
         return new ChronoPeriodImpl(
                 chrono,
-                DesugarMath.multiplyExact(years, scalar),
-                DesugarMath.multiplyExact(months, scalar),
-                DesugarMath.multiplyExact(days, scalar));
+                Math.multiplyExact(years, scalar),
+                Math.multiplyExact(months, scalar),
+                Math.multiplyExact(days, scalar));
     }
 
     //-----------------------------------------------------------------------
@@ -231,7 +231,7 @@ final class ChronoPeriodImpl
             if (splitYears == years && splitMonths == months) {
                 return this;
             }
-            return new ChronoPeriodImpl(chrono, DesugarMath.toIntExact(splitYears), splitMonths, days);
+            return new ChronoPeriodImpl(chrono, Math.toIntExact(splitYears), splitMonths, days);
 
         }
         return this;

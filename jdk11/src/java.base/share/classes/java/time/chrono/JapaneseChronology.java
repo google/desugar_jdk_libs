@@ -480,8 +480,8 @@ public final class JapaneseChronology extends AbstractChronology implements Seri
         fieldValues.remove(YEAR_OF_ERA);
         if (resolverStyle == ResolverStyle.LENIENT) {
             int y = prolepticYearLenient(era, yoe);
-            long months = DesugarMath.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
-            long days = DesugarMath.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1);
+            long months = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
+            long days = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1);
             return date(y, 1, 1).plus(months, MONTHS).plus(days, DAYS);
         }
         int moy = range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR);
@@ -513,7 +513,7 @@ public final class JapaneseChronology extends AbstractChronology implements Seri
         fieldValues.remove(YEAR_OF_ERA);
         if (resolverStyle == ResolverStyle.LENIENT) {
             int y = prolepticYearLenient(era, yoe);
-            long days = DesugarMath.subtractExact(fieldValues.remove(DAY_OF_YEAR), 1);
+            long days = Math.subtractExact(fieldValues.remove(DAY_OF_YEAR), 1);
             return dateYearDay(y, 1).plus(days, DAYS);
         }
         int doy = range(DAY_OF_YEAR).checkValidIntValue(fieldValues.remove(DAY_OF_YEAR), DAY_OF_YEAR);

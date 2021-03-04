@@ -203,7 +203,7 @@ public final class Period
      * @return the period, with the input weeks converted to days, not null
      */
     public static Period ofWeeks(int weeks) {
-        return create(0, 0, DesugarMath.multiplyExact(weeks, 7));
+        return create(0, 0, Math.multiplyExact(weeks, 7));
     }
 
     /**
@@ -270,11 +270,11 @@ public final class Period
         for (TemporalUnit unit : amount.getUnits()) {
             long unitAmount = amount.get(unit);
             if (unit == ChronoUnit.YEARS) {
-                years = DesugarMath.toIntExact(unitAmount);
+                years = Math.toIntExact(unitAmount);
             } else if (unit == ChronoUnit.MONTHS) {
-                months = DesugarMath.toIntExact(unitAmount);
+                months = Math.toIntExact(unitAmount);
             } else if (unit == ChronoUnit.DAYS) {
-                days = DesugarMath.toIntExact(unitAmount);
+                days = Math.toIntExact(unitAmount);
             } else {
                 throw new DateTimeException("Unit must be Years, Months or Days, but was " + unit);
             }
@@ -337,7 +337,7 @@ public final class Period
                     int months = parseNumber(text, monthStart, monthEnd, negate);
                     int weeks = parseNumber(text, weekStart, weekEnd, negate);
                     int days = parseNumber(text, dayStart, dayEnd, negate);
-                    days = DesugarMath.addExact(days, DesugarMath.multiplyExact(weeks, 7));
+                    days = Math.addExact(days, Math.multiplyExact(weeks, 7));
                     return create(years, months, days);
                 } catch (NumberFormatException ex) {
                     throw new DateTimeParseException("Text cannot be parsed to a Period", text, 0, ex);
@@ -359,9 +359,9 @@ public final class Period
         if (text.charAt(start) == '+'){
             start++;
         }
-        int val = DesugarInteger.parseInt(text, start, end, 10);
+        int val = Integer.parseInt(text, start, end, 10);
         try {
-            return DesugarMath.multiplyExact(val, negate);
+            return Math.multiplyExact(val, negate);
         } catch (ArithmeticException ex) {
             throw new DateTimeParseException("Text cannot be parsed to a Period", text, 0, ex);
         }
@@ -630,9 +630,9 @@ public final class Period
     public Period plus(TemporalAmount amountToAdd) {
         Period isoAmount = Period.from(amountToAdd);
         return create(
-                DesugarMath.addExact(years, isoAmount.years),
-                DesugarMath.addExact(months, isoAmount.months),
-                DesugarMath.addExact(days, isoAmount.days));
+                Math.addExact(years, isoAmount.years),
+                Math.addExact(months, isoAmount.months),
+                Math.addExact(days, isoAmount.days));
     }
 
     /**
@@ -652,7 +652,7 @@ public final class Period
         if (yearsToAdd == 0) {
             return this;
         }
-        return create(DesugarMath.toIntExact(DesugarMath.addExact(years, yearsToAdd)), months, days);
+        return create(Math.toIntExact(Math.addExact(years, yearsToAdd)), months, days);
     }
 
     /**
@@ -672,7 +672,7 @@ public final class Period
         if (monthsToAdd == 0) {
             return this;
         }
-        return create(years, DesugarMath.toIntExact(DesugarMath.addExact(months, monthsToAdd)), days);
+        return create(years, Math.toIntExact(Math.addExact(months, monthsToAdd)), days);
     }
 
     /**
@@ -692,7 +692,7 @@ public final class Period
         if (daysToAdd == 0) {
             return this;
         }
-        return create(years, months, DesugarMath.toIntExact(DesugarMath.addExact(days, daysToAdd)));
+        return create(years, months, Math.toIntExact(Math.addExact(days, daysToAdd)));
     }
 
     //-----------------------------------------------------------------------
@@ -719,9 +719,9 @@ public final class Period
     public Period minus(TemporalAmount amountToSubtract) {
         Period isoAmount = Period.from(amountToSubtract);
         return create(
-                DesugarMath.subtractExact(years, isoAmount.years),
-                DesugarMath.subtractExact(months, isoAmount.months),
-                DesugarMath.subtractExact(days, isoAmount.days));
+                Math.subtractExact(years, isoAmount.years),
+                Math.subtractExact(months, isoAmount.months),
+                Math.subtractExact(days, isoAmount.days));
     }
 
     /**
@@ -795,9 +795,9 @@ public final class Period
             return this;
         }
         return create(
-                DesugarMath.multiplyExact(years, scalar),
-                DesugarMath.multiplyExact(months, scalar),
-                DesugarMath.multiplyExact(days, scalar));
+                Math.multiplyExact(years, scalar),
+                Math.multiplyExact(months, scalar),
+                Math.multiplyExact(days, scalar));
     }
 
     /**
@@ -842,7 +842,7 @@ public final class Period
         if (splitYears == years && splitMonths == months) {
             return this;
         }
-        return create(DesugarMath.toIntExact(splitYears), splitMonths, days);
+        return create(Math.toIntExact(splitYears), splitMonths, days);
     }
 
     /**

@@ -200,13 +200,13 @@ abstract class ChronoLocalDateImpl<D extends ChronoLocalDate>
             ChronoUnit f = (ChronoUnit) unit;
             switch (f) {
                 case DAYS: return plusDays(amountToAdd);
-                case WEEKS: return plusDays(DesugarMath.multiplyExact(amountToAdd, 7));
+                case WEEKS: return plusDays(Math.multiplyExact(amountToAdd, 7));
                 case MONTHS: return plusMonths(amountToAdd);
                 case YEARS: return plusYears(amountToAdd);
-                case DECADES: return plusYears(DesugarMath.multiplyExact(amountToAdd, 10));
-                case CENTURIES: return plusYears(DesugarMath.multiplyExact(amountToAdd, 100));
-                case MILLENNIA: return plusYears(DesugarMath.multiplyExact(amountToAdd, 1000));
-                case ERAS: return with(ERA, DesugarMath.addExact(getLong(ERA), amountToAdd));
+                case DECADES: return plusYears(Math.multiplyExact(amountToAdd, 10));
+                case CENTURIES: return plusYears(Math.multiplyExact(amountToAdd, 100));
+                case MILLENNIA: return plusYears(Math.multiplyExact(amountToAdd, 1000));
+                case ERAS: return with(ERA, Math.addExact(getLong(ERA), amountToAdd));
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
@@ -274,7 +274,7 @@ abstract class ChronoLocalDateImpl<D extends ChronoLocalDate>
      * @throws DateTimeException if the result exceeds the supported date range
      */
     D plusWeeks(long weeksToAdd) {
-        return plusDays(DesugarMath.multiplyExact(weeksToAdd, 7));
+        return plusDays(Math.multiplyExact(weeksToAdd, 7));
     }
 
     /**

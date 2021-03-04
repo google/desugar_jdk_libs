@@ -396,7 +396,7 @@ final class Parsed implements TemporalAccessor {
             long ap = fieldValues.remove(AMPM_OF_DAY);
             long hap = fieldValues.remove(HOUR_OF_AMPM);
             if (resolverStyle == ResolverStyle.LENIENT) {
-                updateCheckConflict(AMPM_OF_DAY, HOUR_OF_DAY, DesugarMath.addExact(DesugarMath.multiplyExact(ap, 12), hap));
+                updateCheckConflict(AMPM_OF_DAY, HOUR_OF_DAY, Math.addExact(Math.multiplyExact(ap, 12), hap));
             } else {  // STRICT or SMART
                 AMPM_OF_DAY.checkValidValue(ap);
                 HOUR_OF_AMPM.checkValidValue(ap);
@@ -544,12 +544,12 @@ final class Parsed implements TemporalAccessor {
 
     private void resolveTime(long hod, long moh, long som, long nos) {
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long totalNanos = DesugarMath.multiplyExact(hod, 3600_000_000_000L);
-            totalNanos = DesugarMath.addExact(totalNanos, DesugarMath.multiplyExact(moh, 60_000_000_000L));
-            totalNanos = DesugarMath.addExact(totalNanos, DesugarMath.multiplyExact(som, 1_000_000_000L));
-            totalNanos = DesugarMath.addExact(totalNanos, nos);
-            int excessDays = (int) DesugarMath.floorDiv(totalNanos, 86400_000_000_000L);  // safe int cast
-            long nod = DesugarMath.floorMod(totalNanos, 86400_000_000_000L);
+            long totalNanos = Math.multiplyExact(hod, 3600_000_000_000L);
+            totalNanos = Math.addExact(totalNanos, Math.multiplyExact(moh, 60_000_000_000L));
+            totalNanos = Math.addExact(totalNanos, Math.multiplyExact(som, 1_000_000_000L));
+            totalNanos = Math.addExact(totalNanos, nos);
+            int excessDays = (int) Math.floorDiv(totalNanos, 86400_000_000_000L);  // safe int cast
+            long nod = Math.floorMod(totalNanos, 86400_000_000_000L);
             updateCheckConflict(LocalTime.ofNanoOfDay(nod), Period.ofDays(excessDays));
         } else {  // STRICT or SMART
             int mohVal = MINUTE_OF_HOUR.checkValidIntValue(moh);

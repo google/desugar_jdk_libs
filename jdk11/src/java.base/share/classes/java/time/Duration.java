@@ -178,7 +178,7 @@ public final class Duration
      * @throws ArithmeticException if the input days exceeds the capacity of {@code Duration}
      */
     public static Duration ofDays(long days) {
-        return create(DesugarMath.multiplyExact(days, SECONDS_PER_DAY), 0);
+        return create(Math.multiplyExact(days, SECONDS_PER_DAY), 0);
     }
 
     /**
@@ -193,7 +193,7 @@ public final class Duration
      * @throws ArithmeticException if the input hours exceeds the capacity of {@code Duration}
      */
     public static Duration ofHours(long hours) {
-        return create(DesugarMath.multiplyExact(hours, SECONDS_PER_HOUR), 0);
+        return create(Math.multiplyExact(hours, SECONDS_PER_HOUR), 0);
     }
 
     /**
@@ -208,7 +208,7 @@ public final class Duration
      * @throws ArithmeticException if the input minutes exceeds the capacity of {@code Duration}
      */
     public static Duration ofMinutes(long minutes) {
-        return create(DesugarMath.multiplyExact(minutes, SECONDS_PER_MINUTE), 0);
+        return create(Math.multiplyExact(minutes, SECONDS_PER_MINUTE), 0);
     }
 
     //-----------------------------------------------------------------------
@@ -244,8 +244,8 @@ public final class Duration
      * @throws ArithmeticException if the adjustment causes the seconds to exceed the capacity of {@code Duration}
      */
     public static Duration ofSeconds(long seconds, long nanoAdjustment) {
-        long secs = DesugarMath.addExact(seconds, DesugarMath.floorDiv(nanoAdjustment, NANOS_PER_SECOND));
-        int nos = (int) DesugarMath.floorMod(nanoAdjustment, NANOS_PER_SECOND);
+        long secs = Math.addExact(seconds, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND));
+        int nos = (int) Math.floorMod(nanoAdjustment, NANOS_PER_SECOND);
         return create(secs, nos);
     }
 
@@ -427,8 +427,8 @@ public final class Duration
             return 0;
         }
         try {
-            long val = DesugarLong.parseLong(text, start, end, 10);
-            return DesugarMath.multiplyExact(val, multiplier);
+            long val = Long.parseLong(text, start, end, 10);
+            return Math.multiplyExact(val, multiplier);
         } catch (NumberFormatException | ArithmeticException ex) {
             throw (DateTimeParseException) new DateTimeParseException("Text cannot be parsed to a Duration: " + errorText, text, 0).initCause(ex);
         }
@@ -440,7 +440,7 @@ public final class Duration
             return 0;
         }
         try {
-            int fraction = DesugarInteger.parseInt(text, start, end, 10);
+            int fraction = Integer.parseInt(text, start, end, 10);
 
             // for number strings smaller than 9 digits, interpret as if there
             // were trailing zeros
@@ -454,7 +454,7 @@ public final class Duration
     }
 
     private static Duration create(boolean negate, long daysAsSecs, long hoursAsSecs, long minsAsSecs, long secs, int nanos) {
-        long seconds = DesugarMath.addExact(daysAsSecs, DesugarMath.addExact(hoursAsSecs, DesugarMath.addExact(minsAsSecs, secs)));
+        long seconds = Math.addExact(daysAsSecs, Math.addExact(hoursAsSecs, Math.addExact(minsAsSecs, secs)));
         if (negate) {
             return ofSeconds(seconds, nanos).negated();
         }
@@ -709,7 +709,7 @@ public final class Duration
     public Duration plus(long amountToAdd, TemporalUnit unit) {
         Objects.requireNonNull(unit, "unit");
         if (unit == DAYS) {
-            return plus(DesugarMath.multiplyExact(amountToAdd, SECONDS_PER_DAY), 0);
+            return plus(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY), 0);
         }
         if (unit.isDurationEstimated()) {
             throw new UnsupportedTemporalTypeException("Unit must not have an estimated duration");
@@ -724,7 +724,7 @@ public final class Duration
                 case MILLIS: return plusMillis(amountToAdd);
                 case SECONDS: return plusSeconds(amountToAdd);
             }
-            return plusSeconds(DesugarMath.multiplyExact(unit.getDuration().seconds, amountToAdd));
+            return plusSeconds(Math.multiplyExact(unit.getDuration().seconds, amountToAdd));
         }
         Duration duration = unit.getDuration().multipliedBy(amountToAdd);
         return plusSeconds(duration.getSeconds()).plusNanos(duration.getNano());
@@ -744,7 +744,7 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Duration plusDays(long daysToAdd) {
-        return plus(DesugarMath.multiplyExact(daysToAdd, SECONDS_PER_DAY), 0);
+        return plus(Math.multiplyExact(daysToAdd, SECONDS_PER_DAY), 0);
     }
 
     /**
@@ -757,7 +757,7 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Duration plusHours(long hoursToAdd) {
-        return plus(DesugarMath.multiplyExact(hoursToAdd, SECONDS_PER_HOUR), 0);
+        return plus(Math.multiplyExact(hoursToAdd, SECONDS_PER_HOUR), 0);
     }
 
     /**
@@ -770,7 +770,7 @@ public final class Duration
      * @throws ArithmeticException if numeric overflow occurs
      */
     public Duration plusMinutes(long minutesToAdd) {
-        return plus(DesugarMath.multiplyExact(minutesToAdd, SECONDS_PER_MINUTE), 0);
+        return plus(Math.multiplyExact(minutesToAdd, SECONDS_PER_MINUTE), 0);
     }
 
     /**
@@ -826,8 +826,8 @@ public final class Duration
         if ((secondsToAdd | nanosToAdd) == 0) {
             return this;
         }
-        long epochSec = DesugarMath.addExact(seconds, secondsToAdd);
-        epochSec = DesugarMath.addExact(epochSec, nanosToAdd / NANOS_PER_SECOND);
+        long epochSec = Math.addExact(seconds, secondsToAdd);
+        epochSec = Math.addExact(epochSec, nanosToAdd / NANOS_PER_SECOND);
         nanosToAdd = nanosToAdd % NANOS_PER_SECOND;
         long nanoAdjustment = nanos + nanosToAdd;  // safe int+NANOS_PER_SECOND
         return ofSeconds(epochSec, nanoAdjustment);
@@ -1222,8 +1222,8 @@ public final class Duration
             tempSeconds = tempSeconds + 1;
             tempNanos = tempNanos - NANOS_PER_SECOND;
         }
-        long millis = DesugarMath.multiplyExact(tempSeconds, 1000);
-        millis = DesugarMath.addExact(millis, tempNanos / NANOS_PER_MILLI);
+        long millis = Math.multiplyExact(tempSeconds, 1000);
+        millis = Math.addExact(millis, tempNanos / NANOS_PER_MILLI);
         return millis;
     }
 
@@ -1245,8 +1245,8 @@ public final class Duration
             tempSeconds = tempSeconds + 1;
             tempNanos = tempNanos - NANOS_PER_SECOND;
         }
-        long totalNanos = DesugarMath.multiplyExact(tempSeconds, NANOS_PER_SECOND);
-        totalNanos = DesugarMath.addExact(totalNanos, tempNanos);
+        long totalNanos = Math.multiplyExact(tempSeconds, NANOS_PER_SECOND);
+        totalNanos = Math.addExact(totalNanos, tempNanos);
         return totalNanos;
     }
 

@@ -361,7 +361,7 @@ public final class LocalTime
         Objects.requireNonNull(zone, "zone");
         ZoneOffset offset = zone.getRules().getOffset(instant);
         long localSecond = instant.getEpochSecond() + offset.getTotalSeconds();
-        int secsOfDay = DesugarMath.floorMod(localSecond, SECONDS_PER_DAY);
+        int secsOfDay = Math.floorMod(localSecond, SECONDS_PER_DAY);
         return ofNanoOfDay(secsOfDay * NANOS_PER_SECOND + instant.getNano());
     }
 

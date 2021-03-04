@@ -417,8 +417,8 @@ public final class LocalDateTime
         Objects.requireNonNull(offset, "offset");
         NANO_OF_SECOND.checkValidValue(nanoOfSecond);
         long localSecond = epochSecond + offset.getTotalSeconds();  // overflow caught later
-        long localEpochDay = DesugarMath.floorDiv(localSecond, SECONDS_PER_DAY);
-        int secsOfDay = DesugarMath.floorMod(localSecond, SECONDS_PER_DAY);
+        long localEpochDay = Math.floorDiv(localSecond, SECONDS_PER_DAY);
+        int secsOfDay = Math.floorMod(localSecond, SECONDS_PER_DAY);
         LocalDate date = LocalDate.ofEpochDay(localEpochDay);
         LocalTime time = LocalTime.ofNanoOfDay(secsOfDay * NANOS_PER_SECOND + nanoOfSecond);
         return new LocalDateTime(date, time);
@@ -1565,8 +1565,8 @@ public final class LocalDateTime
                 (hours % HOURS_PER_DAY) * NANOS_PER_HOUR;          //   max  86400000000000
         long curNoD = time.toNanoOfDay();                       //   max  86400000000000
         totNanos = totNanos * sign + curNoD;                    // total 432000000000000
-        totDays += DesugarMath.floorDiv(totNanos, NANOS_PER_DAY);
-        long newNoD = DesugarMath.floorMod(totNanos, NANOS_PER_DAY);
+        totDays += Math.floorDiv(totNanos, NANOS_PER_DAY);
+        long newNoD = Math.floorMod(totNanos, NANOS_PER_DAY);
         LocalTime newTime = (newNoD == curNoD ? time : LocalTime.ofNanoOfDay(newNoD));
         return with(newDate.plusDays(totDays), newTime);
     }
@@ -1697,34 +1697,34 @@ public final class LocalDateTime
                 }
                 switch ((ChronoUnit) unit) {
                     case NANOS:
-                        amount = DesugarMath.multiplyExact(amount, NANOS_PER_DAY);
+                        amount = Math.multiplyExact(amount, NANOS_PER_DAY);
                         break;
                     case MICROS:
-                        amount = DesugarMath.multiplyExact(amount, MICROS_PER_DAY);
+                        amount = Math.multiplyExact(amount, MICROS_PER_DAY);
                         timePart = timePart / 1000;
                         break;
                     case MILLIS:
-                        amount = DesugarMath.multiplyExact(amount, MILLIS_PER_DAY);
+                        amount = Math.multiplyExact(amount, MILLIS_PER_DAY);
                         timePart = timePart / 1_000_000;
                         break;
                     case SECONDS:
-                        amount = DesugarMath.multiplyExact(amount, SECONDS_PER_DAY);
+                        amount = Math.multiplyExact(amount, SECONDS_PER_DAY);
                         timePart = timePart / NANOS_PER_SECOND;
                         break;
                     case MINUTES:
-                        amount = DesugarMath.multiplyExact(amount, MINUTES_PER_DAY);
+                        amount = Math.multiplyExact(amount, MINUTES_PER_DAY);
                         timePart = timePart / NANOS_PER_MINUTE;
                         break;
                     case HOURS:
-                        amount = DesugarMath.multiplyExact(amount, HOURS_PER_DAY);
+                        amount = Math.multiplyExact(amount, HOURS_PER_DAY);
                         timePart = timePart / NANOS_PER_HOUR;
                         break;
                     case HALF_DAYS:
-                        amount = DesugarMath.multiplyExact(amount, 2);
+                        amount = Math.multiplyExact(amount, 2);
                         timePart = timePart / (NANOS_PER_HOUR * 12);
                         break;
                 }
-                return DesugarMath.addExact(amount, timePart);
+                return Math.addExact(amount, timePart);
             }
             LocalDate endDate = end.date;
             if (endDate.isAfter(date) && end.time.isBefore(time)) {

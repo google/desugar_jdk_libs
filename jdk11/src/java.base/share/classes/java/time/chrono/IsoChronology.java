@@ -326,7 +326,7 @@ public final class IsoChronology extends AbstractChronology implements Serializa
         }
         totalDays -= DAYS_0000_TO_1970;
         timeinSec = (hour * 60 + minute ) * 60 + second;
-        return DesugarMath.addExact(DesugarMath.multiplyExact(totalDays, 86400L), timeinSec - zoneOffset.getTotalSeconds());
+        return Math.addExact(Math.multiplyExact(totalDays, 86400L), timeinSec - zoneOffset.getTotalSeconds());
      }
 
     /**
@@ -592,8 +592,8 @@ public final class IsoChronology extends AbstractChronology implements Serializa
             if (resolverStyle != ResolverStyle.LENIENT) {
                 PROLEPTIC_MONTH.checkValidValue(pMonth);
             }
-            addFieldValue(fieldValues, MONTH_OF_YEAR, DesugarMath.floorMod(pMonth, 12) + 1);
-            addFieldValue(fieldValues, YEAR, DesugarMath.floorDiv(pMonth, 12));
+            addFieldValue(fieldValues, MONTH_OF_YEAR, Math.floorMod(pMonth, 12) + 1);
+            addFieldValue(fieldValues, YEAR, Math.floorDiv(pMonth, 12));
         }
     }
 
@@ -610,19 +610,19 @@ public final class IsoChronology extends AbstractChronology implements Serializa
                 if (resolverStyle == ResolverStyle.STRICT) {
                     // do not invent era if strict, but do cross-check with year
                     if (year != null) {
-                        addFieldValue(fieldValues, YEAR, (year > 0 ? yoeLong: DesugarMath.subtractExact(1, yoeLong)));
+                        addFieldValue(fieldValues, YEAR, (year > 0 ? yoeLong: Math.subtractExact(1, yoeLong)));
                     } else {
                         // reinstate the field removed earlier, no cross-check issues
                         fieldValues.put(YEAR_OF_ERA, yoeLong);
                     }
                 } else {
                     // invent era
-                    addFieldValue(fieldValues, YEAR, (year == null || year > 0 ? yoeLong: DesugarMath.subtractExact(1, yoeLong)));
+                    addFieldValue(fieldValues, YEAR, (year == null || year > 0 ? yoeLong: Math.subtractExact(1, yoeLong)));
                 }
             } else if (era.longValue() == 1L) {
                 addFieldValue(fieldValues, YEAR, yoeLong);
             } else if (era.longValue() == 0L) {
-                addFieldValue(fieldValues, YEAR, DesugarMath.subtractExact(1, yoeLong));
+                addFieldValue(fieldValues, YEAR, Math.subtractExact(1, yoeLong));
             } else {
                 throw new DateTimeException("Invalid value for era: " + era);
             }
@@ -636,8 +636,8 @@ public final class IsoChronology extends AbstractChronology implements Serializa
     LocalDate resolveYMD(Map <TemporalField, Long> fieldValues, ResolverStyle resolverStyle) {
         int y = YEAR.checkValidIntValue(fieldValues.remove(YEAR));
         if (resolverStyle == ResolverStyle.LENIENT) {
-            long months = DesugarMath.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
-            long days = DesugarMath.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1);
+            long months = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1);
+            long days = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1);
             return LocalDate.of(y, 1, 1).plusMonths(months).plusDays(days);
         }
         int moy = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR));

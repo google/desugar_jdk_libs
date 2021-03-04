@@ -325,8 +325,8 @@ public final class Instant
      * @throws ArithmeticException if numeric overflow occurs
      */
     public static Instant ofEpochSecond(long epochSecond, long nanoAdjustment) {
-        long secs = DesugarMath.addExact(epochSecond, DesugarMath.floorDiv(nanoAdjustment, NANOS_PER_SECOND));
-        int nos = (int) DesugarMath.floorMod(nanoAdjustment, NANOS_PER_SECOND);
+        long secs = Math.addExact(epochSecond, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND));
+        int nos = (int) Math.floorMod(nanoAdjustment, NANOS_PER_SECOND);
         return create(secs, nos);
     }
 
@@ -341,8 +341,8 @@ public final class Instant
      * @throws DateTimeException if the instant exceeds the maximum or minimum instant
      */
     public static Instant ofEpochMilli(long epochMilli) {
-        long secs = DesugarMath.floorDiv(epochMilli, 1000);
-        int mos = DesugarMath.floorMod(epochMilli, 1000);
+        long secs = Math.floorDiv(epochMilli, 1000);
+        int mos = Math.floorMod(epochMilli, 1000);
         return create(secs, mos * 1000_000);
     }
 
@@ -758,7 +758,7 @@ public final class Instant
             throw new UnsupportedTemporalTypeException("Unit must divide into a standard day without remainder");
         }
         long nod = (seconds % LocalTime.SECONDS_PER_DAY) * LocalTime.NANOS_PER_SECOND + nanos;
-        long result = DesugarMath.floorDiv(nod, dur) * dur;
+        long result = Math.floorDiv(nod, dur) * dur;
         return plusNanos(result - nod);
     }
 
@@ -854,10 +854,10 @@ public final class Instant
                 case MICROS: return plus(amountToAdd / 1000_000, (amountToAdd % 1000_000) * 1000);
                 case MILLIS: return plusMillis(amountToAdd);
                 case SECONDS: return plusSeconds(amountToAdd);
-                case MINUTES: return plusSeconds(DesugarMath.multiplyExact(amountToAdd, SECONDS_PER_MINUTE));
-                case HOURS: return plusSeconds(DesugarMath.multiplyExact(amountToAdd, SECONDS_PER_HOUR));
-                case HALF_DAYS: return plusSeconds(DesugarMath.multiplyExact(amountToAdd, SECONDS_PER_DAY / 2));
-                case DAYS: return plusSeconds(DesugarMath.multiplyExact(amountToAdd, SECONDS_PER_DAY));
+                case MINUTES: return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_MINUTE));
+                case HOURS: return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_HOUR));
+                case HALF_DAYS: return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY / 2));
+                case DAYS: return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY));
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
@@ -922,8 +922,8 @@ public final class Instant
         if ((secondsToAdd | nanosToAdd) == 0) {
             return this;
         }
-        long epochSec = DesugarMath.addExact(seconds, secondsToAdd);
-        epochSec = DesugarMath.addExact(epochSec, nanosToAdd / NANOS_PER_SECOND);
+        long epochSec = Math.addExact(seconds, secondsToAdd);
+        epochSec = Math.addExact(epochSec, nanosToAdd / NANOS_PER_SECOND);
         nanosToAdd = nanosToAdd % NANOS_PER_SECOND;
         long nanoAdjustment = nanos + nanosToAdd;  // safe int+NANOS_PER_SECOND
         return ofEpochSecond(epochSec, nanoAdjustment);
@@ -1147,7 +1147,7 @@ public final class Instant
             switch (f) {
                 case NANOS: return nanosUntil(end);
                 case MICROS: return nanosUntil(end) / 1000;
-                case MILLIS: return DesugarMath.subtractExact(end.toEpochMilli(), toEpochMilli());
+                case MILLIS: return Math.subtractExact(end.toEpochMilli(), toEpochMilli());
                 case SECONDS: return secondsUntil(end);
                 case MINUTES: return secondsUntil(end) / SECONDS_PER_MINUTE;
                 case HOURS: return secondsUntil(end) / SECONDS_PER_HOUR;
@@ -1160,13 +1160,13 @@ public final class Instant
     }
 
     private long nanosUntil(Instant end) {
-        long secsDiff = DesugarMath.subtractExact(end.seconds, seconds);
-        long totalNanos = DesugarMath.multiplyExact(secsDiff, NANOS_PER_SECOND);
-        return DesugarMath.addExact(totalNanos, end.nanos - nanos);
+        long secsDiff = Math.subtractExact(end.seconds, seconds);
+        long totalNanos = Math.multiplyExact(secsDiff, NANOS_PER_SECOND);
+        return Math.addExact(totalNanos, end.nanos - nanos);
     }
 
     private long secondsUntil(Instant end) {
-        long secsDiff = DesugarMath.subtractExact(end.seconds, seconds);
+        long secsDiff = Math.subtractExact(end.seconds, seconds);
         long nanosDiff = end.nanos - nanos;
         if (secsDiff > 0 && nanosDiff < 0) {
             secsDiff--;
@@ -1230,12 +1230,12 @@ public final class Instant
      */
     public long toEpochMilli() {
         if (seconds < 0 && nanos > 0) {
-            long millis = DesugarMath.multiplyExact(seconds+1, 1000);
+            long millis = Math.multiplyExact(seconds+1, 1000);
             long adjustment = nanos / 1000_000 - 1000;
-            return DesugarMath.addExact(millis, adjustment);
+            return Math.addExact(millis, adjustment);
         } else {
-            long millis = DesugarMath.multiplyExact(seconds, 1000);
-            return DesugarMath.addExact(millis, nanos / 1000_000);
+            long millis = Math.multiplyExact(seconds, 1000);
+            return Math.addExact(millis, nanos / 1000_000);
         }
     }
 

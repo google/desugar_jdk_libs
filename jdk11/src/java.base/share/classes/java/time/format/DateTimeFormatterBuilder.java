@@ -3425,8 +3425,8 @@ public final class DateTimeFormatterBuilder {
             if (inSec >= -SECONDS_0000_TO_1970) {
                 // current era
                 long zeroSecs = inSec - SECONDS_PER_10000_YEARS + SECONDS_0000_TO_1970;
-                long hi = DesugarMath.floorDiv(zeroSecs, SECONDS_PER_10000_YEARS) + 1;
-                long lo = DesugarMath.floorMod(zeroSecs, SECONDS_PER_10000_YEARS);
+                long hi = Math.floorDiv(zeroSecs, SECONDS_PER_10000_YEARS) + 1;
+                long lo = Math.floorMod(zeroSecs, SECONDS_PER_10000_YEARS);
                 LocalDateTime ldt = LocalDateTime.ofEpochSecond(lo - SECONDS_0000_TO_1970, 0, ZoneOffset.UTC);
                 if (hi > 0) {
                     buf.append('+').append(hi);
@@ -3515,7 +3515,7 @@ public final class DateTimeFormatterBuilder {
             try {
                 LocalDateTime ldt = LocalDateTime.of(year, month, day, hour, min, sec, 0).plusDays(days);
                 instantSecs = ldt.toEpochSecond(ZoneOffset.UTC);
-                instantSecs += DesugarMath.multiplyExact(yearParsed / 10_000L, SECONDS_PER_10000_YEARS);
+                instantSecs += Math.multiplyExact(yearParsed / 10_000L, SECONDS_PER_10000_YEARS);
             } catch (RuntimeException ex) {
                 return ~position;
             }
@@ -3583,7 +3583,7 @@ public final class DateTimeFormatterBuilder {
             if (offsetSecs == null) {
                 return false;
             }
-            int totalSecs = DesugarMath.toIntExact(offsetSecs);
+            int totalSecs = Math.toIntExact(offsetSecs);
             if (totalSecs == 0) {
                 buf.append(noOffsetText);
             } else {
@@ -3884,7 +3884,7 @@ public final class DateTimeFormatterBuilder {
             }
             String gmtText = "GMT";  // TODO: get localized version of 'GMT'
             buf.append(gmtText);
-            int totalSecs = DesugarMath.toIntExact(offsetSecs);
+            int totalSecs = Math.toIntExact(offsetSecs);
             if (totalSecs != 0) {
                 int absHours = Math.abs((totalSecs / 3600) % 100);  // anything larger than 99 silently dropped
                 int absMinutes = Math.abs((totalSecs / 60) % 60);

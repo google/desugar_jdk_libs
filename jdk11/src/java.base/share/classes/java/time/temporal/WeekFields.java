@@ -790,12 +790,12 @@ public final class WeekFields implements Serializable {
         private int localizedDayOfWeek(TemporalAccessor temporal) {
             int sow = weekDef.getFirstDayOfWeek().getValue();
             int isoDow = temporal.get(DAY_OF_WEEK);
-            return DesugarMath.floorMod(isoDow - sow, 7) + 1;
+            return Math.floorMod(isoDow - sow, 7) + 1;
         }
 
         private int localizedDayOfWeek(int isoDow) {
             int sow = weekDef.getFirstDayOfWeek().getValue();
-            return DesugarMath.floorMod(isoDow - sow, 7) + 1;
+            return Math.floorMod(isoDow - sow, 7) + 1;
         }
 
         private long localizedWeekOfMonth(TemporalAccessor temporal) {
@@ -883,7 +883,7 @@ public final class WeekFields implements Serializable {
          */
         private int startOfWeekOffset(int day, int dow) {
             // offset of first day corresponding to the day of week in first 7 days (zero origin)
-            int weekStart = DesugarMath.floorMod(day - dow, 7);
+            int weekStart = Math.floorMod(day - dow, 7);
             int offset = -weekStart;
             if (weekStart + 1 > weekDef.getMinimalDaysInFirstWeek()) {
                 // The previous week has the minimum days in the current month to be a 'week'
@@ -930,14 +930,14 @@ public final class WeekFields implements Serializable {
         public ChronoLocalDate resolve(
                 Map<TemporalField, Long> fieldValues, TemporalAccessor partialTemporal, ResolverStyle resolverStyle) {
             final long value = fieldValues.get(this);
-            final int newValue = DesugarMath.toIntExact(value);  // broad limit makes overflow checking lighter
+            final int newValue = Math.toIntExact(value);  // broad limit makes overflow checking lighter
             // first convert localized day-of-week to ISO day-of-week
             // doing this first handles case where both ISO and localized were parsed and might mismatch
             // day-of-week is always strict as two different day-of-week values makes lenient complex
             if (rangeUnit == WEEKS) {  // day-of-week
                 final int checkedValue = range.checkValidIntValue(value, this);  // no leniency as too complex
                 final int startDow = weekDef.getFirstDayOfWeek().getValue();
-                long isoDow = DesugarMath.floorMod((startDow - 1) + (checkedValue - 1), 7) + 1;
+                long isoDow = Math.floorMod((startDow - 1) + (checkedValue - 1), 7) + 1;
                 fieldValues.remove(this);
                 fieldValues.put(DAY_OF_WEEK, isoDow);
                 return null;
@@ -973,10 +973,10 @@ public final class WeekFields implements Serializable {
                 Map<TemporalField, Long> fieldValues, Chronology chrono, int year, long month, long wom, int localDow, ResolverStyle resolverStyle) {
             ChronoLocalDate date;
             if (resolverStyle == ResolverStyle.LENIENT) {
-                date = chrono.date(year, 1, 1).plus(DesugarMath.subtractExact(month, 1), MONTHS);
-                long weeks = DesugarMath.subtractExact(wom, localizedWeekOfMonth(date));
+                date = chrono.date(year, 1, 1).plus(Math.subtractExact(month, 1), MONTHS);
+                long weeks = Math.subtractExact(wom, localizedWeekOfMonth(date));
                 int days = localDow - localizedDayOfWeek(date);  // safe from overflow
-                date = date.plus(DesugarMath.addExact(DesugarMath.multiplyExact(weeks, 7), days), DAYS);
+                date = date.plus(Math.addExact(Math.multiplyExact(weeks, 7), days), DAYS);
             } else {
                 int monthValid = MONTH_OF_YEAR.checkValidIntValue(month);  // validate
                 date = chrono.date(year, monthValid, 1);
@@ -999,9 +999,9 @@ public final class WeekFields implements Serializable {
                 Map<TemporalField, Long> fieldValues, Chronology chrono, int year, long woy, int localDow, ResolverStyle resolverStyle) {
             ChronoLocalDate date = chrono.date(year, 1, 1);
             if (resolverStyle == ResolverStyle.LENIENT) {
-                long weeks = DesugarMath.subtractExact(woy, localizedWeekOfYear(date));
+                long weeks = Math.subtractExact(woy, localizedWeekOfYear(date));
                 int days = localDow - localizedDayOfWeek(date);  // safe from overflow
-                date = date.plus(DesugarMath.addExact(DesugarMath.multiplyExact(weeks, 7), days), DAYS);
+                date = date.plus(Math.addExact(Math.multiplyExact(weeks, 7), days), DAYS);
             } else {
                 int womInt = range.checkValidIntValue(woy, this);  // validate
                 int weeks = (int) (womInt - localizedWeekOfYear(date));  // safe from overflow
@@ -1025,7 +1025,7 @@ public final class WeekFields implements Serializable {
             if (resolverStyle == ResolverStyle.LENIENT) {
                 date = ofWeekBasedYear(chrono, yowby, 1, localDow);
                 long wowby = fieldValues.get(weekDef.weekOfWeekBasedYear);
-                long weeks = DesugarMath.subtractExact(wowby, 1);
+                long weeks = Math.subtractExact(wowby, 1);
                 date = date.plus(weeks, WEEKS);
             } else {
                 int wowby = weekDef.weekOfWeekBasedYear.range().checkValidIntValue(

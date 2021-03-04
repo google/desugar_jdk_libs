@@ -742,9 +742,9 @@ public interface Chronology extends Comparable<Chronology> {
         HOUR_OF_DAY.checkValidValue(hour);
         MINUTE_OF_HOUR.checkValidValue(minute);
         SECOND_OF_MINUTE.checkValidValue(second);
-        long daysInSec = DesugarMath.multiplyExact(date(prolepticYear, month, dayOfMonth).toEpochDay(), 86400);
+        long daysInSec = Math.multiplyExact(date(prolepticYear, month, dayOfMonth).toEpochDay(), 86400);
         long timeinSec = (hour * 60 + minute) * 60 + second;
-        return DesugarMath.addExact(daysInSec, timeinSec - zoneOffset.getTotalSeconds());
+        return Math.addExact(daysInSec, timeinSec - zoneOffset.getTotalSeconds());
     }
 
     /**

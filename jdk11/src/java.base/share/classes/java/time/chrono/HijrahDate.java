@@ -497,7 +497,7 @@ public final class HijrahDate
      * @return the day-of-week; computed from the epochday
      */
     private int getDayOfWeek() {
-        int dow0 = DesugarMath.floorMod(toEpochDay() + 3, 7);
+        int dow0 = Math.floorMod(toEpochDay() + 3, 7);
         return dow0 + 1;
     }
 
@@ -527,7 +527,7 @@ public final class HijrahDate
         if (years == 0) {
             return this;
         }
-        int newYear = DesugarMath.addExact(this.prolepticYear, (int)years);
+        int newYear = Math.addExact(this.prolepticYear, (int)years);
         return resolvePreviousValid(newYear, monthOfYear, dayOfMonth);
     }
 
@@ -538,8 +538,8 @@ public final class HijrahDate
         }
         long monthCount = prolepticYear * 12L + (monthOfYear - 1);
         long calcMonths = monthCount + monthsToAdd;  // safe overflow
-        int newYear = chrono.checkValidYear(DesugarMath.floorDiv(calcMonths, 12L));
-        int newMonth = (int)DesugarMath.floorMod(calcMonths, 12L) + 1;
+        int newYear = chrono.checkValidYear(Math.floorDiv(calcMonths, 12L));
+        int newMonth = (int)Math.floorMod(calcMonths, 12L) + 1;
         return resolvePreviousValid(newYear, newMonth, dayOfMonth);
     }
 
@@ -605,7 +605,7 @@ public final class HijrahDate
         }
         long years = totalMonths / 12;  // safe
         int months = (int) (totalMonths % 12);  // safe
-        return getChronology().period(DesugarMath.toIntExact(years), months, days);
+        return getChronology().period(Math.toIntExact(years), months, days);
     }
 
     //-------------------------------------------------------------------------
