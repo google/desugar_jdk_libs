@@ -30,7 +30,7 @@ genrule(
 genrule(
     name = "maven_release_jdk11",
     srcs = [
-        ":desugar_jdk_libs",
+        ":desugar_jdk_libs_jdk11",
         "VERSION.txt",
         "DEPENDENCIES.txt",
     ],
