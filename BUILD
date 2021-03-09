@@ -51,13 +51,8 @@ py_binary(
     srcs_version = "PY3",
 )
 
-java_binary(
+alias(
     name = "tools/jdk_type_selector",
-    srcs = ["tools/com/google/devtools/build/android/JarFileClassEntrySelector.java"],
-    javacopts = [
-        "-source 11",
-        "-target 11",
-    ],
-    main_class = "com.google.devtools.build.android.JarFileClassEntrySelector",
+    actual = "//tools/java/com/google/devtools/build/android:jdk_type_selector",
     visibility = ["//visibility:public"],
 )
