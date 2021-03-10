@@ -24,7 +24,7 @@
  */
 package jdk.internal.util;
 
-// import jdk.internal.HotSpotIntrinsicCandidate; // for desugar:
+import jdk.internal.HotSpotIntrinsicCandidate;
 
 import java.util.List;
 import java.util.function.BiFunction;

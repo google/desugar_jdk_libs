@@ -35,6 +35,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import jdk.internal.vm.annotation.Stable;
 
 /**
  * Container class for immutable collections. Not part of the public API.
@@ -205,10 +206,13 @@ class ImmutableCollections {
 
     static final class ListItr<E> implements ListIterator<E> {
 
+        @Stable
         private final List<E> list;
 
+        @Stable
         private final int size;
 
+        @Stable
         private final boolean isListIterator;
 
         private int cursor;
@@ -293,10 +297,13 @@ class ImmutableCollections {
     static final class SubList<E> extends AbstractImmutableList<E>
             implements RandomAccess {
 
+        @Stable
         private final List<E> root;
 
+        @Stable
         private final int offset;
 
+        @Stable
         private final int size;
 
         private SubList(List<E> root, int offset, int size) {
@@ -353,8 +360,10 @@ class ImmutableCollections {
     static final class List12<E> extends AbstractImmutableList<E>
             implements Serializable {
 
+        @Stable
         private final E e0;
 
+        @Stable
         private final E e1;
 
         List12(E e0) {
@@ -400,7 +409,7 @@ class ImmutableCollections {
             implements Serializable {
 
         // EMPTY_LIST may be initialized from the CDS archive.
-        static List<?> EMPTY_LIST;
+        static @Stable List<?> EMPTY_LIST;
 
         static {
             // For desugar: Android runs on non-JVM runtime.
@@ -410,6 +419,7 @@ class ImmutableCollections {
             }
         }
 
+        @Stable
         private final E[] elements;
 
         @SafeVarargs
@@ -484,7 +494,9 @@ class ImmutableCollections {
     static final class Set12<E> extends AbstractImmutableSet<E>
             implements Serializable {
 
+        @Stable
         final E e0;
+        @Stable
         final E e1;
 
         Set12(E e0) {
@@ -518,7 +530,7 @@ class ImmutableCollections {
 
         @Override
         public Iterator<E> iterator() {
-            return new Iterator<E>() {
+            return new Iterator<>() {
                 private int idx = size();
 
                 @Override
@@ -564,7 +576,7 @@ class ImmutableCollections {
             implements Serializable {
 
         // EMPTY_SET may be initialized from the CDS archive.
-        static Set<?> EMPTY_SET;
+        static @Stable Set<?> EMPTY_SET;
 
         static {
             // For desugar: Android runs on non-JVM runtime.
@@ -574,7 +586,9 @@ class ImmutableCollections {
             }
         }
 
+        @Stable
         final E[] elements;
+        @Stable
         final int size;
 
         @SafeVarargs
@@ -725,7 +739,9 @@ class ImmutableCollections {
     }
 
     static final class Map1<K,V> extends AbstractImmutableMap<K,V> {
+        @Stable
         private final K k0;
+        @Stable
         private final V v0;
 
         Map1(K k0, V v0) {
@@ -779,7 +795,7 @@ class ImmutableCollections {
     static final class MapN<K,V> extends AbstractImmutableMap<K,V> {
 
         // EMPTY_MAP may be initialized from the CDS archive.
-        static Map<?,?> EMPTY_MAP;
+        static @Stable Map<?,?> EMPTY_MAP;
 
         static {
             // For desugar: Android runs on non-JVM runtime.
@@ -789,8 +805,10 @@ class ImmutableCollections {
             }
         }
 
+        @Stable
         final Object[] table; // pairs of key, value
 
+        @Stable
         final int size; // number of pairs
 
         MapN(Object... input) {
@@ -918,7 +936,7 @@ class ImmutableCollections {
 
         @Override
         public Set<Map.Entry<K,V>> entrySet() {
-            return new AbstractSet<Map.Entry<K,V>>() {
+            return new AbstractSet<>() {
                 @Override
                 public int size() {
                     return MapN.this.size;

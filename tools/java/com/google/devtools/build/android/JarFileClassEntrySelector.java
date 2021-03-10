@@ -114,7 +114,15 @@ public final class JarFileClassEntrySelector {
   };
 
   private static final ImmutableSet<String> OMITTED_ANNOTATIONS =
-      ImmutableSet.of("Ljdk/internal/HotSpotIntrinsicCandidate;");
+      ImmutableSet.of(
+          "Ljdk/internal/HotSpotIntrinsicCandidate;",
+          "Ljdk/internal/vm/annotation/Contended;",
+          "Ljdk/internal/vm/annotation/DontInline;",
+          "Ljdk/internal/vm/annotation/ForceInline;",
+          "Ljdk/internal/vm/annotation/Preserve;",
+          "Ljdk/internal/vm/annotation/ReservedStackAccess;",
+          "Ljdk/internal/vm/annotation/Stable;"
+      );
 
   private final Path inputJarPath;
   private final Path outputJarPath;
