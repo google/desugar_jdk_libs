@@ -22,7 +22,9 @@ package com.google.devtools.build.android;
 
 import static java.util.stream.Collectors.toList;
 
+import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +40,10 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.CRC32;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 
 /**
  * A helper class that matches *.class entries in a JAR file and delivers the matched entries to a
@@ -106,6 +112,9 @@ public final class JarFileClassEntrySelector {
     "java/util/concurrent/ThreadLocalRandom",
     "sun/misc/Desugar*"
   };
+
+  private static final ImmutableSet<String> OMITTED_ANNOTATIONS =
+      ImmutableSet.of("Ljdk/internal/HotSpotIntrinsicCandidate;");
 
   private final Path inputJarPath;
   private final Path outputJarPath;
@@ -178,15 +187,26 @@ public final class JarFileClassEntrySelector {
       for (JarEntry inEntry; (inEntry = in.getNextJarEntry()) != null; ) {
         String inEntryName = inEntry.getName();
         if (selectedEntryNames.contains(inEntryName)) {
-          byte[] entryBytes = in.readAllBytes();
-          out.putNextEntry(createJarEntry(inEntryName, entryBytes));
-          out.write(entryBytes);
-          out.closeEntry();
+          transferClassFileJarEntry(in, out);
         }
       }
     }
     selectedEntryNames.clear();
     return this;
+  }
+
+  private JarEntry transferClassFileJarEntry(InputStream in, JarOutputStream out)
+      throws IOException {
+    ClassReader cr = new ClassReader(in);
+    ClassWriter cw = new ClassWriter(0);
+    ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM8);
+    cr.accept(cv, /* parsingOptions= */ 0);
+    byte[] outBytes = cw.toByteArray();
+    JarEntry outJarEntry = createJarEntry(cr.getClassName() + ".class", outBytes);
+    out.putNextEntry(outJarEntry);
+    out.write(outBytes);
+    out.closeEntry();
+    return outJarEntry;
   }
 
   private static JarEntry createJarEntry(String entryName, byte[] bytes) {

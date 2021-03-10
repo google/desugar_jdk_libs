@@ -8,4 +8,8 @@ java_binary(
         "-target 11",
     ],
     main_class = "com.google.devtools.build.android.JarFileClassEntrySelector",
+    deps = [
+        "//third_party:asm",
+        "//third_party:guava",
+    ],
 )
