@@ -207,7 +207,7 @@ public final class JarFileClassEntrySelector {
       throws IOException {
     ClassReader cr = new ClassReader(in);
     ClassWriter cw = new ClassWriter(0);
-    ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM8);
+    ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM7);
     cr.accept(cv, /* parsingOptions= */ 0);
     byte[] outBytes = cw.toByteArray();
     JarEntry outJarEntry = createJarEntry(cr.getClassName() + ".class", outBytes);

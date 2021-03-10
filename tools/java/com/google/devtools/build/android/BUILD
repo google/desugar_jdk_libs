@@ -9,7 +9,7 @@ java_binary(
     ],
     main_class = "com.google.devtools.build.android.JarFileClassEntrySelector",
     deps = [
-        "//third_party:asm",
-        "//third_party:guava",
+        "@google_bazel_common//third_party/java/asm",
+        "@google_bazel_common//third_party/java/guava",
     ],
 )
