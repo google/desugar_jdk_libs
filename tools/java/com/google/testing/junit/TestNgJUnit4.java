@@ -261,6 +261,10 @@ public final class TestNgJUnit4 extends BlockJUnit4ClassRunner {
     for (Method method : getTestClass().getJavaClass().getMethods()) {
       if (method.isAnnotationPresent(Test.class)) {
         baseMethods.add(method);
+      } else if (method.getName().startsWith("test")
+          && method.getParameterCount() == 0
+          && !Modifier.isStatic(method.getModifiers())) {
+        baseMethods.add(method);
       }
     }
     return baseMethods.build();
