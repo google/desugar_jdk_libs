@@ -178,6 +178,13 @@ public class DesugarCollections {
     }
   }
 
+  public static <E> void forEachIterable(Iterable<E> iterable, Consumer<? super E> action) {
+    Objects.requireNonNull(action);
+    for (E t : iterable) {
+      action.accept(t);
+    }
+  }
+
   @SuppressWarnings("unchecked")
   static <E> void replaceAll(List<E> list, UnaryOperator<E> operator) {
     // Fall-back to non-synchronized set-up on instrumented devices.
