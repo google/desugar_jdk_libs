@@ -26,12 +26,18 @@ import com.google.auto.value.AutoValue;
 import com.google.auto.value.extension.memoized.Memoized;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Executable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
@@ -45,8 +51,13 @@ abstract class DataProviderKey {
   private static DataProviderKey create(Class<?> providerClass, String providerName) {
     for (Method method : providerClass.getDeclaredMethods()) {
       DataProvider dataProviderSpec = method.getDeclaredAnnotation(DataProvider.class);
-      if (dataProviderSpec != null && dataProviderSpec.name().equals(providerName)) {
-        return new AutoValue_DataProviderKey(method);
+      if (dataProviderSpec != null) {
+        String dataProviderLabel =
+            dataProviderSpec.name().isEmpty() ? method.getName() : dataProviderSpec.name();
+        if (dataProviderLabel.equals(providerName)) {
+          method.trySetAccessible();
+          return new AutoValue_DataProviderKey(method);
+        }
       }
     }
     throw new NoSuchMethodError(
@@ -105,10 +116,26 @@ abstract class DataProviderKey {
       try {
         providerClassInstances.add(factory.call());
       } catch (ReflectiveOperationException e) {
-        throw new AssertionError(e);
+        throw new LinkageError(e.getMessage(), e);
       }
     }
     return providerClassInstances.build();
+  }
+
+  private void evaluateBeforeMethods(Object providerInstance) {
+    for (Method method : providerInstance.getClass().getMethods()) {
+      for (Class<? extends Annotation> annotation :
+          ImmutableList.of(BeforeTest.class, BeforeClass.class, BeforeMethod.class)) {
+        if (method.isAnnotationPresent(annotation)) {
+          try {
+            method.invoke(providerInstance);
+            break;
+          } catch (ReflectiveOperationException e) {
+            throw new AssertionError(e);
+          }
+        }
+      }
+    }
   }
 
   @Memoized
@@ -123,21 +150,44 @@ abstract class DataProviderKey {
     List<Object> dataProviderOwnerInstances =
         isStaticProvider() ? Collections.singletonList(null) : availableProviderClassInstances();
     for (Object providerInstance : dataProviderOwnerInstances) {
+      if (!isStaticProvider()) {
+        evaluateBeforeMethods(providerInstance);
+      }
       for (ParameterInputEntry parameterInput : parameterInputs) {
         try {
-          Object[][] rawOutputs =
-              (Object[][]) providerMethod().invoke(providerInstance, parameterInput.payload());
-          for (int i = 0, rawDatasetsLength = rawOutputs.length; i < rawDatasetsLength; i++) {
-            ParameterizedMemberTag tag =
-                ParameterizedMemberTag.builder()
-                    .setMember(providerMethod())
-                    .setInputSerialNumber(parameterInput.tag().outputSerialNumber())
-                    .setOutputSerialNumber(i)
-                    .build();
-            dataContainer.add(ParameterInputEntry.create(tag, rawOutputs[i]));
+          Class<?> providerReturnType = providerMethod().getReturnType();
+          Object providerResult =
+              providerMethod().invoke(providerInstance, parameterInput.payload());
+          if (Object[][].class.isAssignableFrom(providerReturnType)) {
+            Object[][] rawOutputs = (Object[][]) providerResult;
+            for (int i = 0, rawDatasetsLength = rawOutputs.length; i < rawDatasetsLength; i++) {
+              ParameterizedMemberTag tag =
+                  ParameterizedMemberTag.builder()
+                      .setMember(providerMethod())
+                      .setInputSerialNumber(parameterInput.tag().outputSerialNumber())
+                      .setOutputSerialNumber(i)
+                      .build();
+              dataContainer.add(ParameterInputEntry.create(tag, rawOutputs[i]));
+            }
+          } else if (Iterator.class.isAssignableFrom(providerReturnType)) {
+            Iterator<Object[]> rawOutputs = (Iterator<Object[]>) providerResult;
+            for (int i = 0; rawOutputs.hasNext(); i++) {
+              Object[] rawOutput = rawOutputs.next();
+              ParameterizedMemberTag tag =
+                  ParameterizedMemberTag.builder()
+                      .setMember(providerMethod())
+                      .setInputSerialNumber(parameterInput.tag().outputSerialNumber())
+                      .setOutputSerialNumber(i)
+                      .build();
+              dataContainer.add(ParameterInputEntry.create(tag, rawOutput));
+            }
+          } else {
+            throw new UnsupportedOperationException(
+                String.format("Unsupported return type for data provider: %s", providerMethod()));
           }
-        } catch (ReflectiveOperationException e) {
-          throw new AssertionError(e);
+        } catch (ReflectiveOperationException | ClassCastException e) {
+          throw new AssertionError(
+              String.format("Failed at %s.\n%s", providerMethod(), e.getCause()));
         }
       }
     }

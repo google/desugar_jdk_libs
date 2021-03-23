@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.junit.internal.runners.model.ReflectiveCallable;
+import org.junit.internal.runners.statements.ExpectException;
 import org.junit.internal.runners.statements.Fail;
 import org.junit.internal.runners.statements.InvokeMethod;
 import org.junit.internal.runners.statements.RunAfters;
@@ -215,6 +216,25 @@ public final class TestNgJUnit4 extends BlockJUnit4ClassRunner {
     statement = withBefores(method, test, statement);
     statement = withAfters(method, test, statement);
     return statement;
+  }
+
+  @Override
+  protected Statement possiblyExpectingExceptions(FrameworkMethod method, Object test,
+      Statement next) {
+    Test testAnnotation = method.getAnnotation(Test.class);
+    if (testAnnotation == null){
+      return super.possiblyExpectingExceptions(method, test, next);
+    }
+    Class<? extends Throwable>[] expectedExceptions = testAnnotation.expectedExceptions();
+    if (expectedExceptions.length == 0) {
+      return super.possiblyExpectingExceptions(method, test, next);
+    } if (expectedExceptions.length == 1) {
+      return new ExpectException(next, expectedExceptions[0]);
+    } else {
+      // TODO(deltazulu): Add multi-exception support once there is a real case for it.
+      throw new UnsupportedOperationException(
+          String.format("%s does not support multiple expected exceptions on %s", getClass(), method));
+    }
   }
 
   @Override
