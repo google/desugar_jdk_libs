@@ -56,3 +56,4 @@ alias(
     actual = "//tools/java/com/google/devtools/build/android:jdk_type_selector",
     visibility = ["//visibility:public"],
 )
+
