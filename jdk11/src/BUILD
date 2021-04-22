@@ -6,7 +6,7 @@ java_library(
     javacopts = [
         "-source 11",
         "-target 11",
-        "--patch-module java.base=.",
+        "--patch-module=java.base=.",
         "-XepAllErrorsAsWarnings",
     ],
     visibility = ["//:__pkg__"],
