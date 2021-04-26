@@ -47,17 +47,17 @@ abstract class ParameterizedMemberTag {
   public String shortMessage() {
     StringBuilder sb = new StringBuilder();
     sb.append(member().getDeclaringClass().getSimpleName());
-    sb.append("#");
+    sb.append("$");
     if (member() instanceof Constructor) {
-      sb.append("<init>");
+      sb.append("$init$");
     } else {
       sb.append(member().getName());
     }
 
-    sb.append(":in");
+    sb.append("$in");
     sb.append(inputSerialNumber());
 
-    sb.append(":out");
+    sb.append("$out");
     sb.append(outputSerialNumber());
 
     return sb.toString();

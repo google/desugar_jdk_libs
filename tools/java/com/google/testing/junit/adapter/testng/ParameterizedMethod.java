@@ -58,7 +58,7 @@ class ParameterizedMethod extends FrameworkMethod {
   }
 
   private String getParameterizationSuffix() {
-    return "_param:" + datasetEntry + "_factory:" + testFactory;
+    return "_param$" + datasetEntry + "_factory$" + testFactory;
   }
 
   @Override
