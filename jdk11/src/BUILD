@@ -6,10 +6,13 @@ java_library(
     javacopts = [
         "-source 11",
         "-target 11",
-        "--patch-module=java.base=.",
         "-XepAllErrorsAsWarnings",
+        "-Xep:rawtypes:OFF",
+        "--patch-module=java.base=$(execpath //jdk11/desugarconfig:libdesugarconfig.jar):.",
+        "--add-reads=java.base=ALL-UNNAMED",
     ],
     visibility = ["//:__pkg__"],
+    deps = ["//jdk11/desugarconfig:libdesugarconfig.jar"],
 )
 
 genrule(
