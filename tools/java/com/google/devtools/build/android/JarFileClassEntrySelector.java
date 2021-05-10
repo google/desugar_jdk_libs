@@ -22,6 +22,7 @@ package com.google.devtools.build.android;
 
 import static java.util.stream.Collectors.toList;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +45,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
 
 /**
  * A helper class that matches *.class entries in a JAR file and delivers the matched entries to a
@@ -118,36 +120,53 @@ public final class JarFileClassEntrySelector {
 
   private static final ImmutableSet<String> OMITTED_ANNOTATIONS =
       ImmutableSet.of(
+          "Lcom/google/devtools/build/android/annotations/DesugarSupportedApi;",
+          "Lcom/google/devtools/build/android/annotations/DesugarSupportedApiHelper;",
           "Ljdk/internal/HotSpotIntrinsicCandidate;",
           "Ljdk/internal/vm/annotation/Contended;",
           "Ljdk/internal/vm/annotation/DontInline;",
           "Ljdk/internal/vm/annotation/ForceInline;",
           "Ljdk/internal/vm/annotation/Preserve;",
           "Ljdk/internal/vm/annotation/ReservedStackAccess;",
-          "Ljdk/internal/vm/annotation/Stable;"
-      );
+          "Ljdk/internal/vm/annotation/Stable;");
+
+  private static final String INTO_DESUGAR_EXTENDED_CLASS_ANNOTATION_NAME =
+      "com/google/devtools/build/android/annotations/DesugarSupportedApiHelper";
+
+  private static final String API_GENERATING_ANNOTATION =
+      "com/google/devtools/build/android/annotations/DesugarSupportedApi";
 
   private final Path inputJarPath;
   private final Path outputJarPath;
+
+  private final PreScanner preScanner;
+
+  /**
+   * electedTopLevelTypePatterns Either 1) the exact binary name of a class and matches both the
+   * outer class and its inner classes, or 2) When the pattern ends with a "*", The binary name
+   * prefix of a class and matches any class with its name starting with the given prefix.
+   */
+  private final ImmutableList<String> selectedTopLevelTypePatterns;
+
   private final LinkedHashSet<String> selectedEntryNames;
 
   public JarFileClassEntrySelector(
-      Path inputJarPath, Path outputJarPath, LinkedHashSet<String> selectedEntryNames) {
+      Path inputJarPath,
+      Path outputJarPath,
+      ImmutableList<String> selectedTopLevelTypePatterns,
+      LinkedHashSet<String> selectedEntryNames) {
     this.inputJarPath = inputJarPath;
     this.outputJarPath = outputJarPath;
+    this.selectedTopLevelTypePatterns = selectedTopLevelTypePatterns;
     this.selectedEntryNames = selectedEntryNames;
+    this.preScanner = new PreScanner(INTO_DESUGAR_EXTENDED_CLASS_ANNOTATION_NAME);
   }
 
   /**
    * Finds all JAR entries whose associated classes match any of the specified top-level name
    * patterns.
-   *
-   * @param selectedTopLevelTypePatterns Either 1) the exact binary name of a class and matches both
-   *     the outer class and its inner classes, or 2) When the pattern ends with a "*", The binary
-   *     name prefix of a class and matches any class with its name starting with the given prefix.
    */
-  public JarFileClassEntrySelector matchTopLevelJavaTypes(List<String> selectedTopLevelTypePatterns)
-      throws IOException {
+  public JarFileClassEntrySelector matchTopLevelJavaTypes() throws IOException {
     JarFile jarFile = new JarFile(inputJarPath.toFile());
     // Sort the names of the input jar entries and the top-level patterns before two-way merge for
     // pattern matching.
@@ -192,13 +211,34 @@ public final class JarFileClassEntrySelector {
     return this;
   }
 
+  public JarFileClassEntrySelector preScan() throws IOException {
+    try (JarInputStream in = new JarInputStream(Files.newInputStream(inputJarPath))) {
+      for (JarEntry inEntry; (inEntry = in.getNextJarEntry()) != null; ) {
+        final String inEntryName = inEntry.getName();
+        if (inEntryName.endsWith(".class")) {
+          ClassReader cr = new ClassReader(in);
+          ClassNode cn = new ClassNode();
+          cr.accept(cn, /* parsingOptions= */ 0);
+          preScanner.scan(cn);
+        }
+      }
+    }
+    return this;
+  }
+
   public JarFileClassEntrySelector sinkToOutput() throws IOException {
     try (JarInputStream in = new JarInputStream(Files.newInputStream(inputJarPath));
         JarOutputStream out = new JarOutputStream(Files.newOutputStream(outputJarPath))) {
       for (JarEntry inEntry; (inEntry = in.getNextJarEntry()) != null; ) {
-        String inEntryName = inEntry.getName();
-        if (selectedEntryNames.contains(inEntryName)) {
-          transferClassFileJarEntry(in, out);
+        final String inEntryName = inEntry.getName();
+        if (inEntryName.endsWith(".class")) {
+          transferClassFileJarEntry(inEntry, in, out);
+        } else if (!inEntryName.endsWith("/")) {
+          byte[] outBytes = in.readAllBytes();
+          JarEntry outJarEntry = createJarEntry(inEntryName, outBytes);
+          out.putNextEntry(outJarEntry);
+          out.write(outBytes);
+          out.closeEntry();
         }
       }
     }
@@ -206,18 +246,49 @@ public final class JarFileClassEntrySelector {
     return this;
   }
 
-  private JarEntry transferClassFileJarEntry(InputStream in, JarOutputStream out)
+  private void transferClassFileJarEntry(JarEntry inEntry, InputStream in, JarOutputStream out)
       throws IOException {
     ClassReader cr = new ClassReader(in);
-    ClassWriter cw = new ClassWriter(0);
-    ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM7);
-    cr.accept(cv, /* parsingOptions= */ 0);
-    byte[] outBytes = cw.toByteArray();
-    JarEntry outJarEntry = createJarEntry(cr.getClassName() + ".class", outBytes);
-    out.putNextEntry(outJarEntry);
-    out.write(outBytes);
-    out.closeEntry();
-    return outJarEntry;
+    ClassNode cn = new ClassNode();
+    cr.accept(cn, /* parsingOptions= */ 0);
+    DesugarSupportedApiClassGenerator apiGenerator =
+        new DesugarSupportedApiClassGenerator(
+            Opcodes.ASM7,
+            cn,
+            ImmutableSet.of(
+                API_GENERATING_ANNOTATION, INTO_DESUGAR_EXTENDED_CLASS_ANNOTATION_NAME));
+    ImmutableList<ClassNode> generatedApiClass = apiGenerator.getClassNodesWithSupportedApis();
+    ImmutableList.Builder<ClassNode> outClassNodes = ImmutableList.builder();
+    if (selectedEntryNames.contains(inEntry.getName())) {
+      outClassNodes.add(cn);
+    }
+    if (!generatedApiClass.isEmpty()) {
+      outClassNodes.addAll(generatedApiClass);
+    }
+
+    for (ClassNode outputClassNode : outClassNodes.build()) {
+      String outputEntryName = outputClassNode.name + ".class";
+      if (isGeneratedOutputEntryUnderSelection(outputEntryName)) {
+        ClassWriter cw = new ClassWriter(0);
+        ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM7);
+        cv = new InvocationSiteReplacementClassVisitor(Opcodes.ASM7, cv, preScanner);
+        outputClassNode.accept(cv);
+        byte[] outBytes = cw.toByteArray();
+        JarEntry outJarEntry = createJarEntry(outputEntryName, outBytes);
+        out.putNextEntry(outJarEntry);
+        out.write(outBytes);
+        out.closeEntry();
+      }
+    }
+  }
+
+  private boolean isGeneratedOutputEntryUnderSelection(String outputEntryName) {
+    for (String pattern : selectedTopLevelTypePatterns) {
+      if (compareAgainstTopLevelPattern(outputEntryName, pattern) == 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static JarEntry createJarEntry(String entryName, byte[] bytes) {
@@ -262,8 +333,10 @@ public final class JarFileClassEntrySelector {
       Collections.addAll(patterns, ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
     }
     JarFileClassEntrySelector jarFileClassSelector =
-        new JarFileClassEntrySelector(inPath, outPath, new LinkedHashSet<>());
-    jarFileClassSelector.matchTopLevelJavaTypes(patterns);
+        new JarFileClassEntrySelector(
+            inPath, outPath, ImmutableList.copyOf(patterns), new LinkedHashSet<>());
+    jarFileClassSelector.matchTopLevelJavaTypes();
+    jarFileClassSelector.preScan();
     jarFileClassSelector.sinkToOutput();
   }
 }
