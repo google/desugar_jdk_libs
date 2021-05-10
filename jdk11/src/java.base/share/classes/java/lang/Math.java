@@ -25,6 +25,7 @@
 
 package java.lang;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.math.BigDecimal;
 import java.util.Random;
 import jdk.internal.math.FloatConsts;
@@ -817,6 +818,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows an int
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static int addExact(int x, int y) {
         int r = x + y;
@@ -837,6 +839,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows a long
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static long addExact(long x, long y) {
         long r = x + y;
@@ -857,6 +860,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows an int
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static int subtractExact(int x, int y) {
         int r = x - y;
@@ -878,6 +882,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows a long
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static long subtractExact(long x, long y) {
         long r = x - y;
@@ -899,6 +904,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows an int
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static int multiplyExact(int x, int y) {
         long r = (long)x * (long)y;
@@ -918,6 +924,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows a long
      * @since 9
      */
+    @DesugarSupportedApi
     public static long multiplyExact(long x, int y) {
         return multiplyExact(x, (long)y);
     }
@@ -932,6 +939,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows a long
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static long multiplyExact(long x, long y) {
         long r = x * y;
@@ -958,6 +966,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows an int
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static int incrementExact(int a) {
         if (a == Integer.MAX_VALUE) {
@@ -976,6 +985,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows a long
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static long incrementExact(long a) {
         if (a == Long.MAX_VALUE) {
@@ -994,6 +1004,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows an int
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static int decrementExact(int a) {
         if (a == Integer.MIN_VALUE) {
@@ -1012,6 +1023,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows a long
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static long decrementExact(long a) {
         if (a == Long.MIN_VALUE) {
@@ -1030,6 +1042,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows an int
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static int negateExact(int a) {
         if (a == Integer.MIN_VALUE) {
@@ -1048,6 +1061,7 @@ public final class Math {
      * @throws ArithmeticException if the result overflows a long
      * @since 1.8
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static long negateExact(long a) {
         if (a == Long.MIN_VALUE) {
@@ -1066,6 +1080,7 @@ public final class Math {
      * @throws ArithmeticException if the {@code argument} overflows an int
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int toIntExact(long value) {
         if ((int)value != value) {
             throw new ArithmeticException("integer overflow");
@@ -1081,6 +1096,7 @@ public final class Math {
      * @return the result
      * @since 9
      */
+    @DesugarSupportedApi
     public static long multiplyFull(int x, int y) {
         return (long)x * (long)y;
     }
@@ -1094,6 +1110,7 @@ public final class Math {
      * @return the result
      * @since 9
      */
+    @DesugarSupportedApi
     @HotSpotIntrinsicCandidate
     public static long multiplyHigh(long x, long y) {
         if (x < 0 || y < 0) {
@@ -1157,6 +1174,7 @@ public final class Math {
      * @see #floor(double)
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int floorDiv(int x, int y) {
         int r = x / y;
         // if the signs are different and modulo not zero, round down
@@ -1191,6 +1209,7 @@ public final class Math {
      * @see #floor(double)
      * @since 9
      */
+    @DesugarSupportedApi
     public static long floorDiv(long x, int y) {
         return floorDiv(x, (long)y);
     }
@@ -1220,6 +1239,7 @@ public final class Math {
      * @see #floor(double)
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static long floorDiv(long x, long y) {
         long r = x / y;
         // if the signs are different and modulo not zero, round down
@@ -1273,6 +1293,7 @@ public final class Math {
      * @see #floorDiv(int, int)
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int floorMod(int x, int y) {
         return x - floorDiv(x, y) * y;
     }
@@ -1299,6 +1320,7 @@ public final class Math {
      * @see #floorDiv(long, int)
      * @since 9
      */
+    @DesugarSupportedApi
     public static int floorMod(long x, int y) {
         // Result cannot overflow the range of int.
         return (int)(x - floorDiv(x, y) * y);
@@ -1326,6 +1348,7 @@ public final class Math {
      * @see #floorDiv(long, long)
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static long floorMod(long x, long y) {
         return x - floorDiv(x, y) * y;
     }
@@ -2483,6 +2506,7 @@ public final class Math {
      * infinity.
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static double nextDown(double d) {
         if (Double.isNaN(d) || d == Double.NEGATIVE_INFINITY)
             return d;
@@ -2520,6 +2544,7 @@ public final class Math {
      * infinity.
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static float nextDown(float f) {
         if (Float.isNaN(f) || f == Float.NEGATIVE_INFINITY)
             return f;

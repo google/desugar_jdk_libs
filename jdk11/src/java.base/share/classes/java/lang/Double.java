@@ -28,6 +28,7 @@ package java.lang;
 import jdk.internal.math.FloatingDecimal;
 import jdk.internal.math.DoubleConsts;
 import jdk.internal.HotSpotIntrinsicCandidate;
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 
 /**
  * The {@code Double} class wraps a value of the primitive type
@@ -577,6 +578,7 @@ public final class Double extends Number implements Comparable<Double> {
      * floating-point value, {@code false} otherwise.
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static boolean isFinite(double d) {
         return Math.abs(d) <= Double.MAX_VALUE;
     }
@@ -768,6 +770,7 @@ public final class Double extends Number implements Comparable<Double> {
      * @return a hash code value for a {@code double} value.
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int hashCode(double value) {
         long bits = doubleToLongBits(value);
         return (int)(bits ^ (bits >>> 32));
@@ -1038,6 +1041,7 @@ public final class Double extends Number implements Comparable<Double> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static double sum(double a, double b) {
         return a + b;
     }
@@ -1052,6 +1056,7 @@ public final class Double extends Number implements Comparable<Double> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static double max(double a, double b) {
         return Math.max(a, b);
     }
@@ -1066,6 +1071,7 @@ public final class Double extends Number implements Comparable<Double> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static double min(double a, double b) {
         return Math.min(a, b);
     }

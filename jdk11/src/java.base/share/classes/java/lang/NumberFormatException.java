@@ -25,6 +25,8 @@
 
 package java.lang;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
+
 /**
  * Thrown to indicate that the application has attempted to convert
  * a string to one of the numeric types, but that the string does not
@@ -74,6 +76,7 @@ class NumberFormatException extends IllegalArgumentException {
      * @param   endIndex     the ending index, exclusive.
      * @param   errorIndex   the index of the first error in s
      */
+    @DesugarSupportedApiHelper
     static NumberFormatException forCharSequence(CharSequence s,
             int beginIndex, int endIndex, int errorIndex) {
         return new NumberFormatException("Error at index "

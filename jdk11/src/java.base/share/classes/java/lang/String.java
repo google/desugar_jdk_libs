@@ -25,6 +25,7 @@
 
 package java.lang;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.io.ObjectStreamField;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Native;
@@ -2389,6 +2390,7 @@ public final class String
      * @see java.util.StringJoiner
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static String join(CharSequence delimiter, CharSequence... elements) {
         Objects.requireNonNull(delimiter);
         Objects.requireNonNull(elements);
@@ -2434,6 +2436,7 @@ public final class String
      * @see    java.util.StringJoiner
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static String join(CharSequence delimiter,
             Iterable<? extends CharSequence> elements) {
         Objects.requireNonNull(delimiter);
@@ -2672,6 +2675,7 @@ public final class String
      *
      * @since 11
      */
+    @DesugarSupportedApi
     public String strip() {
         String ret = isLatin1() ? StringLatin1.strip(value)
                                 : StringUTF16.strip(value);
@@ -2702,6 +2706,7 @@ public final class String
      *
      * @since 11
      */
+    @DesugarSupportedApi
     public String stripLeading() {
         String ret = isLatin1() ? StringLatin1.stripLeading(value)
                                 : StringUTF16.stripLeading(value);
@@ -2732,6 +2737,7 @@ public final class String
      *
      * @since 11
      */
+    @DesugarSupportedApi
     public String stripTrailing() {
         String ret = isLatin1() ? StringLatin1.stripTrailing(value)
                                 : StringUTF16.stripTrailing(value);
@@ -2751,6 +2757,7 @@ public final class String
      *
      * @since 11
      */
+    @DesugarSupportedApi
     public boolean isBlank() {
         return indexOfNonWhitespace() == length();
     }
@@ -2793,6 +2800,7 @@ public final class String
      *
      * @since 11
      */
+    @DesugarSupportedApi
     public Stream<String> lines() {
         return isLatin1() ? StringLatin1.lines(value)
                           : StringUTF16.lines(value);
@@ -2816,6 +2824,7 @@ public final class String
      * @return an IntStream of char values from this sequence
      * @since 9
      */
+    @DesugarSupportedApi
     @Override
     public IntStream chars() {
         return StreamSupport.intStream(
@@ -2836,6 +2845,7 @@ public final class String
      * @return an IntStream of Unicode code points from this sequence
      * @since 9
      */
+    @DesugarSupportedApi
     @Override
     public IntStream codePoints() {
         return StreamSupport.intStream(
@@ -3144,6 +3154,7 @@ public final class String
      *
      * @since 11
      */
+    @DesugarSupportedApi
     public String repeat(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("count is negative: " + count);

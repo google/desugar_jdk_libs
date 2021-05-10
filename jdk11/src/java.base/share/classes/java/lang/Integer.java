@@ -25,6 +25,7 @@
 
 package java.lang;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.lang.annotation.Native;
 import java.util.Objects;
 import jdk.internal.HotSpotIntrinsicCandidate;
@@ -212,6 +213,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @see     #toString(int, int)
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static String toUnsignedString(int i, int radix) {
         return Long.toUnsignedString(toUnsignedLong(i), radix);
     }
@@ -461,6 +463,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @see     #toUnsignedString(int, int)
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static String toUnsignedString(int i) {
         return Long.toString(toUnsignedLong(i));
     }
@@ -690,6 +693,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *             {@link java.lang.Character#MAX_RADIX}.
      * @since  9
      */
+    @DesugarSupportedApi
     public static int parseInt(CharSequence s, int beginIndex, int endIndex, int radix)
                 throws NumberFormatException {
         s = Objects.requireNonNull(s);
@@ -813,6 +817,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *             does not contain a parsable {@code int}.
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int parseUnsignedInt(String s, int radix)
                 throws NumberFormatException {
         if (s == null)  {
@@ -873,6 +878,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *             {@link java.lang.Character#MAX_RADIX}.
      * @since  9
      */
+    @DesugarSupportedApi
     public static int parseUnsignedInt(CharSequence s, int beginIndex, int endIndex, int radix)
                 throws NumberFormatException {
         s = Objects.requireNonNull(s);
@@ -924,6 +930,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *            parsable unsigned integer.
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int parseUnsignedInt(String s) throws NumberFormatException {
         return parseUnsignedInt(s, 10);
     }
@@ -1195,6 +1202,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *
      * @return a hash code value for an {@code int} value.
      */
+    @DesugarSupportedApi
     public static int hashCode(int value) {
         return value;
     }
@@ -1469,6 +1477,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *         a value greater than {@code 0} if {@code x > y}
      * @since 1.7
      */
+    @DesugarSupportedApi
     public static int compare(int x, int y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
@@ -1485,6 +1494,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *         unsigned values
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int compareUnsigned(int x, int y) {
         return compare(x + MIN_VALUE, y + MIN_VALUE);
     }
@@ -1506,6 +1516,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      *         conversion
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static long toUnsignedLong(int x) {
         return ((long) x) & 0xffffffffL;
     }
@@ -1528,6 +1539,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @see #remainderUnsigned
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int divideUnsigned(int dividend, int divisor) {
         // In lieu of tricky code, for now just use long arithmetic.
         return (int)(toUnsignedLong(dividend) / toUnsignedLong(divisor));
@@ -1545,6 +1557,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @see #divideUnsigned
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int remainderUnsigned(int dividend, int divisor) {
         // In lieu of tricky code, for now just use long arithmetic.
         return (int)(toUnsignedLong(dividend) % toUnsignedLong(divisor));
@@ -1793,6 +1806,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int sum(int a, int b) {
         return a + b;
     }
@@ -1807,6 +1821,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int max(int a, int b) {
         return Math.max(a, b);
     }
@@ -1821,6 +1836,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static int min(int a, int b) {
         return Math.min(a, b);
     }
