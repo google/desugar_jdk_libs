@@ -38,6 +38,7 @@
 
 package java.util;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.Instant;
@@ -3253,6 +3254,7 @@ public class GregorianCalendar extends Calendar {
      *  as this gregorian calendar
      * @since 1.8
      */
+    @DesugarSupportedApi
     public ZonedDateTime toZonedDateTime() {
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(getTimeInMillis()),
                                        getTimeZone().toZoneId());
@@ -3282,6 +3284,7 @@ public class GregorianCalendar extends Calendar {
      * large to represent as a {@code GregorianCalendar}
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static GregorianCalendar from(ZonedDateTime zdt) {
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone(zdt.getZone()));
         cal.setGregorianChange(new Date(Long.MIN_VALUE));

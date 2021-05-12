@@ -25,6 +25,8 @@
 
 package java.util;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
+
 /**
  * <p>Hash table and linked list implementation of the {@code Set} interface,
  * with predictable iteration order.  This implementation differs from
@@ -188,6 +190,7 @@ public class LinkedHashSet<E>
      * @return a {@code Spliterator} over the elements in this set
      * @since 1.8
      */
+    @DesugarSupportedApi
     @Override
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.DISTINCT | Spliterator.ORDERED);

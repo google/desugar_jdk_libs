@@ -25,6 +25,7 @@
 
 package java.util;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.io.IOException;
@@ -1355,6 +1356,7 @@ public class Date
      *  represent as a {@code Date}
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static Date from(Instant instant) {
         try {
             return new Date(instant.toEpochMilli());
@@ -1373,6 +1375,7 @@ public class Date
      *  this {@code Date} object
      * @since 1.8
      */
+    @DesugarSupportedApi
     public Instant toInstant() {
         return Instant.ofEpochMilli(getTime());
     }
