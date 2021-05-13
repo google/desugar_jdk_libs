@@ -58,7 +58,7 @@ public final class JarFileClassEntrySelector {
   private static final LocalDateTime DEFAULT_LOCAL_TIME =
       LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-  private static final String[] ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
+  private static final String[] CLASSIC_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
     "java/io/DesugarBufferedReader",
     "java/io/UncheckedIOException",
     "java/lang/Desugar*",
@@ -109,6 +109,62 @@ public final class JarFileClassEntrySelector {
     "java/util/stream/*",
     "sun/misc/Desugar*",
     "jdk/internal/util/Preconditions",
+  };
+
+  private static final String[] D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
+      "java/io/DesugarBufferedReader",
+      "java/io/UncheckedIOException",
+      "java/lang/Desugar*",
+      "java/lang/Iterable",
+      "java/lang/FunctionalInterface",
+      "java/lang/annotation/Native",
+      "java/lang/annotation/Repeatable",
+      "java/nio/*",
+      "java/time/*",
+      "java/util/AbstractList",
+      "java/util/CollSer",
+      "java/util/Collection",
+      "java/util/Comparator",
+      "java/util/Comparators",
+      "java/util/Deque",
+      "java/util/Desugar*",
+      "java/util/DoubleSummaryStatistics",
+      "java/util/ImmutableCollections",
+      "java/util/IntSummaryStatistics",
+      "java/util/Iterator",
+      "java/util/KeyValueHolder",
+      "java/util/List",
+      "java/util/ListIterator",
+      "java/util/LongSummaryStatistics",
+      "java/util/Map",
+      "java/util/NavigableMap",
+      "java/util/NavigableSet",
+      "java/util/Objects",
+      "java/util/Optional*",
+      "java/util/PrimitiveIterator",
+      "java/util/Queue",
+      "java/util/Set",
+      "java/util/SortedMap",
+      "java/util/SortedSet",
+      "java/util/Spliterator",
+      "java/util/Spliterators",
+      "java/util/StringJoiner",
+      "java/util/Tripwire",
+      "java/util/concurrent/BlockingDeque",
+      "java/util/concurrent/BlockingQueue",
+      "java/util/concurrent/ConcurrentHashMap",
+      "java/util/concurrent/ConcurrentMap",
+      "java/util/concurrent/ConcurrentNavigableMap",
+      "java/util/concurrent/Helpers",
+      "java/util/concurrent/ThreadLocalRandom",
+      "java/util/concurrent/TransferQueue",
+      "java/util/concurrent/atomic/Desugar*",
+      "java/util/function/*",
+      "java/util/stream/*",
+      "sun/misc/Desugar*",
+      "sun/nio/*",
+      "jdk/internal/misc/JavaNioAccess",
+      "jdk/internal/util/Preconditions",
   };
 
   private static final String[] ANDROID_CONCURRENT_FIX_LIB_TOP_LEVEL_TYPE_PATTERNS = {
@@ -327,10 +383,20 @@ public final class JarFileClassEntrySelector {
     Path inPath = Paths.get(args[0]);
     Path outPath = Paths.get(args[1]);
     List<String> patterns = new ArrayList<>();
-    if (args.length >= 3 && "--config=android_fix_libs".equals(args[2])) {
-      Collections.addAll(patterns, ANDROID_CONCURRENT_FIX_LIB_TOP_LEVEL_TYPE_PATTERNS);
+    if (args.length >= 3) {
+      switch (args[2]) {
+        case "--config=d8_desugar":
+          Collections.addAll(patterns, D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
+          break;
+        case "--config=android_fix_libs":
+          Collections.addAll(patterns, ANDROID_CONCURRENT_FIX_LIB_TOP_LEVEL_TYPE_PATTERNS);
+          break;
+        default:
+          Collections.addAll(patterns, CLASSIC_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
+          break;
+      }
     } else {
-      Collections.addAll(patterns, ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
+      Collections.addAll(patterns, CLASSIC_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
     }
     JarFileClassEntrySelector jarFileClassSelector =
         new JarFileClassEntrySelector(

@@ -29,6 +29,19 @@ genrule(
 )
 
 genrule(
+    name = "d8_java_base_selected",
+    srcs = [
+        ":java_base_all",
+    ],
+    outs = ["d8_java_base_selected.jar"],
+    cmd = """
+      $(location //:tools/jdk_type_selector) $(location :java_base_all) $@ "--config=d8_desugar"
+    """,
+    exec_tools = ["//:tools/jdk_type_selector"],
+    visibility = ["//:__pkg__"],
+)
+
+genrule(
     name = "java_base_chm_only",
     srcs = [
         ":java_base_all",
