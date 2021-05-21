@@ -38,6 +38,8 @@
 
 package java.util;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
+import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -726,6 +728,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      */
     public static final int ALL_STYLES = 0;
 
+    @DesugarSupportedApiHelper
     static final int STANDALONE_MASK = 0x8000;
 
     /**
@@ -761,6 +764,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #LONG_FORMAT
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static final int NARROW_FORMAT = 4;
 
     /**
@@ -774,6 +778,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #LONG_STANDALONE
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static final int NARROW_STANDALONE = NARROW_FORMAT | STANDALONE_MASK;
 
     /**
@@ -786,6 +791,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #LONG_STANDALONE
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static final int SHORT_FORMAT = 1;
 
     /**
@@ -798,6 +804,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #SHORT_STANDALONE
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static final int LONG_FORMAT = 2;
 
     /**
@@ -811,6 +818,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #LONG_STANDALONE
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static final int SHORT_STANDALONE = SHORT | STANDALONE_MASK;
 
     /**
@@ -824,6 +832,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #SHORT_STANDALONE
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static final int LONG_STANDALONE = LONG | STANDALONE_MASK;
 
     // Internal notes:
@@ -3660,6 +3669,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return the instant representing the same point on the time-line
      * @since 1.8
      */
+    @DesugarSupportedApi
     public final Instant toInstant() {
         return Instant.ofEpochMilli(getTimeInMillis());
     }

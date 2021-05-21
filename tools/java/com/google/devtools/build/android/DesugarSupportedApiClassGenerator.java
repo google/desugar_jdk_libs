@@ -22,46 +22,38 @@
 package com.google.devtools.build.android;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static com.google.devtools.build.android.AsmHelpers.ASM_API_LEVEL;
 import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_SUPER;
 import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import java.util.Collection;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 /** Generates classes with desugar-supported APIs enclosed. */
 public class DesugarSupportedApiClassGenerator {
 
-  private static final String DESUGAR_API_CLASS_PREFIX = "Desugar";
-
-  /** The ASM API versions of the current project, such as {@code Opcodes.ASM7}. */
-  private final int asmApiVersion;
-
   /** The class node based on which new class nodes with supported APIs are to be generated. */
   private final ClassNode baseClassNode;
 
-  private final ImmutableSet<String> apiExtensionClassMethodAnnotations;
+  private final PreScanner preScanner;
 
-  public DesugarSupportedApiClassGenerator(
-      int asmApiVersion,
-      ClassNode baseClassNode,
-      ImmutableSet<String> apiExtensionClassMethodAnnotations) {
-    this.asmApiVersion = asmApiVersion;
+  public DesugarSupportedApiClassGenerator(ClassNode baseClassNode, PreScanner preScanner) {
     this.baseClassNode = baseClassNode;
-    this.apiExtensionClassMethodAnnotations = apiExtensionClassMethodAnnotations;
+    this.preScanner = preScanner;
   }
 
   /** Generates a list of class nodes that enclose supported APIs. */
-  public ImmutableList<ClassNode> getClassNodesWithSupportedApis() {
-    ImmutableList<MethodNode> allSupportedApis = findAllSupportedApis();
-    if (allSupportedApis.isEmpty()) {
+  public ImmutableList<ClassNode> getClassNodesWithSupportedMembers() {
+    ImmutableList<FieldNode> allDesugarSupportedFields = findAllDesugarSupportedFields();
+    ImmutableList<MethodNode> allDesugarSupportedClassMembers = findAllDesugarSupportedMethods();
+    if (allDesugarSupportedFields.isEmpty() && allDesugarSupportedClassMembers.isEmpty()) {
       return ImmutableList.of();
     }
     ClassNode generatedClassNode = new ClassNode();
@@ -70,10 +62,10 @@ public class DesugarSupportedApiClassGenerator {
     String generatedClassName =
         baseClassNode.name.substring(0, simpleNameStart)
             + "/"
-            + DESUGAR_API_CLASS_PREFIX
+            + AsmHelpers.DESUGAR_API_CLASS_PREFIX
             + baseClassNode.name.substring(simpleNameStart + 1);
     generatedClassNode.visit(
-        Opcodes.V11,
+        AsmHelpers.JAVA_LANGUAGE_LEVEL,
         /* access= */ ACC_SYNTHETIC | ACC_PUBLIC | ACC_SUPER | ACC_FINAL,
         generatedClassName,
         /* signature= */ null,
@@ -82,8 +74,8 @@ public class DesugarSupportedApiClassGenerator {
 
     MethodNode privateConstructorNode =
         new MethodNode(
-            asmApiVersion,
-            Opcodes.ACC_PRIVATE,
+            ASM_API_LEVEL,
+            ACC_PRIVATE,
             "<init>",
             "()V",
             /* signature= */ null,
@@ -91,76 +83,58 @@ public class DesugarSupportedApiClassGenerator {
     privateConstructorNode.visitCode();
     privateConstructorNode.visitVarInsn(Opcodes.ALOAD, 0);
     privateConstructorNode.visitMethodInsn(
-        Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", /* isInterface= */ false);
+        INVOKESPECIAL, "java/lang/Object", "<init>", "()V", /* isInterface= */ false);
     privateConstructorNode.visitInsn(Opcodes.RETURN);
     privateConstructorNode.visitMaxs(1, 1);
     privateConstructorNode.visitEnd();
     privateConstructorNode.accept(generatedClassNode);
 
-    for (MethodNode mn : allSupportedApis) {
+    for (FieldNode fn : allDesugarSupportedFields) {
+      fn.accept(generatedClassNode);
+    }
+
+    for (MethodNode mn : allDesugarSupportedClassMembers) {
       mn.accept(generatedClassNode);
     }
     return ImmutableList.of(generatedClassNode);
   }
 
-  /** Finds all APIs of the current class to be supported. */
-  private ImmutableList<MethodNode> findAllSupportedApis() {
+  /**
+   * Finds all (JDK-)base methods that are to be included in {@code Desugar}-prefixed classes,
+   * including both public API methods and private methods that any API depends on. on.
+   */
+  private ImmutableList<MethodNode> findAllDesugarSupportedMethods() {
     return baseClassNode.methods.stream()
-        .filter(methodNode -> hasAnyAnnotation(methodNode, apiExtensionClassMethodAnnotations))
-        .map(this::transformToGeneratedApi)
+        .filter(
+            methodNode ->
+                preScanner.getReplacementMethod(ClassMemberKey.create(baseClassNode, methodNode))
+                    != null)
+        .map(methodNode -> AsmHelpers.transformToStaticCompanion(baseClassNode, methodNode))
         .collect(toImmutableList());
   }
 
-  private static boolean hasAnyAnnotation(
-      MethodNode mn, Collection<String> annotationInternalNames) {
-    return annotationInternalNames.stream()
-        .anyMatch(annotationName -> hasAnnotation(mn, annotationName));
-  }
-
-  private static boolean hasAnnotation(MethodNode mn, String annotationInternalName) {
-    if (mn.visibleAnnotations == null) {
-      return false;
-    }
-    for (AnnotationNode annotationNode : mn.visibleAnnotations) {
-      if (annotationNode.desc.equals(Type.getObjectType(annotationInternalName).getDescriptor())) {
-        return true;
+  /**
+   * Finds all (JDK-)base fields that are to be included in {@code Desugar}-prefixed classes,
+   * including both public API fields and private fields that any API depends on. on.
+   */
+  private ImmutableList<FieldNode> findAllDesugarSupportedFields() {
+    ImmutableList.Builder<FieldNode> supportedFields = ImmutableList.builder();
+    for (FieldNode fieldNode : baseClassNode.fields) {
+      ClassMemberKey replacementField =
+          preScanner.getReplacementField(ClassMemberKey.create(baseClassNode, fieldNode));
+      if (replacementField != null) {
+        FieldNode replacementFieldNode =
+            new FieldNode(
+                ASM_API_LEVEL,
+                fieldNode.access,
+                replacementField.name(),
+                replacementField.desc(),
+                fieldNode.signature,
+                fieldNode.value);
+        supportedFields.add(replacementFieldNode);
       }
     }
-    return false;
+    return supportedFields.build();
   }
 
-  /**
-   * Transform a given API method to be support to its counter part in desugar-supported api
-   * classes. For instance, an input node of {@code Double#sum(double, double)} will be transformed
-   * to {@code DesugarDouble#sum(double, double)}.
-   */
-  private MethodNode transformToGeneratedApi(MethodNode methodNode) {
-    if ((methodNode.access & Opcodes.ACC_STATIC) != 0) {
-      return methodNode;
-    } else {
-      MethodNode transformedMethodNode =
-          new MethodNode(
-              asmApiVersion,
-              /* access= */ methodNode.access | Opcodes.ACC_STATIC,
-              /* name= */ methodNode.name,
-              /* descriptor= */ instanceMethodToStaticDescriptor(
-                  baseClassNode.name, methodNode.desc),
-              /* signature= */ null,
-              /* exceptions= */ methodNode.exceptions.toArray(new String[0]));
-      methodNode.accept(transformedMethodNode);
-
-      return transformedMethodNode;
-    }
-  }
-
-  /** The descriptor of the static version of a given instance method. */
-  private static String instanceMethodToStaticDescriptor(String ownerName, String methodDesc) {
-    Type[] argumentTypes = Type.getArgumentTypes(methodDesc);
-    Type returnType = Type.getReturnType(methodDesc);
-    int n = argumentTypes.length + 1;
-    Type[] staticCompanionArgTypes = new Type[n];
-    staticCompanionArgTypes[0] = Type.getObjectType(ownerName);
-    System.arraycopy(argumentTypes, 0, staticCompanionArgTypes, 1, n - 1);
-    return Type.getMethodDescriptor(returnType, staticCompanionArgTypes);
-  }
 }

@@ -22,6 +22,9 @@
 package com.google.devtools.build.android;
 
 import com.google.auto.value.AutoValue;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
 
 /** Describes a class or interface method or field. */
 @AutoValue
@@ -35,5 +38,13 @@ public abstract class ClassMemberKey {
 
   public static ClassMemberKey create(String owner, String name, String desc) {
     return new AutoValue_ClassMemberKey(owner, name, desc);
+  }
+
+  public static ClassMemberKey create(ClassNode classNode, MethodNode methodNode) {
+    return create(classNode.name, methodNode.name, methodNode.desc);
+  }
+
+  public static ClassMemberKey create(ClassNode classNode, FieldNode fieldNode) {
+    return create(classNode.name, fieldNode.name, fieldNode.desc);
   }
 }

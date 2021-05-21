@@ -25,6 +25,8 @@
 
 package java.util;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
+import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
 import jdk.internal.HotSpotIntrinsicCandidate;
 import jdk.internal.util.ArraysSupport;
 
@@ -4816,6 +4818,7 @@ public class Arrays {
         return true;
     }
 
+    @DesugarSupportedApiHelper
     static boolean deepEquals0(Object e1, Object e2) {
         assert e1 != null;
         boolean eq;
@@ -5242,6 +5245,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static <T> void setAll(T[] array, IntFunction<? extends T> generator) {
         Objects.requireNonNull(generator);
         for (int i = 0; i < array.length; i++)
@@ -5272,6 +5276,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static <T> void parallelSetAll(T[] array, IntFunction<? extends T> generator) {
         Objects.requireNonNull(generator);
         IntStream.range(0, array.length).parallel().forEach(i -> { array[i] = generator.apply(i); });
@@ -5298,6 +5303,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static void setAll(int[] array, IntUnaryOperator generator) {
         Objects.requireNonNull(generator);
         for (int i = 0; i < array.length; i++)
@@ -5327,6 +5333,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static void parallelSetAll(int[] array, IntUnaryOperator generator) {
         Objects.requireNonNull(generator);
         IntStream.range(0, array.length).parallel().forEach(i -> { array[i] = generator.applyAsInt(i); });
@@ -5353,6 +5360,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static void setAll(long[] array, IntToLongFunction generator) {
         Objects.requireNonNull(generator);
         for (int i = 0; i < array.length; i++)
@@ -5382,6 +5390,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static void parallelSetAll(long[] array, IntToLongFunction generator) {
         Objects.requireNonNull(generator);
         IntStream.range(0, array.length).parallel().forEach(i -> { array[i] = generator.applyAsLong(i); });
@@ -5408,6 +5417,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static void setAll(double[] array, IntToDoubleFunction generator) {
         Objects.requireNonNull(generator);
         for (int i = 0; i < array.length; i++)
@@ -5437,6 +5447,7 @@ public class Arrays {
      * @throws NullPointerException if the generator is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static void parallelSetAll(double[] array, IntToDoubleFunction generator) {
         Objects.requireNonNull(generator);
         IntStream.range(0, array.length).parallel().forEach(i -> { array[i] = generator.applyAsDouble(i); });
@@ -5454,6 +5465,7 @@ public class Arrays {
      * @return a spliterator for the array elements
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static <T> Spliterator<T> spliterator(T[] array) {
         return Spliterators.spliterator(array,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5478,6 +5490,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static <T> Spliterator<T> spliterator(T[] array, int startInclusive, int endExclusive) {
         return Spliterators.spliterator(array, startInclusive, endExclusive,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5494,6 +5507,7 @@ public class Arrays {
      * @return a spliterator for the array elements
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static Spliterator.OfInt spliterator(int[] array) {
         return Spliterators.spliterator(array,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5517,6 +5531,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static Spliterator.OfInt spliterator(int[] array, int startInclusive, int endExclusive) {
         return Spliterators.spliterator(array, startInclusive, endExclusive,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5533,6 +5548,7 @@ public class Arrays {
      * @return the spliterator for the array elements
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static Spliterator.OfLong spliterator(long[] array) {
         return Spliterators.spliterator(array,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5556,6 +5572,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static Spliterator.OfLong spliterator(long[] array, int startInclusive, int endExclusive) {
         return Spliterators.spliterator(array, startInclusive, endExclusive,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5573,6 +5590,7 @@ public class Arrays {
      * @return a spliterator for the array elements
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static Spliterator.OfDouble spliterator(double[] array) {
         return Spliterators.spliterator(array,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5596,6 +5614,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static Spliterator.OfDouble spliterator(double[] array, int startInclusive, int endExclusive) {
         return Spliterators.spliterator(array, startInclusive, endExclusive,
                                         Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -5610,6 +5629,7 @@ public class Arrays {
      * @return a {@code Stream} for the array
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static <T> Stream<T> stream(T[] array) {
         return stream(array, 0, array.length);
     }
@@ -5629,6 +5649,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static <T> Stream<T> stream(T[] array, int startInclusive, int endExclusive) {
         return StreamSupport.stream(spliterator(array, startInclusive, endExclusive), false);
     }
@@ -5641,6 +5662,7 @@ public class Arrays {
      * @return an {@code IntStream} for the array
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static IntStream stream(int[] array) {
         return stream(array, 0, array.length);
     }
@@ -5659,6 +5681,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static IntStream stream(int[] array, int startInclusive, int endExclusive) {
         return StreamSupport.intStream(spliterator(array, startInclusive, endExclusive), false);
     }
@@ -5671,6 +5694,7 @@ public class Arrays {
      * @return a {@code LongStream} for the array
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static LongStream stream(long[] array) {
         return stream(array, 0, array.length);
     }
@@ -5689,6 +5713,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static LongStream stream(long[] array, int startInclusive, int endExclusive) {
         return StreamSupport.longStream(spliterator(array, startInclusive, endExclusive), false);
     }
@@ -5701,6 +5726,7 @@ public class Arrays {
      * @return a {@code DoubleStream} for the array
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static DoubleStream stream(double[] array) {
         return stream(array, 0, array.length);
     }
@@ -5719,6 +5745,7 @@ public class Arrays {
      *         the array size
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static DoubleStream stream(double[] array, int startInclusive, int endExclusive) {
         return StreamSupport.doubleStream(spliterator(array, startInclusive, endExclusive), false);
     }

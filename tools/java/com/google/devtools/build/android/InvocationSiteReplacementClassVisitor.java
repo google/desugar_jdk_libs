@@ -21,7 +21,10 @@
 
 package com.google.devtools.build.android;
 
+import static com.google.devtools.build.android.AsmHelpers.LAMBDA_METAFACTORY_INTERNAL_NAME;
+
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -50,10 +53,22 @@ public class InvocationSiteReplacementClassVisitor extends ClassVisitor {
     }
 
     @Override
+    public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
+      ClassMemberKey fieldKey = ClassMemberKey.create(owner, name, descriptor);
+      ClassMemberKey replacementKey = preScanner.getReplacementField(fieldKey);
+      if (replacementKey != null) {
+        super.visitFieldInsn(
+            opcode, replacementKey.owner(), replacementKey.name(), replacementKey.desc());
+        return;
+      }
+      super.visitFieldInsn(opcode, owner, name, descriptor);
+    }
+
+    @Override
     public void visitMethodInsn(
         int opcode, String owner, String name, String descriptor, boolean isInterface) {
       ClassMemberKey methodKey = ClassMemberKey.create(owner, name, descriptor);
-      ClassMemberKey replacementKey = preScanner.getReplacementKey(methodKey);
+      ClassMemberKey replacementKey = preScanner.getReplacementMethod(methodKey);
       if (replacementKey != null) {
         super.visitMethodInsn(
             Opcodes.INVOKESTATIC,
@@ -64,6 +79,32 @@ public class InvocationSiteReplacementClassVisitor extends ClassVisitor {
         return;
       }
       super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+    }
+
+    @Override
+    public void visitInvokeDynamicInsn(
+        String name,
+        String descriptor,
+        Handle bootstrapMethodHandle,
+        Object... bootstrapMethodArguments) {
+      if (LAMBDA_METAFACTORY_INTERNAL_NAME.equals(bootstrapMethodHandle.getOwner())) {
+        Handle handle = (Handle) bootstrapMethodArguments[1];
+        ClassMemberKey lambdaMethod =
+            ClassMemberKey.create(handle.getOwner(), handle.getName(), handle.getDesc());
+        ClassMemberKey replacementKey = preScanner.getReplacementMethod(lambdaMethod);
+        if (replacementKey != null) {
+          Handle replacementHandle =
+              new Handle(
+                  handle.getTag(),
+                  replacementKey.owner(),
+                  replacementKey.name(),
+                  replacementKey.desc(),
+                  handle.isInterface());
+          bootstrapMethodArguments[1] = replacementHandle;
+        }
+      }
+      super.visitInvokeDynamicInsn(
+          name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
     }
   }
 }

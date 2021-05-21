@@ -22,6 +22,7 @@
 package com.google.devtools.build.android.annotations;
 
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 
@@ -34,7 +35,7 @@ import java.lang.annotation.Target;
  * Annotates a non-public JDK method to be included the desugar class for supporting public APIs.
  * Its invocations is to be re-written.
  */
-@Target({METHOD, CONSTRUCTOR, TYPE})
+@Target({FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface DesugarSupportedApiHelper {}

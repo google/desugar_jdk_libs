@@ -215,7 +215,10 @@ public final class JarFileClassEntrySelector {
     this.outputJarPath = outputJarPath;
     this.selectedTopLevelTypePatterns = selectedTopLevelTypePatterns;
     this.selectedEntryNames = selectedEntryNames;
-    this.preScanner = new PreScanner(INTO_DESUGAR_EXTENDED_CLASS_ANNOTATION_NAME);
+    this.preScanner =
+        new PreScanner(
+            ImmutableSet.of(
+                API_GENERATING_ANNOTATION, INTO_DESUGAR_EXTENDED_CLASS_ANNOTATION_NAME));
   }
 
   /**
@@ -308,12 +311,8 @@ public final class JarFileClassEntrySelector {
     ClassNode cn = new ClassNode();
     cr.accept(cn, /* parsingOptions= */ 0);
     DesugarSupportedApiClassGenerator apiGenerator =
-        new DesugarSupportedApiClassGenerator(
-            Opcodes.ASM7,
-            cn,
-            ImmutableSet.of(
-                API_GENERATING_ANNOTATION, INTO_DESUGAR_EXTENDED_CLASS_ANNOTATION_NAME));
-    ImmutableList<ClassNode> generatedApiClass = apiGenerator.getClassNodesWithSupportedApis();
+        new DesugarSupportedApiClassGenerator(cn, preScanner);
+    ImmutableList<ClassNode> generatedApiClass = apiGenerator.getClassNodesWithSupportedMembers();
     ImmutableList.Builder<ClassNode> outClassNodes = ImmutableList.builder();
     if (selectedEntryNames.contains(inEntry.getName())) {
       outClassNodes.add(cn);

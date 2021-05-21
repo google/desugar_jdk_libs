@@ -22,6 +22,7 @@
 package com.google.devtools.build.android.annotations;
 
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 
@@ -31,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /** Annotates a JDK class member that is to be supported through the desugar library. */
-@Target({METHOD, CONSTRUCTOR, TYPE})
+@Target({FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface DesugarSupportedApi {}
