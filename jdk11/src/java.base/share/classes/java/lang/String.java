@@ -3154,7 +3154,6 @@ public final class String
      *
      * @since 11
      */
-    @DesugarSupportedApi
     public String repeat(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("count is negative: " + count);

@@ -84,7 +84,7 @@ public final class PreScanner {
         stagingMethodsMap.put(mk, methodNode);
       }
       // Record non-public methods that may be moved due to dependency.
-      if ((methodNode.access & 0b111) != ACC_PUBLIC) {
+      if (!"<init>".equals(methodNode.name) &&(methodNode.access & 0b111) != ACC_PUBLIC) {
         nonPublicMethods.put(mk, methodNode);
       }
     }
