@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 import org.objectweb.asm.Handle;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
@@ -47,19 +46,32 @@ public final class PreScanner {
 
   private final ImmutableSet<String> intoDesugarExtendedClassAnnotationNames;
 
+  private final Map<String, String> typeReplacements;
   private final Map<ClassMemberKey, ClassMemberKey> fieldReplacements;
   private final Map<ClassMemberKey, ClassMemberKey> methodReplacements;
 
+  /** Maps from an anonymous class to its enclosing method. */
+  private final Map<String, ClassMemberKey> anonymousClasses;
+
   public PreScanner(ImmutableSet<String> intoDesugarExtendedClassAnnotationNames) {
     this.intoDesugarExtendedClassAnnotationNames = intoDesugarExtendedClassAnnotationNames;
+    this.typeReplacements = new HashMap<>();
     this.methodReplacements = new HashMap<>();
     this.fieldReplacements = new HashMap<>();
+    this.anonymousClasses = new HashMap<>();
   }
 
   /** Obtains fields and methods that are to be supported by this library. */
   public void scan(ClassNode classNode) {
     Map<ClassMemberKey, FieldNode> nonPublicFields = new HashMap<>();
     Map<ClassMemberKey, MethodNode> nonPublicMethods = new HashMap<>();
+
+    if (classNode.outerMethodDesc != null) {
+      anonymousClasses.put(
+          classNode.name,
+          ClassMemberKey.create(
+              classNode.outerClass, classNode.outerMethod, classNode.outerMethodDesc));
+    }
 
     ArrayDeque<ClassMemberKey> stagingMethods = new ArrayDeque<>();
     Map<ClassMemberKey, MethodNode> stagingMethodsMap = new HashMap<>();
@@ -70,7 +82,7 @@ public final class PreScanner {
             (fieldNode.access & ACC_STATIC) != 0 && (fieldNode.access & ACC_FINAL) != 0,
             "Only static final constant fields can be supported, but gets %s",
             fk);
-        fieldReplacements.put(fk, getReplacementFieldKey(fk));
+        fieldReplacements.put(fk, AsmHelpers.getReplacementFieldKey(fk));
       }
       // Record non-public static fields that may be moved due to dependency.
       if ((fieldNode.access & ACC_STATIC) != 0 && (fieldNode.access & 0b111) != ACC_PUBLIC) {
@@ -84,7 +96,7 @@ public final class PreScanner {
         stagingMethodsMap.put(mk, methodNode);
       }
       // Record non-public methods that may be moved due to dependency.
-      if (!"<init>".equals(methodNode.name) &&(methodNode.access & 0b111) != ACC_PUBLIC) {
+      if (!"<init>".equals(methodNode.name) && (methodNode.access & 0b111) != ACC_PUBLIC) {
         nonPublicMethods.put(mk, methodNode);
       }
     }
@@ -94,7 +106,8 @@ public final class PreScanner {
     while (!stagingMethods.isEmpty()) {
       ClassMemberKey front = stagingMethods.pop();
       MethodNode frontMethodNode = stagingMethodsMap.remove(front);
-      methodReplacements.putIfAbsent(front, getReplacementMethodKey(frontMethodNode.access, front));
+      methodReplacements.putIfAbsent(
+          front, AsmHelpers.getReplacementMethodKey(frontMethodNode.access, front));
       for (AbstractInsnNode insnNode : frontMethodNode.instructions) {
         final ClassMemberKey accessedField;
         final ClassMemberKey invokedMethod;
@@ -139,10 +152,27 @@ public final class PreScanner {
         if (accessedField != null
             && nonPublicFields.containsKey(accessedField)
             && !fieldReplacements.containsKey(accessedField)) {
-          fieldReplacements.put(accessedField, getReplacementFieldKey(accessedField));
+          fieldReplacements.put(accessedField, AsmHelpers.getReplacementFieldKey(accessedField));
         }
       }
     }
+  }
+
+  public void close() {
+    for (Map.Entry<String, ClassMemberKey> anonymousClass : anonymousClasses.entrySet()) {
+      ClassMemberKey enclosingMethod = anonymousClass.getValue();
+      if (methodReplacements.containsKey(enclosingMethod)) {
+        String anonymousClassInternalName = anonymousClass.getKey();
+        typeReplacements.put(
+            anonymousClassInternalName,
+            AsmHelpers.getReplacementTypeInternalName(anonymousClassInternalName));
+      }
+    }
+  }
+
+  @Nullable
+  public String getReplacementType(String typeInternalName) {
+    return typeReplacements.get(typeInternalName);
   }
 
   @Nullable
@@ -153,33 +183,6 @@ public final class PreScanner {
   @Nullable
   public ClassMemberKey getReplacementField(ClassMemberKey field) {
     return fieldReplacements.get(field);
-  }
-
-  private static ClassMemberKey getReplacementMethodKey(
-      int methodDeclAccessCode, ClassMemberKey originalMethod) {
-    int simpleNameStart = originalMethod.owner().lastIndexOf('/');
-    String replacementOwnerName =
-        originalMethod.owner().substring(0, simpleNameStart)
-            + "/"
-            + AsmHelpers.DESUGAR_API_CLASS_PREFIX
-            + originalMethod.owner().substring(simpleNameStart + 1);
-    String replacementMethodDesc =
-        (methodDeclAccessCode & Opcodes.ACC_STATIC) != 0
-            ? originalMethod.desc()
-            : AsmHelpers.instanceMethodToStaticDescriptor(
-                originalMethod.owner(), originalMethod.desc());
-    return ClassMemberKey.create(
-        replacementOwnerName, originalMethod.name(), replacementMethodDesc);
-  }
-
-  private static ClassMemberKey getReplacementFieldKey(ClassMemberKey originalField) {
-    int simpleNameStart = originalField.owner().lastIndexOf('/');
-    String replacementOwnerName =
-        originalField.owner().substring(0, simpleNameStart)
-            + "/"
-            + AsmHelpers.DESUGAR_API_CLASS_PREFIX
-            + originalField.owner().substring(simpleNameStart + 1);
-    return ClassMemberKey.create(replacementOwnerName, originalField.name(), originalField.desc());
   }
 
 }

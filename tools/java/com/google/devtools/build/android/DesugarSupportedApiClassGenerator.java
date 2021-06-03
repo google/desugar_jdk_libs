@@ -23,6 +23,7 @@ package com.google.devtools.build.android;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.devtools.build.android.AsmHelpers.ASM_API_LEVEL;
+import static com.google.devtools.build.android.AsmHelpers.getReplacementTypeInternalName;
 import static org.objectweb.asm.Opcodes.ACC_FINAL;
 import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
@@ -58,16 +59,10 @@ public class DesugarSupportedApiClassGenerator {
     }
     ClassNode generatedClassNode = new ClassNode();
 
-    int simpleNameStart = baseClassNode.name.lastIndexOf('/');
-    String generatedClassName =
-        baseClassNode.name.substring(0, simpleNameStart)
-            + "/"
-            + AsmHelpers.DESUGAR_API_CLASS_PREFIX
-            + baseClassNode.name.substring(simpleNameStart + 1);
     generatedClassNode.visit(
         AsmHelpers.JAVA_LANGUAGE_LEVEL,
         /* access= */ ACC_SYNTHETIC | ACC_PUBLIC | ACC_SUPER | ACC_FINAL,
-        generatedClassName,
+        getReplacementTypeInternalName(baseClassNode.name),
         /* signature= */ null,
         /* superName= */ "java/lang/Object",
         /* interfaces= */ new String[] {});

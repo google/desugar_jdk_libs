@@ -92,4 +92,31 @@ public final class AsmHelpers {
       return transformedMethodNode;
     }
   }
+
+  static String getReplacementTypeInternalName(String typeInternalName) {
+    int simpleNameStart = typeInternalName.lastIndexOf('/');
+    return typeInternalName.substring(0, simpleNameStart)
+        + "/"
+        + DESUGAR_API_CLASS_PREFIX
+        + typeInternalName.substring(simpleNameStart + 1);
+  }
+
+  static ClassMemberKey getReplacementMethodKey(
+      int methodDeclAccessCode, ClassMemberKey originalMethod) {
+    String replacementMethodDesc =
+        (methodDeclAccessCode & Opcodes.ACC_STATIC) != 0
+            ? originalMethod.desc()
+            : instanceMethodToStaticDescriptor(originalMethod.owner(), originalMethod.desc());
+    return ClassMemberKey.create(
+        getReplacementTypeInternalName(originalMethod.owner()),
+        originalMethod.name(),
+        replacementMethodDesc);
+  }
+
+  static ClassMemberKey getReplacementFieldKey(ClassMemberKey originalField) {
+    return ClassMemberKey.create(
+        getReplacementTypeInternalName(originalField.owner()),
+        originalField.name(),
+        originalField.desc());
+  }
 }

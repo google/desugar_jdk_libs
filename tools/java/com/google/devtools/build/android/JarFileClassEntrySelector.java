@@ -282,6 +282,7 @@ public final class JarFileClassEntrySelector {
         }
       }
     }
+    preScanner.close();
     return this;
   }
 
@@ -320,13 +321,22 @@ public final class JarFileClassEntrySelector {
     if (!generatedApiClass.isEmpty()) {
       outClassNodes.addAll(generatedApiClass);
     }
+    String replacementType = preScanner.getReplacementType(cn.name);
+    if (replacementType != null) {
+      outClassNodes.add(cn);
+    }
 
     for (ClassNode outputClassNode : outClassNodes.build()) {
       String outputEntryName = outputClassNode.name + ".class";
+      String replacementName = preScanner.getReplacementType(outputClassNode.name);
+      if (replacementName != null) {
+        outputEntryName = replacementName + ".class";
+      }
       if (isGeneratedOutputEntryUnderSelection(outputEntryName)) {
         ClassWriter cw = new ClassWriter(0);
         ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM7);
-        cv = new InvocationSiteReplacementClassVisitor(Opcodes.ASM7, cv, preScanner);
+        cv = new InvocationSiteReplacementClassVisitor(AsmHelpers.ASM_API_LEVEL, cv, preScanner);
+        cv = new TypeReplacementClassVisitor(AsmHelpers.ASM_API_LEVEL, cv, preScanner);
         outputClassNode.accept(cv);
         byte[] outBytes = cw.toByteArray();
         JarEntry outJarEntry = createJarEntry(outputEntryName, outBytes);

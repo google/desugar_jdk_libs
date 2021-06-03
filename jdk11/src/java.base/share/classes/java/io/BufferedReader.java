@@ -26,6 +26,7 @@
 package java.io;
 
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
@@ -561,6 +562,7 @@ public class BufferedReader extends Reader {
      *
      * @since 1.8
      */
+    @DesugarSupportedApi
     public Stream<String> lines() {
         Iterator<String> iter = new Iterator<>() {
             String nextLine = null;
