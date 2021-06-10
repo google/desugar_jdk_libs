@@ -322,7 +322,9 @@ public final class JarFileClassEntrySelector {
       outClassNodes.addAll(generatedApiClass);
     }
     String replacementType = preScanner.getReplacementType(cn.name);
-    if (replacementType != null) {
+    if (replacementType != null
+        // If the Desugar* class is manually defined, exclude it from type remapping.
+        && !selectedEntryNames.contains(replacementType + ".class")) {
       outClassNodes.add(cn);
     }
 

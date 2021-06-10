@@ -168,6 +168,8 @@ public final class PreScanner {
             AsmHelpers.getReplacementTypeInternalName(anonymousClassInternalName));
       }
     }
+
+    typeReplacements.put("jdk/internal/misc/Unsafe", "sun/misc/DesugarUnsafe");
   }
 
   @Nullable
