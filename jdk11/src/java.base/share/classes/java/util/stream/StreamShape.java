@@ -46,7 +46,8 @@ package java.util.stream;
  *
  * @since 1.8
  */
-enum StreamShape {
+// For desugar: make this public to run emulator tests.
+public enum StreamShape {
     /**
      * The shape specialization corresponding to {@code Stream} and elements
      * that are object references.
