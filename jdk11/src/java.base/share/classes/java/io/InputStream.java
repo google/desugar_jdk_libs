@@ -25,6 +25,7 @@
 
 package java.io;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -696,6 +697,7 @@ public abstract class InputStream implements Closeable {
      *
      * @since 9
      */
+    @DesugarSupportedApi
     public long transferTo(OutputStream out) throws IOException {
         Objects.requireNonNull(out, "out");
         long transferred = 0;

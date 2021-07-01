@@ -59,7 +59,7 @@ public final class JarFileClassEntrySelector {
       LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
   private static final String[] CLASSIC_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
-    "java/io/DesugarBufferedReader",
+    "java/io/Desugar*",
     "java/io/UncheckedIOException",
     "java/lang/Desugar*",
     "java/lang/Iterable",
@@ -112,7 +112,7 @@ public final class JarFileClassEntrySelector {
   };
 
   private static final String[] D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
-      "java/io/DesugarBufferedReader",
+      "java/io/Desugar*",
       "java/io/UncheckedIOException",
       "java/lang/Desugar*",
       "java/lang/Iterable",
