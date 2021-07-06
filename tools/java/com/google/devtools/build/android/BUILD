@@ -9,10 +9,11 @@ java_binary(
     ],
     main_class = "com.google.devtools.build.android.JarFileClassEntrySelector",
     deps = [
-        "@google_bazel_common//third_party/java/asm",
-        "@google_bazel_common//third_party/java/asm:asm-tree",
         "@google_bazel_common//third_party/java/auto:value",
-        "@google_bazel_common//third_party/java/guava",
         "@google_bazel_common//third_party/java/jsr305_annotations",
+        "@maven//:com_google_guava_guava",
+        "@maven//:org_ow2_asm_asm",
+        "@maven//:org_ow2_asm_asm_commons",
+        "@maven//:org_ow2_asm_asm_tree",
     ],
 )
