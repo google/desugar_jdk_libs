@@ -122,6 +122,7 @@ public final class JarFileClassEntrySelector {
     "java/lang/FunctionalInterface",
     "java/lang/annotation/Native",
     "java/lang/annotation/Repeatable",
+    "java/lang/ref/Cleaner",
     "java/nio/*",
     "java/time/*",
     "java/util/AbstractList",
@@ -168,6 +169,8 @@ public final class JarFileClassEntrySelector {
     "sun/misc/Desugar*",
     "sun/nio/*",
     "jdk/internal/misc/JavaNioAccess",
+    "jdk/internal/ref/Cleaner",
+    "jdk/internal/ref/CleanerFactory",
     "jdk/internal/util/Preconditions",
   };
 
