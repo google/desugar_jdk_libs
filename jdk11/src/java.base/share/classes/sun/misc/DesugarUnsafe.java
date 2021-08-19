@@ -387,6 +387,38 @@ public final class DesugarUnsafe {
   }
 
   /**
+   * Sets all bytes in a given block of memory to a copy of another
+   * block.
+   *
+   * <p>This method determines each block's base address by means of two parameters,
+   * and so it provides (in effect) a <em>double-register</em> addressing mode,
+   * as discussed in {@link #getInt(Object,long)}.  When the object reference is null,
+   * the offset supplies an absolute base address.
+   *
+   * <p>The transfers are in coherent (atomic) units of a size determined
+   * by the address and length parameters.  If the effective addresses and
+   * length are all even modulo 8, the transfer takes place in 'long' units.
+   * If the effective addresses and length are (resp.) even modulo 4 or 2,
+   * the transfer takes place in units of 'int' or 'short'.
+   *
+   * @since 1.7
+   */
+  public void copyMemory(Object srcBase, long srcOffset,
+                         Object destBase, long destOffset,
+                         long bytes) {
+    // For desugar: custom implementation.
+    // TODO(b/197162880): Look into an efficient solution instead of byte-to-byte copying.
+    for (int i = 0; i < bytes; i++) {
+      byte value = srcBase == null ? getByte(i + srcOffset) : getByte(srcBase, i + srcOffset);
+      if (destBase == null) {
+        putByte(i + destOffset, value);
+      } else {
+        putByte(destBase, i + destOffset, value);
+      }
+    }
+  }
+
+  /**
    * Fetches a value from a given Java variable. More specifically, fetches a field or array element
    * within the given object {@code o} at the given offset, or (if {@code o} is null) from the
    * memory address whose numerical value is the given offset.
