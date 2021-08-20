@@ -97,7 +97,9 @@ public final class InnocuousThread extends Thread {
     }
 
     private InnocuousThread(ThreadGroup group, Runnable target, String name, ClassLoader tccl) {
-        super(group, target, name, 0L, false);
+        // For desugar: Use Android-supported thread constructor API.
+        // super(group, target, name, 0L, false);
+        super(group, target, name, 0L);
         UNSAFE.putObjectRelease(this, INHERITEDACCESSCONTROLCONTEXT, ACC);
         UNSAFE.putObjectRelease(this, CONTEXTCLASSLOADER, tccl);
     }

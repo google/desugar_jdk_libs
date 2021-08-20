@@ -848,4 +848,20 @@ public final class DesugarUnsafe {
   public void park(boolean isAbsolute, long time) {
     theUnsafe.park(isAbsolute, time);
   }
+
+  /**
+   * Ensures the given class has been initialized. This is often needed in conjunction with
+   * obtaining the static field base of a class.
+   */
+  @ForceInline
+  public void ensureClassInitialized(Class<?> c) {
+    // For desugar: Use Android SDK implementation instead.
+    try {
+      Class.forName(c.getName());
+    } catch (ClassNotFoundException e) {
+      // Throw if FileDescriptor class is not found. Something wrong in runtime / libcore.
+      throw new RuntimeException(e);
+    }
+  }
+
 }

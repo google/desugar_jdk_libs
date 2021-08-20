@@ -168,9 +168,14 @@ public final class JarFileClassEntrySelector {
     "java/util/stream/*",
     "sun/misc/Desugar*",
     "sun/nio/*",
-    "jdk/internal/misc/JavaNioAccess",
+    "jdk/internal/misc/InnocuousThread",
+    "jdk/internal/misc/Java*",
+    "jdk/internal/misc/SharedSecrets",
+    "jdk/internal/misc/Signal",
+    "jdk/internal/misc/TerminatingThreadLocal",
     "jdk/internal/ref/Cleaner",
     "jdk/internal/ref/CleanerFactory",
+    "jdk/internal/util/StaticProperty",
     "jdk/internal/util/Preconditions",
   };
 

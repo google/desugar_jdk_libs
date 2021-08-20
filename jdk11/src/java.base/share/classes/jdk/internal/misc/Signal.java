@@ -221,7 +221,9 @@ public final class Signal {
             }
         };
         if (handler != null) {
-            new Thread(null, runnable, sig + " handler", 0, false).start();
+            // For desugar: Use Android-supported thread constructor API.
+            // new Thread(null, runnable, sig + " handler", 0, false).start();
+            new Thread(null, runnable, sig + " handler", 0).start();
         }
     }
 
