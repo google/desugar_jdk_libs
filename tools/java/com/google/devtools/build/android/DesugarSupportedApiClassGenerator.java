@@ -54,6 +54,7 @@ public class DesugarSupportedApiClassGenerator {
   public ImmutableList<ClassNode> getClassNodesWithSupportedMembers() {
     ImmutableList<FieldNode> allDesugarSupportedFields = findAllDesugarSupportedFields();
     ImmutableList<MethodNode> allDesugarSupportedClassMembers = findAllDesugarSupportedMethods();
+    ImmutableList<String> allNestMembers = findAllDesugarSupportedNestMember();
     if (allDesugarSupportedFields.isEmpty() && allDesugarSupportedClassMembers.isEmpty()) {
       return ImmutableList.of();
     }
@@ -90,6 +91,10 @@ public class DesugarSupportedApiClassGenerator {
 
     for (MethodNode mn : allDesugarSupportedClassMembers) {
       mn.accept(generatedClassNode);
+    }
+
+    for (String nestMember : allNestMembers) {
+      generatedClassNode.visitNestMember(nestMember);
     }
     return ImmutableList.of(generatedClassNode);
   }
@@ -132,4 +137,13 @@ public class DesugarSupportedApiClassGenerator {
     return supportedFields.build();
   }
 
+  private ImmutableList<String> findAllDesugarSupportedNestMember() {
+    ImmutableList.Builder<String> nestMembers = ImmutableList.builder();
+    for (String nestMember : preScanner.getNestMembers(baseClassNode.name)) {
+      if (preScanner.getReplacementType(nestMember) != null) {
+        nestMembers.add(nestMember);
+      }
+    }
+    return nestMembers.build();
+  }
 }

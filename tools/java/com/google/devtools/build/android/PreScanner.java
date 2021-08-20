@@ -28,9 +28,11 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.LinkedHashMultimap;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.Nullable;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -47,6 +49,9 @@ public final class PreScanner {
   private final ImmutableSet<String> intoDesugarExtendedClassAnnotationNames;
 
   private final Map<String, String> typeReplacements;
+  private final Map<String, String> nestHosts;
+  private final LinkedHashMultimap<String, String> nestMembers;
+
   private final Map<ClassMemberKey, ClassMemberKey> fieldReplacements;
   private final Map<ClassMemberKey, ClassMemberKey> methodReplacements;
 
@@ -55,7 +60,11 @@ public final class PreScanner {
 
   public PreScanner(ImmutableSet<String> intoDesugarExtendedClassAnnotationNames) {
     this.intoDesugarExtendedClassAnnotationNames = intoDesugarExtendedClassAnnotationNames;
+
     this.typeReplacements = new HashMap<>();
+    this.nestHosts = new HashMap<>();
+    this.nestMembers = LinkedHashMultimap.create();
+
     this.methodReplacements = new HashMap<>();
     this.fieldReplacements = new HashMap<>();
     this.anonymousClasses = new HashMap<>();
@@ -71,6 +80,14 @@ public final class PreScanner {
           classNode.name,
           ClassMemberKey.create(
               classNode.outerClass, classNode.outerMethod, classNode.outerMethodDesc));
+    }
+
+    if (classNode.nestHostClass != null && !classNode.nestHostClass.isEmpty()) {
+      nestHosts.put(classNode.name, classNode.nestHostClass);
+    }
+
+    if (classNode.nestMembers != null && !classNode.nestMembers.isEmpty()) {
+      nestMembers.putAll(classNode.name, classNode.nestMembers);
     }
 
     ArrayDeque<ClassMemberKey> stagingMethods = new ArrayDeque<>();
@@ -175,6 +192,14 @@ public final class PreScanner {
   @Nullable
   public String getReplacementType(String typeInternalName) {
     return typeReplacements.get(typeInternalName);
+  }
+
+  public String getNestHost(String typeInternalName) {
+    return nestHosts.getOrDefault(typeInternalName, "");
+  }
+
+  public Set<String> getNestMembers(String typeInternalName) {
+    return nestMembers.get(typeInternalName);
   }
 
   @Nullable
