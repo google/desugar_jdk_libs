@@ -25,6 +25,7 @@
 
 package java.lang;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
@@ -557,6 +558,7 @@ class Character implements java.io.Serializable, Comparable<Character> {
      *
      * @since 1.5
      */
+    @DesugarSupportedApi
     public static final char MIN_LOW_SURROGATE  = '\uDC00';
 
     /**
@@ -568,6 +570,7 @@ class Character implements java.io.Serializable, Comparable<Character> {
      *
      * @since 1.5
      */
+    @DesugarSupportedApi
     public static final char MAX_LOW_SURROGATE  = '\uDFFF';
 
     /**
@@ -576,6 +579,7 @@ class Character implements java.io.Serializable, Comparable<Character> {
      *
      * @since 1.5
      */
+    @DesugarSupportedApi
     public static final char MIN_SURROGATE = MIN_HIGH_SURROGATE;
 
     /**
@@ -584,6 +588,7 @@ class Character implements java.io.Serializable, Comparable<Character> {
      *
      * @since 1.5
      */
+    @DesugarSupportedApi
     public static final char MAX_SURROGATE = MAX_LOW_SURROGATE;
 
     /**
@@ -8171,6 +8176,7 @@ class Character implements java.io.Serializable, Comparable<Character> {
      *         {@code false} otherwise.
      * @since  1.7
      */
+    @DesugarSupportedApi
     public static boolean isSurrogate(char ch) {
         return ch >= MIN_SURROGATE && ch < (MAX_SURROGATE + 1);
     }
@@ -8468,6 +8474,7 @@ class Character implements java.io.Serializable, Comparable<Character> {
      *          character in the UTF-16 encoding
      * @since   1.7
      */
+    @DesugarSupportedApi
     public static char highSurrogate(int codePoint) {
         return (char) ((codePoint >>> 10)
             + (MIN_HIGH_SURROGATE - (MIN_SUPPLEMENTARY_CODE_POINT >>> 10)));
@@ -8497,6 +8504,7 @@ class Character implements java.io.Serializable, Comparable<Character> {
      *          character in the UTF-16 encoding
      * @since   1.7
      */
+    @DesugarSupportedApi
     public static char lowSurrogate(int codePoint) {
         return (char) ((codePoint & 0x3ff) + MIN_LOW_SURROGATE);
     }

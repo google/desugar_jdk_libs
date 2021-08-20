@@ -63,6 +63,7 @@ class NumberFormatException extends IllegalArgumentException {
      *
      * @param   s   the input causing the error
      */
+    @DesugarSupportedApiHelper
     static NumberFormatException forInputString(String s) {
         return new NumberFormatException("For input string: \"" + s + "\"");
     }
