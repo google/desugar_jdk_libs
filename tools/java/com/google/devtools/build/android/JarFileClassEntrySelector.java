@@ -64,8 +64,6 @@ public final class JarFileClassEntrySelector {
     "java/lang/Desugar*",
     "java/lang/Iterable",
     "java/lang/FunctionalInterface",
-    "java/lang/annotation/Native",
-    "java/lang/annotation/Repeatable",
     "java/time/*",
     "java/util/AbstractList",
     "java/util/CollSer",
