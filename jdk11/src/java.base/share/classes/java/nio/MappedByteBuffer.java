@@ -25,6 +25,7 @@
 
 package java.nio;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
 import java.io.FileDescriptor;
 import java.lang.ref.Reference;
 import jdk.internal.misc.Unsafe;
@@ -221,6 +222,7 @@ public abstract class MappedByteBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public final MappedByteBuffer position(int newPosition) {
         super.position(newPosition);
@@ -230,6 +232,7 @@ public abstract class MappedByteBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public final MappedByteBuffer limit(int newLimit) {
         super.limit(newLimit);
@@ -239,6 +242,7 @@ public abstract class MappedByteBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public final MappedByteBuffer mark() {
         super.mark();
@@ -248,6 +252,7 @@ public abstract class MappedByteBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public final MappedByteBuffer reset() {
         super.reset();
@@ -257,6 +262,7 @@ public abstract class MappedByteBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public final MappedByteBuffer clear() {
         super.clear();
@@ -266,6 +272,7 @@ public abstract class MappedByteBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public final MappedByteBuffer flip() {
         super.flip();
@@ -275,6 +282,7 @@ public abstract class MappedByteBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public final MappedByteBuffer rewind() {
         super.rewind();

@@ -36,6 +36,7 @@ package java.nio;
 
 
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
 import jdk.internal.util.ArraysSupport;
 
 /**
@@ -1077,6 +1078,7 @@ public abstract class IntBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public
 
@@ -1090,6 +1092,7 @@ public abstract class IntBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public
 
@@ -1103,6 +1106,7 @@ public abstract class IntBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1116,6 +1120,7 @@ public abstract class IntBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1129,6 +1134,7 @@ public abstract class IntBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1142,6 +1148,7 @@ public abstract class IntBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1155,6 +1162,7 @@ public abstract class IntBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 

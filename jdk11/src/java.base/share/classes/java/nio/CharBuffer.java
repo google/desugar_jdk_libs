@@ -28,6 +28,7 @@
 package java.nio;
 
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
 import java.io.IOException;
 
 
@@ -1077,11 +1078,11 @@ public abstract class CharBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public
 
     final
-
     CharBuffer position(int newPosition) {
         super.position(newPosition);
         return this;
@@ -1090,6 +1091,7 @@ public abstract class CharBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public
 
@@ -1103,6 +1105,7 @@ public abstract class CharBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1116,6 +1119,7 @@ public abstract class CharBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1129,6 +1133,7 @@ public abstract class CharBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1142,6 +1147,7 @@ public abstract class CharBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
@@ -1155,6 +1161,7 @@ public abstract class CharBuffer
     /**
      * {@inheritDoc}
      */
+    @DesugarSupportedApiHelper
     @Override
     public 
 
