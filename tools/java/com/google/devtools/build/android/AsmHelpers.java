@@ -88,7 +88,8 @@ public final class AsmHelpers {
               /* signature= */ null,
               /* exceptions= */ baseMethodNode.exceptions.toArray(new String[0]));
       baseMethodNode.accept(transformedMethodNode);
-
+      // Omit opitonal MethodParameters attribute which is complex to compute and not used by dexer.
+      transformedMethodNode.parameters = null;
       return transformedMethodNode;
     }
   }
