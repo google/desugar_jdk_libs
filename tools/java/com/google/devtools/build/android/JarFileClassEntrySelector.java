@@ -166,6 +166,7 @@ public final class JarFileClassEntrySelector {
     "java/util/stream/*",
     "sun/misc/Desugar*",
     "sun/nio/*",
+    "sun/security/action/*",
     "jdk/internal/misc/InnocuousThread",
     "jdk/internal/misc/Java*",
     "jdk/internal/misc/SharedSecrets",

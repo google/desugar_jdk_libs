@@ -69,9 +69,13 @@ final class FileChannelLinesSpliterator implements Spliterator<String> {
     static final Set<String> SUPPORTED_CHARSET_NAMES;
     static {
         SUPPORTED_CHARSET_NAMES = new HashSet<>();
-        SUPPORTED_CHARSET_NAMES.add(UTF_8.INSTANCE.name());
-        SUPPORTED_CHARSET_NAMES.add(ISO_8859_1.INSTANCE.name());
-        SUPPORTED_CHARSET_NAMES.add(US_ASCII.INSTANCE.name());
+        // For desugar: inline the constant values to avoid sun.nio package dependencies.
+        // SUPPORTED_CHARSET_NAMES.add(UTF_8.INSTANCE.name());
+        // SUPPORTED_CHARSET_NAMES.add(ISO_8859_1.INSTANCE.name());
+        // SUPPORTED_CHARSET_NAMES.add(US_ASCII.INSTANCE.name());
+        SUPPORTED_CHARSET_NAMES.add("UTF-8");
+        SUPPORTED_CHARSET_NAMES.add("ISO-8859-1");
+        SUPPORTED_CHARSET_NAMES.add("US-ASCII");
     }
 
     private final FileChannel fc;

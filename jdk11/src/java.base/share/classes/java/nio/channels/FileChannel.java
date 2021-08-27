@@ -25,6 +25,7 @@
 
 package java.nio.channels;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
@@ -283,6 +284,7 @@ public abstract class FileChannel
      *
      * @since   1.7
      */
+    @DesugarSupportedApi
     public static FileChannel open(Path path,
                                    Set<? extends OpenOption> options,
                                    FileAttribute<?>... attrs)
@@ -332,6 +334,7 @@ public abstract class FileChannel
      *
      * @since   1.7
      */
+    @DesugarSupportedApi
     public static FileChannel open(Path path, OpenOption... options)
         throws IOException
     {

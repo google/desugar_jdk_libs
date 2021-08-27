@@ -418,9 +418,10 @@ public abstract class FileSystemProvider {
             }
         }
         ReadableByteChannel rbc = Files.newByteChannel(path, options);
-        if (rbc instanceof FileChannelImpl) {
-            ((FileChannelImpl) rbc).setUninterruptible();
-        }
+        // For desugar: Not applicable to Android.
+        // if (rbc instanceof FileChannelImpl) {
+        //     ((FileChannelImpl) rbc).setUninterruptible();
+        // }
         return Channels.newInputStream(rbc);
     }
 
@@ -476,9 +477,9 @@ public abstract class FileSystemProvider {
             opts.add(StandardOpenOption.WRITE);
         }
         WritableByteChannel wbc = newByteChannel(path, opts);
-        if (wbc instanceof FileChannelImpl) {
-            ((FileChannelImpl) wbc).setUninterruptible();
-        }
+        // if (wbc instanceof FileChannelImpl) {
+        //     ((FileChannelImpl) wbc).setUninterruptible();
+        // }
         return Channels.newOutputStream(wbc);
     }
 

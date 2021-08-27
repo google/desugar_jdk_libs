@@ -80,6 +80,7 @@ import java.util.stream.StreamSupport;
 import sun.nio.ch.FileChannelImpl;
 import sun.nio.cs.UTF_8;
 import sun.nio.fs.AbstractFileSystemProvider;
+import sun.nio.fs.AbstractFileTypeDetector;
 
 /**
  * This class consists exclusively of static methods that operate on files,
@@ -1570,8 +1571,16 @@ public final class Files {
             return AccessController
                 .doPrivileged(new PrivilegedAction<>() {
                     @Override public FileTypeDetector run() {
-                        return sun.nio.fs.DefaultFileTypeDetector.create();
-                }});
+                        // For desugar: Avoid sun.nio dependency:
+                        // Inlined sun.nio.fs.UnixFileSystemProvider
+                        // return sun.nio.fs.DefaultFileTypeDetector.create();
+                        return new AbstractFileTypeDetector() {
+                            @Override
+                            public String implProbeContentType(Path file) {
+                                return null;
+                            }
+                        };
+                    }});
         }
 
         // loads all installed file type detectors
@@ -3205,8 +3214,9 @@ public final class Files {
     public static byte[] readAllBytes(Path path) throws IOException {
         try (SeekableByteChannel sbc = Files.newByteChannel(path);
              InputStream in = Channels.newInputStream(sbc)) {
-            if (sbc instanceof FileChannelImpl)
-                ((FileChannelImpl) sbc).setUninterruptible();
+            // For desugar: omit the check to be consistent with the Android 11 version.
+            // if (sbc instanceof FileChannelImpl)
+            //     ((FileChannelImpl) sbc).setUninterruptible();
             long size = sbc.size();
             if (size > (long) MAX_BUFFER_SIZE)
                 throw new OutOfMemoryError("Required array size too large");
@@ -3282,8 +3292,9 @@ public final class Files {
         Objects.requireNonNull(cs);
 
         byte[] ba = readAllBytes(path);
-        if (path.getClass().getModule() != Object.class.getModule())
-            ba = ba.clone();
+        // For desugar: Java 9 module is not applicable to Android.
+        // if (path.getClass().getModule() != Object.class.getModule())
+        //     ba = ba.clone();
         return JLA.newStringNoRepl(ba, cs);
     }
 
@@ -3636,8 +3647,9 @@ public final class Files {
         Objects.requireNonNull(cs);
 
         byte[] bytes = JLA.getBytesNoRepl(String.valueOf(csq), cs);
-        if (path.getClass().getModule() != Object.class.getModule())
-            bytes = bytes.clone();
+        // For desugar: always true
+        // if (path.getClass().getModule() != Object.class.getModule())
+        //     bytes = bytes.clone();
         write(path, bytes, options);
 
         return path;
@@ -4127,6 +4139,8 @@ public final class Files {
      * @since 1.8
      */
     public static Stream<String> lines(Path path) throws IOException {
-        return lines(path, UTF_8.INSTANCE);
+        // For desugar:
+        // return lines(path, UTF_8.INSTANCE);
+        return lines(path, StandardCharsets.UTF_8);
     }
 }
