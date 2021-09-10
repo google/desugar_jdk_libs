@@ -77,6 +77,14 @@ class AnnotationFilterClassVisitor extends ClassVisitor {
     }
 
     @Override
+    public void visitParameter(String name, int access) {
+      // Omit MethodParameters attribute in the pre-selected desugar library in consistent with
+      // other platform class path entries, such as android.jar.
+      // See: b/198841565, the attribute causes build-time check failures.
+      // TODO(deltazulu): Move to a separate visitor to perform the stripping functionality.
+    }
+
+    @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
       return omitAnnotation(descriptor) ? null : super.visitAnnotation(descriptor, visible);
     }
