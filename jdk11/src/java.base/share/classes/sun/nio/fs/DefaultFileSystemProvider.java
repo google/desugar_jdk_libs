@@ -26,21 +26,24 @@
 package sun.nio.fs;
 
 import java.nio.file.FileSystem;
+import java.nio.file.spi.FileSystemProvider;
 
 /**
  * Creates this platform's default FileSystemProvider.
  */
 
 public class DefaultFileSystemProvider {
-    private static final LinuxFileSystemProvider INSTANCE
-        = new LinuxFileSystemProvider();
+    private static final FileSystemProvider INSTANCE
+        // For desugar: TODO(deltazulu): Implement a desugar-customized FileSystemProvider.
+        // = new LinuxFileSystemProvider();
+        = null;
 
     private DefaultFileSystemProvider() { }
 
     /**
      * Returns the platform's default file system provider.
      */
-    public static LinuxFileSystemProvider instance() {
+    public static FileSystemProvider instance() {
         return INSTANCE;
     }
 
@@ -48,6 +51,8 @@ public class DefaultFileSystemProvider {
      * Returns the platform's default file system.
      */
     public static FileSystem theFileSystem() {
-        return INSTANCE.theFileSystem();
+        // For desugar: TODO(deltazulu): Implement a desugar-customized FileSystemProvider.
+        // return INSTANCE.theFileSystem();
+        throw new UnsupportedOperationException("Pending Implementation.");
     }
 }
