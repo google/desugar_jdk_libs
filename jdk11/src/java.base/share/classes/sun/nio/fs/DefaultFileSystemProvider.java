@@ -56,8 +56,4 @@ public class DefaultFileSystemProvider {
         // return INSTANCE.theFileSystem();
         throw new UnsupportedOperationException("Pending Implementation.");
     }
-
-    public static ByteBuffer testCovariant(ByteBuffer b) {
-        return b.limit(123);
-    }
 }
