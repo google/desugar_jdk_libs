@@ -207,11 +207,20 @@ public class URLDecoder {
 
                     while ( ((i+2) < numChars) &&
                             (c=='%')) {
+                        // For desugar: Follow Android 11 implementation:
+                        // BEGIN Android-changed: App compat. Forbid non-hex chars after '%'.
+                        if (!isValidHexChar(s.charAt(i+1)) || !isValidHexChar(s.charAt(i+2))) {
+                            throw new IllegalArgumentException("URLDecoder: Illegal hex characters in escape (%) pattern : "
+                                + s.substring(i, i + 3));
+                        }
+                        // For desugar: END Android-changed: App compat. Forbid non-hex chars after '%'.
                         int v = Integer.parseInt(s, i + 1, i + 3, 16);
-                        if (v < 0)
-                            throw new IllegalArgumentException(
-                                    "URLDecoder: Illegal hex characters in escape "
-                                            + "(%) pattern - negative value");
+                        if (v < 0) {
+                            // For desugar: Follow Android 11 implementation:
+                            // Android-changed: Improve error message by printing the string value.
+                            throw new IllegalArgumentException("URLDecoder: Illegal hex characters in escape (%) pattern - negative value : "
+                                + s.substring(i, i + 3));
+                        }
                         bytes[pos++] = (byte) v;
                         i+= 3;
                         if (i < numChars)
@@ -242,4 +251,11 @@ public class URLDecoder {
 
         return (needToChange? sb.toString() : s);
     }
+
+    // For desugar: Follow Android 11 implementation:
+    // BEGIN Android-added: App compat. Forbid non-hex chars after '%'.
+    private static boolean isValidHexChar(char c) {
+        return ('0' <= c && c <= '9') || ('a' <= c && c <= 'f') || ('A' <= c && c <= 'F');
+    }
+    // END Android-added: App compat. Forbid non-hex chars after '%'.
 }
