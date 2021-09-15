@@ -1,5 +1,6 @@
 package com.google.devtools.build.android;
 
+import com.google.common.collect.ImmutableSet;
 import java.lang.invoke.LambdaMetafactory;
 import java.util.Collection;
 import org.objectweb.asm.Opcodes;
@@ -22,6 +23,20 @@ public final class AsmHelpers {
   static final String LAMBDA_METAFACTORY_INTERNAL_NAME =
       // Expected to be "java/lang/invoke/LambdaMetafactory"
       Type.getType(LambdaMetafactory.class).getInternalName();
+
+  private static final ImmutableSet<String> DERIVED_NIO_BUFFERS =
+      ImmutableSet.of(
+          "java/nio/ByteBuffer",
+          "java/nio/CharBuffer",
+          "java/nio/DoubleBuffer",
+          "java/nio/FloatBuffer",
+          "java/nio/IntBuffer",
+          "java/nio/LongBuffer",
+          "java/nio/MappedByteBuffer",
+          "java/nio/ShortBuffer");
+
+  private static final ImmutableSet<String> NIO_BUFFER_COVARIANT_RETURN_TYPED_METHODS =
+      ImmutableSet.of("position", "limit", "mark", "reset", "clear", "flip", "rewind");
 
   /** The descriptor of the static version of a given instance method. */
   static String instanceMethodToStaticDescriptor(String ownerName, String methodDesc) {
@@ -119,5 +134,11 @@ public final class AsmHelpers {
         getReplacementTypeInternalName(originalField.owner()),
         originalField.name(),
         originalField.desc());
+  }
+
+  /** Covariant return typed methods that will be handled by the d8 desugar tool. */
+  static boolean isCovariantReturnTypedMethod(ClassMemberKey method) {
+    return DERIVED_NIO_BUFFERS.contains(method.owner())
+        && NIO_BUFFER_COVARIANT_RETURN_TYPED_METHODS.contains(method.name());
   }
 }

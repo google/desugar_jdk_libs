@@ -108,7 +108,8 @@ public final class PreScanner {
     }
     for (MethodNode methodNode : classNode.methods) {
       ClassMemberKey mk = ClassMemberKey.create(classNode, methodNode);
-      if (AsmHelpers.hasAnyAnnotation(methodNode, intoDesugarExtendedClassAnnotationNames)) {
+      if (!AsmHelpers.isCovariantReturnTypedMethod(mk)
+          && AsmHelpers.hasAnyAnnotation(methodNode, intoDesugarExtendedClassAnnotationNames)) {
         stagingMethods.add(mk);
         stagingMethodsMap.put(mk, methodNode);
       }

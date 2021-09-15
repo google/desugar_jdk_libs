@@ -25,6 +25,7 @@
 
 package sun.nio.fs;
 
+import java.nio.ByteBuffer;
 import java.nio.file.FileSystem;
 import java.nio.file.spi.FileSystemProvider;
 
@@ -54,5 +55,9 @@ public class DefaultFileSystemProvider {
         // For desugar: TODO(deltazulu): Implement a desugar-customized FileSystemProvider.
         // return INSTANCE.theFileSystem();
         throw new UnsupportedOperationException("Pending Implementation.");
+    }
+
+    public static ByteBuffer testCovariant(ByteBuffer b) {
+        return b.limit(123);
     }
 }
