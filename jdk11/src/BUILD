@@ -2,7 +2,7 @@ load("@rules_java//java:defs.bzl", "java_library")
 
 java_library(
     name = "java_base_all",
-    srcs = glob(["**/*.java"]),
+    srcs = glob(["java.base/**/*.java"]),
     javacopts = [
         "-source 11",
         "-target 11",
