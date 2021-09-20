@@ -8,11 +8,11 @@ java_library(
         "-target 11",
         "-XepAllErrorsAsWarnings",
         "-Xep:rawtypes:OFF",
-        "--patch-module=java.base=$(execpath //jdk11/desugarconfig:libdesugarconfig.jar):.",
+        "--patch-module=java.base=%s" % package_name(),
         "--add-reads=java.base=ALL-UNNAMED",
     ],
     visibility = ["//:__pkg__"],
-    deps = ["//jdk11/desugarconfig:libdesugarconfig.jar"],
+    deps = ["//jdk11/desugarconfig"],
 )
 
 genrule(
