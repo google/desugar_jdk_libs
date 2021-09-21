@@ -12,7 +12,10 @@ java_library(
         "--add-reads=java.base=ALL-UNNAMED",
     ],
     visibility = ["//:__pkg__"],
-    deps = ["//jdk11/desugarconfig"],
+    deps = [
+        "//jdk11/desugarconfig",
+        "//jdk11/src/libcore:libcore_addon",
+    ],
 )
 
 genrule(
