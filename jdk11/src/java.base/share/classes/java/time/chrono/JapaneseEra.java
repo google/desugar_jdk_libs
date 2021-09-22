@@ -155,12 +155,14 @@ public final class JapaneseEra
      */
     // public static final JapaneseEra HEISEI = new JapaneseEra(2, LocalDate.of(1989, 1, 8));
     public static final JapaneseEra HEISEI = new JapaneseEra(2, LocalDate.of(1989, 1, 8), "Heisei", "H");
+    // For desugar: Follow Android 11's implementation.
+    // Android-changed: Integrate OpenJDK support for Japanese Era Reiwa.
     /**
       * The singleton instance for the 'Reiwa' era (2019-05-01 - current)
       * which has the value 3. The end date of this era is not specified, unless
       * the Japanese Government defines it.
       */
-    private static final JapaneseEra REIWA = new JapaneseEra(3, LocalDate.of(2019, 5, 1), "Reiwa", "R");
+    public static final JapaneseEra REIWA = new JapaneseEra(3, LocalDate.of(2019, 5, 1), "Reiwa", "R");
 
     // The number of predefined JapaneseEra constants.
     // There may be a supplemental era defined by the property.
