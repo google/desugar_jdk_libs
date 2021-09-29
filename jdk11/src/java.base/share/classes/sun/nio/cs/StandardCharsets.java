@@ -1378,8 +1378,9 @@ public class StandardCharsets extends CharsetProvider {
     private void init() {
         if (initialized)
             return;
-        if (!jdk.internal.misc.VM.isBooted())
-            return;
+        // For desugar: jdk.internal.misc.VM is not applicable on Android.
+        // if (!jdk.internal.misc.VM.isBooted())
+        //     return;
         initialized = true;
 
         String map = GetPropertyAction.privilegedGetProperty("sun.nio.cs.map");

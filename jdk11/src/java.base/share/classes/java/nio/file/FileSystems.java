@@ -178,12 +178,14 @@ public final class FileSystems {
      * @return  the default file system
      */
     public static FileSystem getDefault() {
-        if (VM.isModuleSystemInited()) {
-            return DefaultFileSystemHolder.defaultFileSystem;
-        } else {
-            // always use the platform's default file system during startup
-            return DefaultFileSystemProvider.theFileSystem();
-        }
+        // For desugar: jdk.internal.misc.VM is not applicable on Android.
+        // if (VM.isModuleSystemInited()) {
+        //     return DefaultFileSystemHolder.defaultFileSystem;
+        // } else {
+        //     // always use the platform's default file system during startup
+        //     return DefaultFileSystemProvider.theFileSystem();
+        // }
+        return DefaultFileSystemProvider.theFileSystem();
     }
 
     /**
