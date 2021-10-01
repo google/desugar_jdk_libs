@@ -14,7 +14,7 @@ java_library(
     visibility = ["//:__pkg__"],
     deps = [
         "//jdk11/desugarconfig",
-        "//jdk11/src/libcore:libcore_addon",
+        "//jdk11/src/addon",
     ],
 )
 

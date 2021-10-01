@@ -1,6 +1,6 @@
 load("@rules_java//java:defs.bzl", "java_library")
 
-package(default_visibility = ["//jdk11/src:__pkg__"])
+package(default_visibility = ["//jdk11/src:__subpackages__"])
 
 java_library(
     name = "libcore_addon",
