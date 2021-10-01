@@ -25,6 +25,7 @@
 
 package java.nio.file;
 
+import desugar.sun.nio.fs.DesugarDefaultFileSystemProvider;
 import java.nio.file.spi.FileSystemProvider;
 import java.net.URI;
 import java.io.IOException;
@@ -36,8 +37,6 @@ import java.util.Map;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
-import jdk.internal.misc.VM;
-import sun.nio.fs.DefaultFileSystemProvider;
 
 /**
  * Factory methods for file systems. This class defines the {@link #getDefault
@@ -110,7 +109,7 @@ public final class FileSystems {
         // returns default provider
         private static FileSystemProvider getDefaultProvider() {
             // start with the platform's default file system provider
-            FileSystemProvider provider = DefaultFileSystemProvider.instance();
+            FileSystemProvider provider = DesugarDefaultFileSystemProvider.instance();
 
             // if the property java.nio.file.spi.DefaultFileSystemProvider is
             // set then its value is the name of the default provider (or a list)
@@ -185,7 +184,7 @@ public final class FileSystems {
         //     // always use the platform's default file system during startup
         //     return DefaultFileSystemProvider.theFileSystem();
         // }
-        return DefaultFileSystemProvider.theFileSystem();
+        return DefaultFileSystemHolder.defaultFileSystem;
     }
 
     /**

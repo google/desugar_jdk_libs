@@ -25,6 +25,7 @@
 
 package java.nio.file;
 
+import desugar.sun.nio.fs.DesugarDefaultFileTypeDetector;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.Closeable;
@@ -76,11 +77,8 @@ import java.util.Spliterators;
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import sun.nio.ch.FileChannelImpl;
 import sun.nio.cs.UTF_8;
 import sun.nio.fs.AbstractFileSystemProvider;
-import sun.nio.fs.AbstractFileTypeDetector;
 
 /**
  * This class consists exclusively of static methods that operate on files,
@@ -1571,15 +1569,8 @@ public final class Files {
             return AccessController
                 .doPrivileged(new PrivilegedAction<>() {
                     @Override public FileTypeDetector run() {
-                        // For desugar: Avoid sun.nio dependency:
-                        // Inlined sun.nio.fs.UnixFileSystemProvider
-                        // return sun.nio.fs.DefaultFileTypeDetector.create();
-                        return new AbstractFileTypeDetector() {
-                            @Override
-                            public String implProbeContentType(Path file) {
-                                return null;
-                            }
-                        };
+                        // For desugar: Use desugar-custom implementation.
+                        return DesugarDefaultFileTypeDetector.create();
                     }});
         }
 
