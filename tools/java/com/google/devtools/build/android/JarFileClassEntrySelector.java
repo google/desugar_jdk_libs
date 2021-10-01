@@ -177,6 +177,7 @@ public final class JarFileClassEntrySelector {
     "jdk/internal/misc/TerminatingThreadLocal",
     "jdk/internal/ref/Cleaner",
     "jdk/internal/ref/CleanerFactory",
+    "jdk/internal/ref/CleanerImpl",
     "jdk/internal/util/StaticProperty",
     "jdk/internal/util/Preconditions",
   };

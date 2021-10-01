@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 public final class AndroidPlatformJdkApiGenerator {
 
   private static final ImmutableSet<String> JDK_TYPE_PREFIXES =
-      ImmutableSet.of("com/sun/", "java/", "javax/", "jdk/", "sun/");
+      ImmutableSet.of("com/sun/", "java/", "javax/", "jdk/", "sun/", "j$/");
 
   public static void main(String[] args) throws IOException {
     if (args.length < 2) {
