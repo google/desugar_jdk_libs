@@ -26,6 +26,7 @@
 package java.lang;
 
 import com.google.devtools.build.android.annotations.DesugarSupportedApi;
+import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
 import java.io.ObjectStreamField;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Native;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Spliterator;
@@ -326,6 +328,7 @@ public final class String
             }
         }
         this.coder = UTF16;
+        // sun.nio.cs.UTF_16
         this.value = StringUTF16.toBytes(codePoints, offset, count);
     }
 
@@ -2677,9 +2680,26 @@ public final class String
      */
     @DesugarSupportedApi
     public String strip() {
-        String ret = isLatin1() ? StringLatin1.strip(value)
-                                : StringUTF16.strip(value);
-        return ret == null ? this : ret;
+        // For desugar: Avoid StringLatin1 and StringUTF16 dependencies.
+        if (isEmpty()) {
+            return this;
+        }
+        if (!Character.isWhitespace(charAt(0)) && !Character.isWhitespace(length() - 1)) {
+            return this;
+        }
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        while (Character.isWhitespace(charAt(i))) {
+            i++;
+        }
+        int j = length() - 1;
+        while (Character.isWhitespace(charAt(j))) {
+            j--;
+        }
+        return substring(i, j + 1);
+        // String ret = isLatin1() ? StringLatin1.strip(value)
+        //     : StringUTF16.strip(value);
+        // return ret == null ? this : ret;
     }
 
     /**
@@ -2708,9 +2728,25 @@ public final class String
      */
     @DesugarSupportedApi
     public String stripLeading() {
-        String ret = isLatin1() ? StringLatin1.stripLeading(value)
-                                : StringUTF16.stripLeading(value);
-        return ret == null ? this : ret;
+        // For desugar: Avoid StringLatin1 and StringUTF16 dependencies.
+        // String ret = isLatin1() ? StringLatin1.stripLeading(value)
+        //                         : StringUTF16.stripLeading(value);
+        // return ret == null ? this : ret;
+
+        if (isEmpty()) {
+            return this;
+        }
+        if (!Character.isWhitespace(charAt(0))) {
+            return this;
+        }
+        int i = 0;
+        while (Character.isWhitespace(charAt(i))) {
+            i++;
+        }
+        return substring(i);
+        // String ret = isLatin1() ? StringLatin1.strip(value)
+        //     : StringUTF16.strip(value);
+        // return ret == null ? this : ret;
     }
 
     /**
@@ -2739,9 +2775,22 @@ public final class String
      */
     @DesugarSupportedApi
     public String stripTrailing() {
-        String ret = isLatin1() ? StringLatin1.stripTrailing(value)
-                                : StringUTF16.stripTrailing(value);
-        return ret == null ? this : ret;
+        // For desugar: Avoid StringLatin1 and StringUTF16 dependencies.
+        if (isEmpty()) {
+            return this;
+        }
+        if (!Character.isWhitespace(length() - 1)) {
+            return this;
+        }
+        int j = length() - 1;
+        while (Character.isWhitespace(charAt(j))) {
+            j--;
+        }
+        return substring(0, j + 1);
+
+        // String ret = isLatin1() ? StringLatin1.stripTrailing(value)
+        //                         : StringUTF16.stripTrailing(value);
+        // return ret == null ? this : ret;
     }
 
     /**
@@ -2759,7 +2808,14 @@ public final class String
      */
     @DesugarSupportedApi
     public boolean isBlank() {
-        return indexOfNonWhitespace() == length();
+        // For desugar: Avoid StringLatin1 and StringUTF16 dependencies.
+        // return indexOfNonWhitespace() == length();
+        for (char c : toCharArray()) {
+            if (!Character.isWhitespace(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int indexOfNonWhitespace() {
@@ -2802,8 +2858,11 @@ public final class String
      */
     @DesugarSupportedApi
     public Stream<String> lines() {
-        return isLatin1() ? StringLatin1.lines(value)
-                          : StringUTF16.lines(value);
+        // For desugar: Avoid StringLatin1 and StringUTF16 dependencies.
+        // return isLatin1() ? StringLatin1.lines(value)
+        //                   : StringUTF16.lines(value);
+
+        return Arrays.stream(split("\n"));
     }
 
     /**
@@ -2827,10 +2886,16 @@ public final class String
     @DesugarSupportedApi
     @Override
     public IntStream chars() {
-        return StreamSupport.intStream(
-            isLatin1() ? new StringLatin1.CharsSpliterator(value, Spliterator.IMMUTABLE)
-                       : new StringUTF16.CharsSpliterator(value, Spliterator.IMMUTABLE),
-            false);
+        // For desugar: Avoid StringLatin1 and StringUTF16 dependencies.
+        // return StreamSupport.intStream(
+        //     isLatin1() ? new StringLatin1.CharsSpliterator(value, Spliterator.IMMUTABLE)
+        //                : new StringUTF16.CharsSpliterator(value, Spliterator.IMMUTABLE),
+        //     false);
+        IntStream.Builder builder = IntStream.builder();
+        for (char c : toCharArray()) {
+            builder.add(c);
+        }
+        return builder.build();
     }
 
 
@@ -2845,7 +2910,6 @@ public final class String
      * @return an IntStream of Unicode code points from this sequence
      * @since 9
      */
-    @DesugarSupportedApi
     @Override
     public IntStream codePoints() {
         return StreamSupport.intStream(
@@ -3294,6 +3358,7 @@ public final class String
      * StringIndexOutOfBoundsException  if {@code offset}
      * is negative or greater than {@code length}.
      */
+    @DesugarSupportedApiHelper
     static void checkOffset(int offset, int length) {
         if (offset < 0 || offset > length) {
             throw new StringIndexOutOfBoundsException("offset " + offset +
@@ -3324,6 +3389,7 @@ public final class String
      *          If {@code begin} is negative, {@code begin} is greater than
      *          {@code end}, or {@code end} is greater than {@code length}.
      */
+    @DesugarSupportedApiHelper
     static void checkBoundsBeginEnd(int begin, int end, int length) {
         if (begin < 0 || begin > end || end > length) {
             throw new StringIndexOutOfBoundsException(
