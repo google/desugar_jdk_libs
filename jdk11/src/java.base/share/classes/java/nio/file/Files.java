@@ -3129,8 +3129,9 @@ public final class Files {
      */
     private static final int MAX_BUFFER_SIZE = Integer.MAX_VALUE - 8;
 
-    private static final jdk.internal.misc.JavaLangAccess JLA =
-            jdk.internal.misc.SharedSecrets.getJavaLangAccess();
+    // For desugar: Replaced with public String API instead for string operations.
+    // private static final jdk.internal.misc.JavaLangAccess JLA =
+    //         jdk.internal.misc.SharedSecrets.getJavaLangAccess();
 
     /**
      * Reads all the bytes from an input stream. Uses {@code initialSize} as a hint
@@ -3286,7 +3287,10 @@ public final class Files {
         // For desugar: Java 9 module is not applicable to Android.
         // if (path.getClass().getModule() != Object.class.getModule())
         //     ba = ba.clone();
-        return JLA.newStringNoRepl(ba, cs);
+
+        // For desugar: Use public String class API instead.
+        // return JLA.newStringNoRepl(ba, cs);
+        return new String(ba, cs);
     }
 
     /**
@@ -3637,7 +3641,10 @@ public final class Files {
         Objects.requireNonNull(csq);
         Objects.requireNonNull(cs);
 
-        byte[] bytes = JLA.getBytesNoRepl(String.valueOf(csq), cs);
+        // For desugar: Use public String API instead:
+        // byte[] bytes = JLA.getBytesNoRepl(String.valueOf(csq), cs);
+        byte[] bytes = String.valueOf(csq).getBytes(cs);
+
         // For desugar: always true
         // if (path.getClass().getModule() != Object.class.getModule())
         //     bytes = bytes.clone();
