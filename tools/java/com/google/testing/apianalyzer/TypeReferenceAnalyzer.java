@@ -34,13 +34,13 @@ import org.objectweb.asm.tree.ClassNode;
 public class TypeReferenceAnalyzer {
   private final Predicate<String> typeInternalNameFilter;
   private final byte[] classFileBytes;
-  private final boolean skipDebug;
+  private final boolean skipDebugAndFrames;
 
   public TypeReferenceAnalyzer(
-      Predicate<String> typeInternalNameFilter, byte[] classFileBytes, boolean skipDebug) {
+      Predicate<String> typeInternalNameFilter, byte[] classFileBytes, boolean skipDebugAndFrames) {
     this.typeInternalNameFilter = typeInternalNameFilter;
     this.classFileBytes = classFileBytes;
-    this.skipDebug = skipDebug;
+    this.skipDebugAndFrames = skipDebugAndFrames;
   }
 
   public ImmutableSet<String> getAllReferencedTypes() {
@@ -48,7 +48,7 @@ public class TypeReferenceAnalyzer {
     TypeReferenceScanner typeReferenceScanner =
         new TypeReferenceScanner(typeInternalNameFilter, referencedTypes);
     ClassReader cr = new ClassReader(classFileBytes);
-    cr.accept(typeReferenceScanner, /* parsingOptions= */ skipDebug ? ClassReader.SKIP_DEBUG : 0);
+    cr.accept(typeReferenceScanner, /* parsingOptions= */ skipDebugAndFrames ? ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES: 0);
     return ImmutableSet.copyOf(referencedTypes);
   }
 
