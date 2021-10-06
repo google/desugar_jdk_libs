@@ -37,6 +37,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -80,6 +81,9 @@ public class DesugarUnixPath implements Path {
   }
 
   private static List<String> getFileNames(String rawTextPath) {
+    if (rawTextPath.isEmpty()) {
+      return Collections.singletonList("");
+    }
     return stream(PATH_COMPONENT_SPLITERATOR.split(rawTextPath))
         .filter(name -> !name.isEmpty())
         .collect(Collectors.toUnmodifiableList());
@@ -115,7 +119,7 @@ public class DesugarUnixPath implements Path {
   @Override
   public DesugarUnixPath getFileName() {
     return fileNames.isEmpty()
-        ? new DesugarUnixPath(fileSystem, /* rawPath= */ "", userDir, rootDir)
+        ? null
         : new DesugarUnixPath(fileSystem, fileNames.get(getNameCount() - 1), userDir, rootDir);
   }
 
