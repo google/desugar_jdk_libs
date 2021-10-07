@@ -25,6 +25,7 @@
 
 package java.io;
 
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.net.URI;
 import java.net.URL;
 import java.net.MalformedURLException;
@@ -2283,17 +2284,20 @@ public class File
      * @since   1.7
      * @see Path#toFile
      */
+    @DesugarSupportedApi
     public Path toPath() {
-        Path result = filePath;
-        if (result == null) {
-            synchronized (this) {
-                result = filePath;
-                if (result == null) {
-                    result = FileSystems.getDefault().getPath(path);
-                    filePath = result;
-                }
-            }
-        }
-        return result;
+      // For desugar: Avoid using new internal state of java.nio.File.
+      // Path result = filePath;
+      // if (result == null) {
+      //     synchronized (this) {
+      //         result = filePath;
+      //         if (result == null) {
+      //             result = FileSystems.getDefault().getPath(path);
+      //             filePath = result;
+      //         }
+      //     }
+      // }
+      // return result;
+      return FileSystems.getDefault().getPath(getPath());
     }
 }
