@@ -38,6 +38,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributeView;
@@ -126,7 +127,7 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
   @Override
   public void createDirectory(Path dir, FileAttribute<?>... attrs) throws IOException {
     File dirFile = dir.toFile();
-    boolean mkdirStatus = dirFile.mkdir();
+    boolean mkdirStatus = dirFile.mkdirs();
     if (!mkdirStatus) {
       throw new FileAlreadyExistsException(dir.toString());
     }
@@ -257,6 +258,9 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
   @Override
   public void checkAccess(Path path, AccessMode... modes) throws IOException {
     File file = path.toFile();
+    if (!file.exists()) {
+      throw new NoSuchFileException(path.toString());
+    }
     boolean permittedToAccess = file.exists();
     for (AccessMode accessMode : modes) {
       switch (accessMode) {
