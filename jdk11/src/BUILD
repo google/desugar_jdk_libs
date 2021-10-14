@@ -19,19 +19,6 @@ java_library(
 )
 
 genrule(
-    name = "java_base_selected",
-    srcs = [
-        ":java_base_all",
-    ],
-    outs = ["java_base_selected.jar"],
-    cmd = """
-      $(location //:tools/jdk_type_selector) $(location :java_base_all) $@
-    """,
-    exec_tools = ["//:tools/jdk_type_selector"],
-    visibility = ["//:__pkg__"],
-)
-
-genrule(
     name = "d8_java_base_selected",
     srcs = [
         ":java_base_all",
