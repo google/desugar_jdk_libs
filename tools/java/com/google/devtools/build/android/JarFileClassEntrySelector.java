@@ -58,57 +58,6 @@ public final class JarFileClassEntrySelector {
   private static final LocalDateTime DEFAULT_LOCAL_TIME =
       LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-  private static final String[] CLASSIC_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
-    "java/io/Desugar*",
-    "java/io/UncheckedIOException",
-    "java/lang/Desugar*",
-    "java/lang/Iterable",
-    "java/lang/FunctionalInterface",
-    "java/time/*",
-    "java/util/AbstractList",
-    "java/util/CollSer",
-    "java/util/Collection",
-    "java/util/Comparator",
-    "java/util/Comparators",
-    "java/util/Deque",
-    "java/util/Desugar*",
-    "java/util/DoubleSummaryStatistics",
-    "java/util/ImmutableCollections",
-    "java/util/IntSummaryStatistics",
-    "java/util/Iterator",
-    "java/util/KeyValueHolder",
-    "java/util/List",
-    "java/util/ListIterator",
-    "java/util/LongSummaryStatistics",
-    "java/util/Map",
-    "java/util/NavigableMap",
-    "java/util/NavigableSet",
-    "java/util/Objects",
-    "java/util/Optional*",
-    "java/util/PrimitiveIterator",
-    "java/util/Queue",
-    "java/util/Set",
-    "java/util/SortedMap",
-    "java/util/SortedSet",
-    "java/util/Spliterator",
-    "java/util/Spliterators",
-    "java/util/StringJoiner",
-    "java/util/Tripwire",
-    "java/util/concurrent/BlockingDeque",
-    "java/util/concurrent/BlockingQueue",
-    "java/util/concurrent/ConcurrentHashMap",
-    "java/util/concurrent/ConcurrentMap",
-    "java/util/concurrent/ConcurrentNavigableMap",
-    "java/util/concurrent/Helpers",
-    "java/util/concurrent/ThreadLocalRandom",
-    "java/util/concurrent/TransferQueue",
-    "java/util/concurrent/atomic/Desugar*",
-    "java/util/function/*",
-    "java/util/stream/*",
-    "sun/misc/Desugar*",
-    "jdk/internal/util/Preconditions",
-  };
-
   private static final String[] D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
     "java/io/Desugar*",
     "java/io/UncheckedIOException",
@@ -416,11 +365,10 @@ public final class JarFileClassEntrySelector {
           Collections.addAll(patterns, ANDROID_CONCURRENT_FIX_LIB_TOP_LEVEL_TYPE_PATTERNS);
           break;
         default:
-          Collections.addAll(patterns, CLASSIC_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
-          break;
+          throw new UnsupportedOperationException("Unexpected build config: " + args[2]);
       }
     } else {
-      Collections.addAll(patterns, CLASSIC_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
+      Collections.addAll(patterns, D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
     }
     JarFileClassEntrySelector jarFileClassSelector =
         new JarFileClassEntrySelector(
