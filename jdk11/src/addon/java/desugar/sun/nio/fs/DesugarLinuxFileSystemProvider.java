@@ -169,6 +169,10 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
   @Override
   public DesugarSeekableByteChannel newByteChannel(
       Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs) throws IOException {
+    if (path.toFile().isDirectory()) {
+      throw new UnsupportedOperationException(
+          "The desugar library does not support creating a file channel on a directory: " + path);
+    }
     return DesugarSeekableByteChannel.create(path, options);
   }
 
