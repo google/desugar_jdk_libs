@@ -6,7 +6,7 @@ alias(
 
 alias(
     name = "desugar_jdk_libs_jdk11",
-    actual = "//jdk11/src:d8_java_base_selected",
+    actual = "//jdk11/src:d8_java_base_selected_with_addon",
     visibility = ["//visibility:public"],
 )
 
