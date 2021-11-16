@@ -21,7 +21,6 @@
 
 package wrapper.java.nio.file;
 
-import j$.io.UncheckedIOException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -165,7 +164,7 @@ public final class PathConversions {
       try {
         return encode(delegate.toRealPath(LinkOptionConversions.decode(options)));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -186,7 +185,7 @@ public final class PathConversions {
                 WatchEventKindConversions.decode(events),
                 WatchEventModifierConversions.decode(modifiers)));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -198,7 +197,7 @@ public final class PathConversions {
             delegate.register(
                 WatchServiceConversions.decode(watcher), WatchEventKindConversions.decode(events)));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 

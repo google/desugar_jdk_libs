@@ -21,7 +21,6 @@
 
 package wrapper.java.nio.file;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.nio.file.FileStore;
 import java.nio.file.attribute.FileAttributeView;
@@ -81,7 +80,7 @@ public final class FileStoreConversions {
       try {
         return delegate.getTotalSpace();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -90,7 +89,7 @@ public final class FileStoreConversions {
       try {
         return delegate.getUsableSpace();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -99,7 +98,7 @@ public final class FileStoreConversions {
       try {
         return delegate.getBlockSize();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -108,7 +107,7 @@ public final class FileStoreConversions {
       try {
         return delegate.getUnallocatedSpace();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -137,7 +136,7 @@ public final class FileStoreConversions {
       try {
         return delegate.getAttribute(attribute);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

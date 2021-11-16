@@ -21,8 +21,8 @@
 
 package wrapper.java.nio.file.attribute;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.file.attribute.DosFileAttributeView} and {@link
@@ -69,7 +69,7 @@ public final class DosFileAttributeViewConversions {
       try {
         return DosFileAttributesConversions.encode(delegate.readAttributes());
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -78,7 +78,7 @@ public final class DosFileAttributeViewConversions {
       try {
         delegate.setReadOnly(value);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -87,7 +87,7 @@ public final class DosFileAttributeViewConversions {
       try {
         delegate.setHidden(value);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -96,7 +96,7 @@ public final class DosFileAttributeViewConversions {
       try {
         delegate.setSystem(value);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -105,7 +105,7 @@ public final class DosFileAttributeViewConversions {
       try {
         delegate.setArchive(value);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

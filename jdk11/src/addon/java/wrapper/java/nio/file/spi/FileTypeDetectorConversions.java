@@ -22,7 +22,7 @@
 package wrapper.java.nio.file.spi;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
+import wrapper.java.nio.file.IOExceptionConversions;
 import wrapper.java.nio.file.PathConversions;
 
 /**
@@ -67,7 +67,7 @@ public final class FileTypeDetectorConversions {
       try {
         return delegate.probeContentType(PathConversions.decode(path));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

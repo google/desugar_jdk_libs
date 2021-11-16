@@ -21,8 +21,8 @@
 
 package wrapper.java.nio.file.attribute;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.file.attribute.BasicFileAttributeView} and {@link
@@ -76,7 +76,7 @@ public class BasicFileAttributeViewConversions {
         return BasicFileAttributesConversions.encode(
             getDelegate().readAttributes(), j$.nio.file.attribute.BasicFileAttributes.class);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -91,7 +91,7 @@ public class BasicFileAttributeViewConversions {
             FileTimeConversions.decode(lastAccessTime),
             FileTimeConversions.decode(createTime));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

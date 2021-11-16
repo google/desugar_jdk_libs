@@ -21,9 +21,9 @@
 
 package wrapper.java.nio.file.attribute;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.util.Set;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.file.attribute.PosixFileAttributeView} and {@link
@@ -78,7 +78,7 @@ public final class PosixFileAttributeViewConversions {
       try {
         return PosixFileAttributesConversions.encode(delegate.readAttributes());
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -87,7 +87,7 @@ public final class PosixFileAttributeViewConversions {
       try {
         delegate.setPermissions(PosixFilePermissionConversions.decode(perms));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -96,7 +96,7 @@ public final class PosixFileAttributeViewConversions {
       try {
         delegate.setGroup(GroupPrincipalConversions.decode(group));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -106,7 +106,7 @@ public final class PosixFileAttributeViewConversions {
 
         return UserPrincipalConversions.encode(delegate.getOwner());
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -115,7 +115,7 @@ public final class PosixFileAttributeViewConversions {
       try {
         delegate.setOwner(UserPrincipalConversions.decode(owner));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

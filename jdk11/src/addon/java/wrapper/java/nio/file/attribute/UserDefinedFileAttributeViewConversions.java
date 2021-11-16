@@ -21,10 +21,10 @@
 
 package wrapper.java.nio.file.attribute;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.file.attribute.UserDefinedFileAttributeView} and {@link
@@ -77,7 +77,7 @@ public final class UserDefinedFileAttributeViewConversions {
       try {
         return delegate.list();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -86,7 +86,7 @@ public final class UserDefinedFileAttributeViewConversions {
       try {
         return delegate.size(name);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -95,7 +95,7 @@ public final class UserDefinedFileAttributeViewConversions {
       try {
         return delegate.read(name, dst);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -104,7 +104,7 @@ public final class UserDefinedFileAttributeViewConversions {
       try {
         return delegate.write(name, src);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -113,7 +113,7 @@ public final class UserDefinedFileAttributeViewConversions {
       try {
         delegate.delete(name);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

@@ -21,9 +21,9 @@
 
 package wrapper.java.nio.file.attribute;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.util.List;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.file.attribute.AclFileAttributeView} and {@link
@@ -75,7 +75,7 @@ public final class AclFileAttributeViewConversions {
       try {
         return AclEntryConversions.encode(delegate.getAcl());
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -84,7 +84,7 @@ public final class AclFileAttributeViewConversions {
       try {
         delegate.setAcl(AclEntryConversions.decode(acl));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

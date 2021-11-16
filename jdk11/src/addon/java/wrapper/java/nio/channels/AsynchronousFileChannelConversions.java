@@ -22,7 +22,6 @@
 package wrapper.java.nio.channels;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileLock;
 import java.nio.file.OpenOption;
@@ -31,6 +30,7 @@ import java.nio.file.attribute.FileAttribute;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.channels.AsynchronousFileChannel} and {@link
@@ -89,7 +89,7 @@ public final class AsynchronousFileChannelConversions {
       try {
         return delegate.size();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -98,7 +98,7 @@ public final class AsynchronousFileChannelConversions {
       try {
         delegate.truncate(size);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
       return this;
     }
@@ -108,7 +108,7 @@ public final class AsynchronousFileChannelConversions {
       try {
         delegate.force(metaData);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -133,7 +133,7 @@ public final class AsynchronousFileChannelConversions {
       try {
         return delegate.tryLock(position, size, shared);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -170,7 +170,7 @@ public final class AsynchronousFileChannelConversions {
       try {
         delegate.close();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 

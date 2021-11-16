@@ -21,8 +21,8 @@
 
 package wrapper.java.nio.file.attribute;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.file.attribute.UserPrincipalLookupService} and {@link
@@ -69,7 +69,7 @@ public class UserPrincipalLookupServiceConversions {
       try {
         return UserPrincipalConversions.encode(delegate.lookupPrincipalByName(name));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -78,7 +78,7 @@ public class UserPrincipalLookupServiceConversions {
       try {
         return GroupPrincipalConversions.encode(delegate.lookupPrincipalByGroupName(group));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 

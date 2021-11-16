@@ -21,8 +21,8 @@
 
 package wrapper.java.nio.file.attribute;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.file.attribute.FileOwnerAttributeView} and {@link
@@ -75,7 +75,7 @@ public final class FileOwnerAttributeViewConversions {
       try {
         return UserPrincipalConversions.encode(delegate.getOwner());
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -84,7 +84,7 @@ public final class FileOwnerAttributeViewConversions {
       try {
         delegate.setOwner(UserPrincipalConversions.decode(owner));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

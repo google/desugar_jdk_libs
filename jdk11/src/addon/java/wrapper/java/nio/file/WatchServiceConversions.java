@@ -21,7 +21,6 @@
 
 package wrapper.java.nio.file;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -65,7 +64,7 @@ public final class WatchServiceConversions {
       try {
         delegate.close();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 

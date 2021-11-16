@@ -37,6 +37,8 @@ import java.util.zip.CRC32;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.Remapper;
 
@@ -87,7 +89,8 @@ public final class TypeWrapperConverter {
       throws IOException {
     ClassReader cr = new ClassReader(in);
     ClassWriter cw = new ClassWriter(0);
-    TypeWrapperClassRemapper cv = new TypeWrapperClassRemapper(cw);
+    ClassVisitor cv = new TypeWrapperClassRemapper(cw);
+    cv = new InvocationRetargetClassVisitor(Opcodes.ASM7, cv);
     cr.accept(cv, 0);
     String outputEntryName = inEntry.getName();
     byte[] outBytes = cw.toByteArray();
@@ -124,6 +127,38 @@ public final class TypeWrapperConverter {
         return internalNameMapper.apply(internalName);
       }
       return internalName;
+    }
+  }
+
+  static class InvocationRetargetClassVisitor extends ClassVisitor {
+
+    public InvocationRetargetClassVisitor(int api, ClassVisitor classVisitor) {
+      super(api, classVisitor);
+    }
+
+    @Override
+    public MethodVisitor visitMethod(
+        int access, String name, String descriptor, String signature, String[] exceptions) {
+      MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
+      return mv == null ? null : new InvocationRetargetMethodVisitor(api, mv);
+    }
+  }
+
+  static class InvocationRetargetMethodVisitor extends MethodVisitor {
+
+    public InvocationRetargetMethodVisitor(int api, MethodVisitor methodVisitor) {
+      super(api, methodVisitor);
+    }
+
+    @Override
+    public void visitMethodInsn(
+        int opcode, String owner, String name, String descriptor, boolean isInterface) {
+      if ("wrapper/java/nio/file/IOExceptionConversions".equals(owner)
+          && "encodeUnchecked".equals(name)) {
+        name = "encodeChecked";
+        descriptor = "(Ljava/io/IOException;)Ljava/io/IOException;";
+      }
+      super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
   }
 

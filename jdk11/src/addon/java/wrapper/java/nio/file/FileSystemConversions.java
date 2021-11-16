@@ -21,7 +21,6 @@
 
 package wrapper.java.nio.file;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
@@ -71,7 +70,7 @@ public final class FileSystemConversions {
       try {
         delegate.close();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -160,7 +159,7 @@ public final class FileSystemConversions {
       try {
         return WatchServiceConversions.encode(delegate.newWatchService());
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

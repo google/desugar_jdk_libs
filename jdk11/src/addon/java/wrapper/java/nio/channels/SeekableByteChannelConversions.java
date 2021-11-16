@@ -21,9 +21,9 @@
 
 package wrapper.java.nio.channels;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import wrapper.java.nio.file.IOExceptionConversions;
 
 /**
  * Type conversions between {@link java.nio.channels.SeekableByteChannel} and {@link
@@ -68,7 +68,7 @@ public final class SeekableByteChannelConversions {
       try {
         return delegate.read(dst);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -77,7 +77,7 @@ public final class SeekableByteChannelConversions {
       try {
         return delegate.write(src);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -86,7 +86,7 @@ public final class SeekableByteChannelConversions {
       try {
         return delegate.position();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -95,7 +95,7 @@ public final class SeekableByteChannelConversions {
       try {
         return encode(delegate.position(newPosition));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -104,7 +104,7 @@ public final class SeekableByteChannelConversions {
       try {
         return delegate.size();
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -113,7 +113,7 @@ public final class SeekableByteChannelConversions {
       try {
         return encode(delegate.truncate(size));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 

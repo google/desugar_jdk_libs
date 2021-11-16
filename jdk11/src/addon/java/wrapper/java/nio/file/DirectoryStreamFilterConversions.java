@@ -20,7 +20,6 @@
 
 package wrapper.java.nio.file;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import wrapper.model.WrapperTranslator;
@@ -71,7 +70,7 @@ public class DirectoryStreamFilterConversions {
       try {
         return delegate.accept(decoder.translate(entry));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

@@ -21,7 +21,6 @@
 
 package wrapper.java.nio.file;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 
 /** Type conversions between {@link java.nio.file.Watchable} and {@link j$.nio.file.Watchable}. */
@@ -69,7 +68,7 @@ public final class WatchableConversions {
                 WatchEventKindConversions.decode(events),
                 WatchEventModifierConversions.decode(modifiers)));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -81,7 +80,7 @@ public final class WatchableConversions {
             delegate.register(
                 WatchServiceConversions.decode(watcher), WatchEventKindConversions.decode(events)));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }

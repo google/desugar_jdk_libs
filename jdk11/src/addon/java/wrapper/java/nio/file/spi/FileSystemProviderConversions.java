@@ -21,7 +21,6 @@
 
 package wrapper.java.nio.file.spi;
 
-import j$.io.UncheckedIOException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,6 +44,7 @@ import wrapper.java.nio.file.DirectoryStreamConversions;
 import wrapper.java.nio.file.DirectoryStreamFilterConversions;
 import wrapper.java.nio.file.FileStoreConversions;
 import wrapper.java.nio.file.FileSystemConversions;
+import wrapper.java.nio.file.IOExceptionConversions;
 import wrapper.java.nio.file.LinkOptionConversions;
 import wrapper.java.nio.file.OpenOptionConversions;
 import wrapper.java.nio.file.PathConversions;
@@ -107,7 +107,7 @@ public final class FileSystemProviderConversions {
       try {
         return FileSystemConversions.encode(delegate.newFileSystem(uri, env));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       } catch (FileSystemAlreadyExistsException e) {
         throw new j$.nio.file.FileSystemAlreadyExistsException();
       }
@@ -129,7 +129,7 @@ public final class FileSystemProviderConversions {
         return FileSystemConversions.encode(
             delegate.newFileSystem(PathConversions.decode(path), env));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -139,7 +139,7 @@ public final class FileSystemProviderConversions {
         return delegate.newInputStream(
             PathConversions.decode(path), OpenOptionConversions.decode(options));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -149,7 +149,7 @@ public final class FileSystemProviderConversions {
         return delegate.newOutputStream(
             PathConversions.decode(path), OpenOptionConversions.decode(options));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -164,7 +164,7 @@ public final class FileSystemProviderConversions {
             OpenOptionConversions.decode(options),
             FileAttributeConversions.decode(attrs));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -182,7 +182,7 @@ public final class FileSystemProviderConversions {
                 executor,
                 FileAttributeConversions.decode(attrs)));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -199,7 +199,7 @@ public final class FileSystemProviderConversions {
                 FileAttributeConversions.decode(attrs));
         return SeekableByteChannelConversions.encode(javaSeekableByteChannel);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -214,7 +214,7 @@ public final class FileSystemProviderConversions {
             delegate.newDirectoryStream(javaPath, javaFilter);
         return DirectoryStreamConversions.encode(javaDirectoryStream, PathConversions::encode);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -227,7 +227,7 @@ public final class FileSystemProviderConversions {
             FileAttributeConversions.decode(attrs);
         delegate.createDirectory(javaPath, javaFileAttrs);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -243,7 +243,7 @@ public final class FileSystemProviderConversions {
             FileAttributeConversions.decode(attrs);
         delegate.createSymbolicLink(javaLink, javaTarget, javaFileAttrs);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -254,7 +254,7 @@ public final class FileSystemProviderConversions {
         Path javaExisting = PathConversions.decode(existing);
         delegate.createLink(javaLink, javaExisting);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -264,7 +264,7 @@ public final class FileSystemProviderConversions {
         Path javaPath = PathConversions.decode(path);
         delegate.delete(javaPath);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -274,7 +274,7 @@ public final class FileSystemProviderConversions {
         Path javaPath = PathConversions.decode(path);
         return delegate.deleteIfExists(javaPath);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -285,7 +285,7 @@ public final class FileSystemProviderConversions {
         Path actualPath = delegate.readSymbolicLink(javaLink);
         return PathConversions.encode(actualPath);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -298,7 +298,7 @@ public final class FileSystemProviderConversions {
         java.nio.file.CopyOption[] javaCopyOptions = CopyOptionConversions.decode(options);
         delegate.copy(javaSource, javaTarget, javaCopyOptions);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -311,7 +311,7 @@ public final class FileSystemProviderConversions {
         java.nio.file.CopyOption[] javaCopyOptions = CopyOptionConversions.decode(options);
         delegate.move(javaSource, javaTarget, javaCopyOptions);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -322,7 +322,7 @@ public final class FileSystemProviderConversions {
       try {
         return delegate.isSameFile(javaPath, javaPath2);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -332,7 +332,7 @@ public final class FileSystemProviderConversions {
       try {
         return delegate.isHidden(javaPath);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -343,7 +343,7 @@ public final class FileSystemProviderConversions {
         java.nio.file.FileStore javaFileStore = delegate.getFileStore(javaPath);
         return FileStoreConversions.encode(javaFileStore);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -354,7 +354,7 @@ public final class FileSystemProviderConversions {
       try {
         delegate.checkAccess(javaPath, javaAccessModes);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -380,7 +380,7 @@ public final class FileSystemProviderConversions {
         return BasicFileAttributesConversions.encode(
             delegate.readAttributes(javaPath, javaType, javaLinkOptions), type);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -392,7 +392,7 @@ public final class FileSystemProviderConversions {
       try {
         return delegate.readAttributes(javaPath, attributes, javaLinkOptions);
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
 
@@ -407,7 +407,7 @@ public final class FileSystemProviderConversions {
         delegate.setAttribute(
             PathConversions.decode(path), attribute, value, LinkOptionConversions.decode(options));
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
   }
