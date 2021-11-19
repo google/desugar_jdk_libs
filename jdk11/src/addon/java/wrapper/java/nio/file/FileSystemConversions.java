@@ -162,6 +162,24 @@ public final class FileSystemConversions {
         throw IOExceptionConversions.encodeUnchecked(e);
       }
     }
+
+    @Override
+    public int hashCode() {
+      return delegate.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof EncodedFileSystem)) {
+        return false;
+      }
+      return delegate.equals(((EncodedFileSystem) obj).delegate);
+    }
+
+    @Override
+    public String toString() {
+      return delegate.toString();
+    }
   }
 
   static class DecodedFileSystem extends java.nio.file.FileSystem {

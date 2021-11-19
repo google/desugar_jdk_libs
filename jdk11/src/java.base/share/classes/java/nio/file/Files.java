@@ -25,7 +25,6 @@
 
 package java.nio.file;
 
-import desugar.sun.nio.fs.DesugarDefaultFileTypeDetector;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.Closeable;
@@ -1289,7 +1288,9 @@ public final class Files {
         throws IOException
     {
         FileSystemProvider provider = provider(source);
-        if (provider(target) == provider) {
+    // For desugar: avoid instance check due to wrappers.
+    // if (provider(target) == provider) {
+    if (provider(target).equals(provider)) {
             // same provider
             provider.copy(source, target, options);
         } else {
@@ -1416,11 +1417,13 @@ public final class Files {
         throws IOException
     {
         FileSystemProvider provider = provider(source);
-        if (provider(target) == provider) {
+
+    // For desugar: avoid instance equality due to wrapper.
+    // if (provider(target) == provider) {
+    if (provider(target).equals(provider)) {
             // same provider
             provider.move(source, target, options);
         } else {
-            // different providers
             CopyMoveHelper.moveToForeignTarget(source, target, options);
         }
         return target;
@@ -1566,12 +1569,13 @@ public final class Files {
 
         // creates the default file type detector
         private static FileTypeDetector createDefaultFileTypeDetector() {
-            return AccessController
-                .doPrivileged(new PrivilegedAction<>() {
-                    @Override public FileTypeDetector run() {
-                        // For desugar: Use desugar-custom implementation.
-                        return DesugarDefaultFileTypeDetector.create();
-                    }});
+      return AccessController.doPrivileged(
+          new PrivilegedAction<>() {
+            @Override
+            public FileTypeDetector run() {
+              return sun.nio.fs.DefaultFileTypeDetector.create();
+            }
+          });
         }
 
         // loads all installed file type detectors

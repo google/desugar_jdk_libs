@@ -265,7 +265,7 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
     if (!file.exists()) {
       throw new NoSuchFileException(path.toString());
     }
-    boolean permittedToAccess = file.exists();
+    boolean permittedToAccess = true;
     for (AccessMode accessMode : modes) {
       switch (accessMode) {
         case READ:

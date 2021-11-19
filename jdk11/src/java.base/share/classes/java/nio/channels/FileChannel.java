@@ -33,9 +33,9 @@ import java.nio.channels.spi.AbstractInterruptibleChannel;
 import java.nio.file.*;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.spi.*;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A channel for reading, writing, mapping, and manipulating a file.
@@ -345,7 +345,10 @@ public abstract class FileChannel
             set = new HashSet<>();
             Collections.addAll(set, options);
         }
-        return open(path, set, NO_ATTRIBUTES);
+
+    // For desugar: Inline field new FileAttribute[0] due to non constant.
+    // return open(path, set, NO_ATTRIBUTES);
+    return open(path, set, new FileAttribute[0]);
     }
 
     // -- Channel operations --

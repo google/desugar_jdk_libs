@@ -20,6 +20,8 @@
 
 package wrapper.adapter;
 
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
 import j$.desugar.sun.nio.fs.DesugarDefaultFileSystemProvider;
 import j$.nio.file.FileSystem;
 import j$.nio.file.spi.FileSystemProvider;
@@ -32,12 +34,17 @@ import wrapper.java.nio.file.spi.FileSystemProviderConversions;
  */
 public final class HybridFileSystemProvider {
   private static final FileSystemProvider INSTANCE = getFileSystemProvider();
+  private static final FileSystem FILE_SYSTEM_INSTANCE =
+      INSTANCE.getFileSystem(URI.create("file:///"));
 
   private static FileSystemProvider getFileSystemProvider() {
     try {
       return FileSystemProviderConversions.encode(
           java.nio.file.FileSystems.getDefault().provider());
     } catch (NoClassDefFoundError e) {
+      // TODO(b/207004118): Fix the strict mode allowlisting.
+      ThreadPolicy threadPolicy = StrictMode.getThreadPolicy();
+      StrictMode.setThreadPolicy(new ThreadPolicy.Builder(threadPolicy).permitDiskReads().build());
       return DesugarDefaultFileSystemProvider.instance();
     }
   }
@@ -51,6 +58,6 @@ public final class HybridFileSystemProvider {
 
   /** Returns the platform's default file system. */
   public static FileSystem theFileSystem() {
-    return INSTANCE.getFileSystem(URI.create("file:///"));
+    return FILE_SYSTEM_INSTANCE;
   }
 }

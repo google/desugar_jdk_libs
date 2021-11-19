@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import wrapper.java.nio.JavaNioCentralConversions;
 import wrapper.java.nio.channels.AsynchronousFileChannelConversions;
 import wrapper.java.nio.channels.SeekableByteChannelConversions;
 import wrapper.java.nio.file.AccessModeConversions;
@@ -51,7 +52,6 @@ import wrapper.java.nio.file.PathConversions;
 import wrapper.java.nio.file.attribute.AttributeViewConversions;
 import wrapper.java.nio.file.attribute.BasicFileAttributesConversions;
 import wrapper.java.nio.file.attribute.FileAttributeConversions;
-import wrapper.java.nio.file.attribute.FileTimeConversions;
 
 /**
  * Type conversions between {@link java.nio.file.spi.FileSystemProvider} and {@link
@@ -387,10 +387,10 @@ public final class FileSystemProviderConversions {
     @Override
     public Map<String, Object> readAttributes(
         j$.nio.file.Path path, String attributes, j$.nio.file.LinkOption... options) {
-      Path javaPath = PathConversions.decode(path);
-      java.nio.file.LinkOption[] javaLinkOptions = LinkOptionConversions.decode(options);
       try {
-        return delegate.readAttributes(javaPath, attributes, javaLinkOptions);
+        return JavaNioCentralConversions.encodeMapValue(
+            delegate.readAttributes(
+                PathConversions.decode(path), attributes, LinkOptionConversions.decode(options)));
       } catch (IOException e) {
         throw IOExceptionConversions.encodeUnchecked(e);
       }
@@ -399,16 +399,33 @@ public final class FileSystemProviderConversions {
     @Override
     public void setAttribute(
         j$.nio.file.Path path, String attribute, Object value, j$.nio.file.LinkOption... options) {
-      // TODO(deltazulu): Check more comprehensive type decoding.
-      if (value instanceof j$.nio.file.attribute.FileTime) {
-        value = FileTimeConversions.decode((j$.nio.file.attribute.FileTime) value);
-      }
       try {
         delegate.setAttribute(
-            PathConversions.decode(path), attribute, value, LinkOptionConversions.decode(options));
+            PathConversions.decode(path),
+            attribute,
+            JavaNioCentralConversions.decode(value),
+            LinkOptionConversions.decode(options));
       } catch (IOException e) {
         throw IOExceptionConversions.encodeUnchecked(e);
       }
+    }
+
+    @Override
+    public int hashCode() {
+      return delegate.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof EncodedFileSystemProvider)) {
+        return false;
+      }
+      return delegate.equals(((EncodedFileSystemProvider) obj).delegate);
+    }
+
+    @Override
+    public String toString() {
+      return delegate.toString();
     }
   }
 
@@ -621,8 +638,9 @@ public final class FileSystemProviderConversions {
     @Override
     public Map<String, Object> readAttributes(
         java.nio.file.Path path, String attributes, java.nio.file.LinkOption... options) {
-      return delegate.readAttributes(
-          PathConversions.encode(path), attributes, LinkOptionConversions.encode(options));
+      return JavaNioCentralConversions.decodeMapValue(
+          delegate.readAttributes(
+              PathConversions.encode(path), attributes, LinkOptionConversions.encode(options)));
     }
 
     @Override
@@ -631,12 +649,11 @@ public final class FileSystemProviderConversions {
         String attribute,
         Object value,
         java.nio.file.LinkOption... options) {
-      // TODO(deltazulu): Check more comprehensive type decoding.
-      if (value instanceof java.nio.file.attribute.FileTime) {
-        value = FileTimeConversions.encode((java.nio.file.attribute.FileTime) value);
-      }
       delegate.setAttribute(
-          PathConversions.encode(path), attribute, value, LinkOptionConversions.encode(options));
+          PathConversions.encode(path),
+          attribute,
+          JavaNioCentralConversions.encode(value),
+          LinkOptionConversions.encode(options));
     }
   }
 }
