@@ -38,12 +38,14 @@ public class WatchEventModifierConversions {
     return new EncodedWatchEventModifier(raw);
   }
 
-  public static j$.nio.file.WatchEvent.Modifier[] encode(
-      java.nio.file.WatchEvent.Modifier[] modifiers) {
-    int n = modifiers.length;
+  public static j$.nio.file.WatchEvent.Modifier[] encode(java.nio.file.WatchEvent.Modifier[] raw) {
+    if (raw == null) {
+      return null;
+    }
+    int n = raw.length;
     var results = new Modifier[n];
     for (int i = 0; i < n; i++) {
-      results[i] = encode(modifiers[i]);
+      results[i] = encode(raw[i]);
     }
     return results;
   }
@@ -59,11 +61,14 @@ public class WatchEventModifierConversions {
   }
 
   public static java.nio.file.WatchEvent.Modifier[] decode(
-      j$.nio.file.WatchEvent.Modifier[] modifiers) {
-    int n = modifiers.length;
+      j$.nio.file.WatchEvent.Modifier[] encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    int n = encoded.length;
     var results = new java.nio.file.WatchEvent.Modifier[n];
     for (int i = 0; i < n; i++) {
-      results[i] = decode(modifiers[i]);
+      results[i] = decode(encoded[i]);
     }
     return results;
   }

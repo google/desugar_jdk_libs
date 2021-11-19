@@ -43,30 +43,36 @@ public final class AclEntryConversions {
   }
 
   public static List<j$.nio.file.attribute.AclEntry> encode(
-      List<java.nio.file.attribute.AclEntry> encodedList) {
-    if (encodedList == null) {
+      List<java.nio.file.attribute.AclEntry> raw) {
+    if (raw == null) {
       return null;
     }
     var values = new ArrayList<j$.nio.file.attribute.AclEntry>();
-    for (var value : encodedList) {
+    for (var value : raw) {
       values.add(encode(value));
     }
     return values;
   }
 
-  public static java.nio.file.attribute.AclEntry decode(j$.nio.file.attribute.AclEntry source) {
+  public static java.nio.file.attribute.AclEntry decode(j$.nio.file.attribute.AclEntry encoded) {
+    if (encoded == null) {
+      return null;
+    }
     return java.nio.file.attribute.AclEntry.newBuilder()
-        .setFlags(AclEntryFlagConversions.decode(source.flags()))
-        .setPermissions(AclEntryPermissionConversions.decode(source.permissions()))
-        .setPrincipal(UserPrincipalConversions.decode(source.principal()))
-        .setType(AclEntryTypeConversions.decode(source.type()))
+        .setFlags(AclEntryFlagConversions.decode(encoded.flags()))
+        .setPermissions(AclEntryPermissionConversions.decode(encoded.permissions()))
+        .setPrincipal(UserPrincipalConversions.decode(encoded.principal()))
+        .setType(AclEntryTypeConversions.decode(encoded.type()))
         .build();
   }
 
   public static List<java.nio.file.attribute.AclEntry> decode(
-      List<j$.nio.file.attribute.AclEntry> entries) {
+      List<j$.nio.file.attribute.AclEntry> encoded) {
+    if (encoded == null) {
+      return null;
+    }
     var values = new ArrayList<java.nio.file.attribute.AclEntry>();
-    for (var value : entries) {
+    for (var value : encoded) {
       values.add(decode(value));
     }
     return values;

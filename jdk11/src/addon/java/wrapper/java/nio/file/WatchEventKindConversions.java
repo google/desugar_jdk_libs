@@ -36,15 +36,14 @@ public class WatchEventKindConversions {
     return new EncodedWatchEventKind<>(raw);
   }
 
-  public static j$.nio.file.WatchEvent.Kind<?>[] encode(
-      java.nio.file.WatchEvent.Kind<?>[] rawKinds) {
-    if (rawKinds == null) {
+  public static j$.nio.file.WatchEvent.Kind<?>[] encode(java.nio.file.WatchEvent.Kind<?>[] raw) {
+    if (raw == null) {
       return null;
     }
-    int n = rawKinds.length;
+    int n = raw.length;
     var results = new j$.nio.file.WatchEvent.Kind<?>[n];
     for (int i = 0; i < n; i++) {
-      results[i] = encode(rawKinds[i]);
+      results[i] = encode(raw[i]);
     }
     return results;
   }
@@ -62,6 +61,9 @@ public class WatchEventKindConversions {
 
   public static java.nio.file.WatchEvent.Kind<?>[] decode(
       j$.nio.file.WatchEvent.Kind<?>[] encoded) {
+    if (encoded == null) {
+      return null;
+    }
     int n = encoded.length;
     var results = new java.nio.file.WatchEvent.Kind<?>[n];
     for (int i = 0; i < n; i++) {

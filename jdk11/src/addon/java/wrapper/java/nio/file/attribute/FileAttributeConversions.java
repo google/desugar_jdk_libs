@@ -40,14 +40,14 @@ public final class FileAttributeConversions {
   }
 
   public static j$.nio.file.attribute.FileAttribute<?>[] encode(
-      java.nio.file.attribute.FileAttribute<?>[] attributes) {
-    if (attributes == null) {
+      java.nio.file.attribute.FileAttribute<?>[] raw) {
+    if (raw == null) {
       return null;
     }
-    int n = attributes.length;
+    int n = raw.length;
     var results = new j$.nio.file.attribute.FileAttribute<?>[n];
     for (int i = 0; i < n; i++) {
-      results[i] = encode(attributes[i]);
+      results[i] = encode(raw[i]);
     }
     return results;
   }
@@ -64,11 +64,14 @@ public final class FileAttributeConversions {
   }
 
   public static java.nio.file.attribute.FileAttribute<?>[] decode(
-      j$.nio.file.attribute.FileAttribute<?>[] attributes) {
-    int n = attributes.length;
+      j$.nio.file.attribute.FileAttribute<?>[] encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    int n = encoded.length;
     var results = new java.nio.file.attribute.FileAttribute<?>[n];
     for (int i = 0; i < n; i++) {
-      results[i] = decode(attributes[i]);
+      results[i] = decode(encoded[i]);
     }
     return results;
   }

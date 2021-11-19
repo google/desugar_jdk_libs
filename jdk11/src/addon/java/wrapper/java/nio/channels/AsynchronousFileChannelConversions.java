@@ -39,25 +39,25 @@ import wrapper.java.nio.file.IOExceptionConversions;
 public final class AsynchronousFileChannelConversions {
 
   public static j$.nio.channels.AsynchronousFileChannel encode(
-      java.nio.channels.AsynchronousFileChannel channel) {
-    if (channel == null) {
+      java.nio.channels.AsynchronousFileChannel raw) {
+    if (raw == null) {
       return null;
     }
-    if (channel instanceof DecodedAsynchronousFileChannel) {
-      return ((DecodedAsynchronousFileChannel) channel).delegate;
+    if (raw instanceof DecodedAsynchronousFileChannel) {
+      return ((DecodedAsynchronousFileChannel) raw).delegate;
     }
-    return new EncodedAsynchronousFileChannel(channel);
+    return new EncodedAsynchronousFileChannel(raw);
   }
 
   public static java.nio.channels.AsynchronousFileChannel decode(
-      j$.nio.channels.AsynchronousFileChannel channel) {
-    if (channel == null) {
+      j$.nio.channels.AsynchronousFileChannel encoded) {
+    if (encoded == null) {
       return null;
     }
-    if (channel instanceof EncodedAsynchronousFileChannel) {
-      return ((EncodedAsynchronousFileChannel) channel).delegate;
+    if (encoded instanceof EncodedAsynchronousFileChannel) {
+      return ((EncodedAsynchronousFileChannel) encoded).delegate;
     }
-    return new DecodedAsynchronousFileChannel(channel);
+    return new DecodedAsynchronousFileChannel(encoded);
   }
 
   public static java.nio.channels.AsynchronousFileChannel open(

@@ -51,6 +51,9 @@ public final class IOExceptionConversions {
   }
 
   private static java.io.IOException encode(java.io.IOException e) {
+    if (e == null) {
+      return null;
+    }
     if (e instanceof AccessDeniedException) {
       return AccessDeniedExceptionConversions.encode((java.nio.file.AccessDeniedException) e);
     }
@@ -85,6 +88,9 @@ public final class IOExceptionConversions {
   }
 
   private static java.io.IOException decode(java.io.IOException e) {
+    if (e == null) {
+      return null;
+    }
     if (e instanceof j$.nio.file.AccessDeniedException) {
       return AccessDeniedExceptionConversions.decode((j$.nio.file.AccessDeniedException) e);
     }

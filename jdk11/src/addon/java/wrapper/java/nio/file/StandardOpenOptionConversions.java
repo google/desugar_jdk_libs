@@ -27,12 +27,11 @@ package wrapper.java.nio.file;
  */
 public final class StandardOpenOptionConversions {
 
-  public static j$.nio.file.StandardOpenOption encode(
-      java.nio.file.StandardOpenOption standardOpenOption) {
-    if (standardOpenOption == null) {
+  public static j$.nio.file.StandardOpenOption encode(java.nio.file.StandardOpenOption raw) {
+    if (raw == null) {
       return null;
     }
-    switch (standardOpenOption) {
+    switch (raw) {
       case READ:
         return j$.nio.file.StandardOpenOption.READ;
       case WRITE:
@@ -54,12 +53,14 @@ public final class StandardOpenOptionConversions {
       case DSYNC:
         return j$.nio.file.StandardOpenOption.DSYNC;
     }
-    throw new AssertionError("Unexpected StandardOpenOption: " + standardOpenOption);
+    throw new AssertionError("Unexpected StandardOpenOption: " + raw);
   }
 
-  public static java.nio.file.StandardOpenOption decode(
-      j$.nio.file.StandardOpenOption standardOpenOption) {
-    switch (standardOpenOption) {
+  public static java.nio.file.StandardOpenOption decode(j$.nio.file.StandardOpenOption encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    switch (encoded) {
       case READ:
         return java.nio.file.StandardOpenOption.READ;
       case WRITE:
@@ -81,7 +82,7 @@ public final class StandardOpenOptionConversions {
       case DSYNC:
         return java.nio.file.StandardOpenOption.DSYNC;
     }
-    throw new AssertionError("Unexpected StandardOpenOption: " + standardOpenOption);
+    throw new AssertionError("Unexpected StandardOpenOption: " + encoded);
   }
 
   private StandardOpenOptionConversions() {}

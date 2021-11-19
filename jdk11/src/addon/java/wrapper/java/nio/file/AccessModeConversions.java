@@ -24,11 +24,11 @@ package wrapper.java.nio.file;
 /** Type conversions between {@link java.nio.file.AccessMode} and {@link j$.nio.file.AccessMode}. */
 public final class AccessModeConversions {
 
-  public static j$.nio.file.AccessMode encode(java.nio.file.AccessMode accessMode) {
-    if (accessMode == null) {
+  public static j$.nio.file.AccessMode encode(java.nio.file.AccessMode raw) {
+    if (raw == null) {
       return null;
     }
-    switch (accessMode) {
+    switch (raw) {
       case READ:
         return j$.nio.file.AccessMode.READ;
       case WRITE:
@@ -36,23 +36,26 @@ public final class AccessModeConversions {
       case EXECUTE:
         return j$.nio.file.AccessMode.EXECUTE;
     }
-    throw new AssertionError("Unexpected AccessMode: " + accessMode);
+    throw new AssertionError("Unexpected AccessMode: " + raw);
   }
 
-  public static j$.nio.file.AccessMode[] encode(java.nio.file.AccessMode[] accessModes) {
-    if (accessModes == null) {
+  public static j$.nio.file.AccessMode[] encode(java.nio.file.AccessMode[] raw) {
+    if (raw == null) {
       return null;
     }
-    int n = accessModes.length;
+    int n = raw.length;
     var result = new j$.nio.file.AccessMode[n];
     for (int i = 0; i < n; i++) {
-      result[i] = encode(accessModes[i]);
+      result[i] = encode(raw[i]);
     }
     return result;
   }
 
-  public static java.nio.file.AccessMode decode(j$.nio.file.AccessMode accessMode) {
-    switch (accessMode) {
+  public static java.nio.file.AccessMode decode(j$.nio.file.AccessMode encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    switch (encoded) {
       case READ:
         return java.nio.file.AccessMode.READ;
       case WRITE:
@@ -60,14 +63,17 @@ public final class AccessModeConversions {
       case EXECUTE:
         return java.nio.file.AccessMode.EXECUTE;
     }
-    throw new AssertionError("Unexpected AccessMode: " + accessMode);
+    throw new AssertionError("Unexpected AccessMode: " + encoded);
   }
 
-  public static java.nio.file.AccessMode[] decode(j$.nio.file.AccessMode[] accessModes) {
-    int n = accessModes.length;
+  public static java.nio.file.AccessMode[] decode(j$.nio.file.AccessMode[] encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    int n = encoded.length;
     var result = new java.nio.file.AccessMode[n];
     for (int i = 0; i < n; i++) {
-      result[i] = decode(accessModes[i]);
+      result[i] = decode(encoded[i]);
     }
     return result;
   }

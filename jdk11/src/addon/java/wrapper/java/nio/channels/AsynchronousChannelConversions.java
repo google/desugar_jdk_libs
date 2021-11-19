@@ -30,25 +30,25 @@ import java.io.IOException;
 public final class AsynchronousChannelConversions {
 
   public static j$.nio.channels.AsynchronousChannel encode(
-      java.nio.channels.AsynchronousChannel channel) {
-    if (channel == null) {
+      java.nio.channels.AsynchronousChannel raw) {
+    if (raw == null) {
       return null;
     }
-    if (channel instanceof DecodedAsynchronousChannel) {
-      return ((DecodedAsynchronousChannel) channel).delegate;
+    if (raw instanceof DecodedAsynchronousChannel) {
+      return ((DecodedAsynchronousChannel) raw).delegate;
     }
-    return new EncodedAsynchronousChannel(channel);
+    return new EncodedAsynchronousChannel(raw);
   }
 
   public static java.nio.channels.AsynchronousChannel decode(
-      j$.nio.channels.AsynchronousChannel channel) {
-    if (channel == null) {
+      j$.nio.channels.AsynchronousChannel encoded) {
+    if (encoded == null) {
       return null;
     }
-    if (channel instanceof EncodedAsynchronousChannel) {
-      return ((EncodedAsynchronousChannel) channel).delegate;
+    if (encoded instanceof EncodedAsynchronousChannel) {
+      return ((EncodedAsynchronousChannel) encoded).delegate;
     }
-    return new DecodedAsynchronousChannel(channel);
+    return new DecodedAsynchronousChannel(encoded);
   }
 
   private AsynchronousChannelConversions() {}

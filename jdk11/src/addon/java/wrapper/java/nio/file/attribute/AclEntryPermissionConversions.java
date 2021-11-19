@@ -119,9 +119,12 @@ public final class AclEntryPermissionConversions {
   }
 
   public static Set<java.nio.file.attribute.AclEntryPermission> decode(
-      Set<j$.nio.file.attribute.AclEntryPermission> source) {
+      Set<j$.nio.file.attribute.AclEntryPermission> encoded) {
+    if (encoded == null) {
+      return null;
+    }
     var permissions = new LinkedHashSet<java.nio.file.attribute.AclEntryPermission>();
-    for (var permission : source) {
+    for (var permission : encoded) {
       permissions.add(decode(permission));
     }
     return permissions;

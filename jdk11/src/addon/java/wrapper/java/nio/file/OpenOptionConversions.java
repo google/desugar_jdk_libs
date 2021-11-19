@@ -27,64 +27,74 @@ import java.util.Set;
 /** Type conversions between {@link java.nio.file.OpenOption} and {@link j$.nio.file.OpenOption}. */
 public final class OpenOptionConversions {
 
-  public static j$.nio.file.OpenOption encode(java.nio.file.OpenOption openOption) {
-    if (openOption == null) {
+  public static j$.nio.file.OpenOption encode(java.nio.file.OpenOption raw) {
+    if (raw == null) {
       return null;
     }
-    if (openOption instanceof java.nio.file.StandardOpenOption) {
-      return StandardOpenOptionConversions.encode((java.nio.file.StandardOpenOption) openOption);
+    if (raw instanceof java.nio.file.StandardOpenOption) {
+      return StandardOpenOptionConversions.encode((java.nio.file.StandardOpenOption) raw);
     }
-    if (openOption instanceof java.nio.file.LinkOption) {
-      return LinkOptionConversions.encode((java.nio.file.LinkOption) openOption);
+    if (raw instanceof java.nio.file.LinkOption) {
+      return LinkOptionConversions.encode((java.nio.file.LinkOption) raw);
     }
-    throw new UnsupportedOperationException("Unexpected OpenOption: " + openOption);
+    throw new UnsupportedOperationException("Unexpected OpenOption: " + raw);
   }
 
-  public static j$.nio.file.OpenOption[] encode(java.nio.file.OpenOption[] values) {
-    if (values == null) {
+  public static j$.nio.file.OpenOption[] encode(java.nio.file.OpenOption[] raw) {
+    if (raw == null) {
       return null;
     }
-    int n = values.length;
+    int n = raw.length;
     var results = new j$.nio.file.OpenOption[n];
     for (int i = 0; i < n; i++) {
-      results[i] = encode(values[i]);
+      results[i] = encode(raw[i]);
     }
     return results;
   }
 
-  public static Set<j$.nio.file.OpenOption> encode(Set<? extends java.nio.file.OpenOption> values) {
-    if (values == null) {
+  public static Set<j$.nio.file.OpenOption> encode(Set<? extends java.nio.file.OpenOption> raw) {
+    if (raw == null) {
       return null;
     }
     var results = new LinkedHashSet<j$.nio.file.OpenOption>();
-    for (var v : values) {
+    for (var v : raw) {
       results.add(encode(v));
     }
     return results;
   }
 
-  public static java.nio.file.OpenOption decode(j$.nio.file.OpenOption openOption) {
-    if (openOption instanceof j$.nio.file.StandardOpenOption) {
-      return StandardOpenOptionConversions.decode((j$.nio.file.StandardOpenOption) openOption);
+  public static java.nio.file.OpenOption decode(j$.nio.file.OpenOption encoded) {
+    if (encoded == null) {
+      return null;
     }
-    if (openOption instanceof j$.nio.file.LinkOption) {
-      return LinkOptionConversions.decode((j$.nio.file.LinkOption) openOption);
+    if (encoded instanceof j$.nio.file.StandardOpenOption) {
+      return StandardOpenOptionConversions.decode((j$.nio.file.StandardOpenOption) encoded);
     }
-    throw new UnsupportedOperationException("Unexpected OpenOption: " + openOption);
+    if (encoded instanceof j$.nio.file.LinkOption) {
+      return LinkOptionConversions.decode((j$.nio.file.LinkOption) encoded);
+    }
+    throw new UnsupportedOperationException("Unexpected OpenOption: " + encoded);
   }
 
-  public static java.nio.file.OpenOption[] decode(j$.nio.file.OpenOption[] values) {
-    int n = values.length;
+  public static java.nio.file.OpenOption[] decode(j$.nio.file.OpenOption[] encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    int n = encoded.length;
     var results = new java.nio.file.OpenOption[n];
     for (int i = 0; i < n; i++) {
-      results[i] = decode(values[i]);
+      results[i] = decode(encoded[i]);
     }
     return results;
   }
 
-  public static Set<java.nio.file.OpenOption> decode(Set<? extends j$.nio.file.OpenOption> values) {
+  public static Set<java.nio.file.OpenOption> decode(
+      Set<? extends j$.nio.file.OpenOption> encoded) {
+    if (encoded == null) {
+      return null;
+    }
     var results = new LinkedHashSet<java.nio.file.OpenOption>();
-    for (var v : values) {
+    for (var v : encoded) {
       results.add(decode(v));
     }
     return results;

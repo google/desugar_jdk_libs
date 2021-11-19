@@ -36,14 +36,14 @@ public final class WatchKeyConversions {
     return new EncodedWatchKey(raw);
   }
 
-  public static java.nio.file.WatchKey decode(j$.nio.file.WatchKey watchKey) {
-    if (watchKey == null) {
+  public static java.nio.file.WatchKey decode(j$.nio.file.WatchKey encoded) {
+    if (encoded == null) {
       return null;
     }
-    if (watchKey instanceof EncodedWatchKey) {
-      return ((EncodedWatchKey) watchKey).delegate;
+    if (encoded instanceof EncodedWatchKey) {
+      return ((EncodedWatchKey) encoded).delegate;
     }
-    return new DecodedWatchKey(watchKey);
+    return new DecodedWatchKey(encoded);
   }
 
   private WatchKeyConversions() {}

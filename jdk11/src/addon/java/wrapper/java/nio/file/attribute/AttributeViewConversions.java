@@ -153,12 +153,18 @@ public final class AttributeViewConversions {
 
   public static Class<? extends java.nio.file.attribute.AttributeView> decode(
       Class<? extends j$.nio.file.attribute.AttributeView> encoded) {
+    if (encoded == null) {
+      return null;
+    }
     return ATTRIBUTE_VIEW_DECODE_MAP.getOrDefault(
         encoded, java.nio.file.attribute.AttributeView.class);
   }
 
   public static <T extends java.nio.file.attribute.AttributeView> T decode(
       j$.nio.file.attribute.AttributeView encoded, Class<T> decodedType) {
+    if (encoded == null) {
+      return null;
+    }
     if (decodedType == java.nio.file.attribute.AclFileAttributeView.class) {
       return decodedType.cast(
           AclFileAttributeViewConversions.decode(

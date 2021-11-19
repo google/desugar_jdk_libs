@@ -27,11 +27,11 @@ package wrapper.java.nio.file;
  */
 public final class StandardCopyOptionConversions {
 
-  public static j$.nio.file.StandardCopyOption encode(java.nio.file.StandardCopyOption copyOption) {
-    if (copyOption == null) {
+  public static j$.nio.file.StandardCopyOption encode(java.nio.file.StandardCopyOption raw) {
+    if (raw == null) {
       return null;
     }
-    switch (copyOption) {
+    switch (raw) {
       case REPLACE_EXISTING:
         return j$.nio.file.StandardCopyOption.REPLACE_EXISTING;
       case COPY_ATTRIBUTES:
@@ -39,11 +39,14 @@ public final class StandardCopyOptionConversions {
       case ATOMIC_MOVE:
         return j$.nio.file.StandardCopyOption.ATOMIC_MOVE;
     }
-    throw new AssertionError("Unexpected StandardOpenOption: " + copyOption);
+    throw new AssertionError("Unexpected StandardOpenOption: " + raw);
   }
 
-  public static java.nio.file.StandardCopyOption decode(j$.nio.file.StandardCopyOption copyOption) {
-    switch (copyOption) {
+  public static java.nio.file.StandardCopyOption decode(j$.nio.file.StandardCopyOption encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    switch (encoded) {
       case REPLACE_EXISTING:
         return java.nio.file.StandardCopyOption.REPLACE_EXISTING;
       case COPY_ATTRIBUTES:
@@ -51,7 +54,7 @@ public final class StandardCopyOptionConversions {
       case ATOMIC_MOVE:
         return java.nio.file.StandardCopyOption.ATOMIC_MOVE;
     }
-    throw new AssertionError("Unexpected StandardOpenOption: " + copyOption);
+    throw new AssertionError("Unexpected StandardOpenOption: " + encoded);
   }
 
   private StandardCopyOptionConversions() {}

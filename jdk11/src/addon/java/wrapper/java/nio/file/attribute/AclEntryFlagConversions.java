@@ -49,12 +49,12 @@ public final class AclEntryFlagConversions {
   }
 
   public static Set<j$.nio.file.attribute.AclEntryFlag> encode(
-      Set<java.nio.file.attribute.AclEntryFlag> raws) {
-    if (raws == null) {
+      Set<java.nio.file.attribute.AclEntryFlag> raw) {
+    if (raw == null) {
       return null;
     }
     var results = new LinkedHashSet<AclEntryFlag>();
-    for (var value : raws) {
+    for (var value : raw) {
       results.add(encode(value));
     }
     return results;

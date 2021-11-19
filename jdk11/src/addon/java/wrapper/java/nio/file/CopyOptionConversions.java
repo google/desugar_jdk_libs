@@ -24,46 +24,52 @@ package wrapper.java.nio.file;
 /** Type conversions between {@link java.nio.file.CopyOption} and {@link j$.nio.file.CopyOption}. */
 public final class CopyOptionConversions {
 
-  public static j$.nio.file.CopyOption encode(java.nio.file.CopyOption copyOption) {
-    if (copyOption == null) {
+  public static j$.nio.file.CopyOption encode(java.nio.file.CopyOption raw) {
+    if (raw == null) {
       return null;
     }
-    if (copyOption instanceof java.nio.file.StandardCopyOption) {
-      return StandardCopyOptionConversions.encode((java.nio.file.StandardCopyOption) copyOption);
+    if (raw instanceof java.nio.file.StandardCopyOption) {
+      return StandardCopyOptionConversions.encode((java.nio.file.StandardCopyOption) raw);
     }
-    if (copyOption instanceof java.nio.file.LinkOption) {
-      return LinkOptionConversions.encode((java.nio.file.LinkOption) copyOption);
+    if (raw instanceof java.nio.file.LinkOption) {
+      return LinkOptionConversions.encode((java.nio.file.LinkOption) raw);
     }
-    throw new UnsupportedOperationException("Unexpected OpenOption: " + copyOption);
+    throw new UnsupportedOperationException("Unexpected OpenOption: " + raw);
   }
 
-  public static j$.nio.file.CopyOption[] encode(java.nio.file.CopyOption[] values) {
-    if (values == null) {
+  public static j$.nio.file.CopyOption[] encode(java.nio.file.CopyOption[] raw) {
+    if (raw == null) {
       return null;
     }
-    int n = values.length;
+    int n = raw.length;
     var results = new j$.nio.file.CopyOption[n];
     for (int i = 0; i < n; i++) {
-      results[i] = encode(values[i]);
+      results[i] = encode(raw[i]);
     }
     return results;
   }
 
-  public static java.nio.file.CopyOption decode(j$.nio.file.CopyOption copyOption) {
-    if (copyOption instanceof j$.nio.file.StandardCopyOption) {
-      return StandardCopyOptionConversions.decode((j$.nio.file.StandardCopyOption) copyOption);
+  public static java.nio.file.CopyOption decode(j$.nio.file.CopyOption encoded) {
+    if (encoded == null) {
+      return null;
     }
-    if (copyOption instanceof j$.nio.file.LinkOption) {
-      return LinkOptionConversions.decode((j$.nio.file.LinkOption) copyOption);
+    if (encoded instanceof j$.nio.file.StandardCopyOption) {
+      return StandardCopyOptionConversions.decode((j$.nio.file.StandardCopyOption) encoded);
     }
-    throw new UnsupportedOperationException("Unexpected OpenOption: " + copyOption);
+    if (encoded instanceof j$.nio.file.LinkOption) {
+      return LinkOptionConversions.decode((j$.nio.file.LinkOption) encoded);
+    }
+    throw new UnsupportedOperationException("Unexpected OpenOption: " + encoded);
   }
 
-  public static java.nio.file.CopyOption[] decode(j$.nio.file.CopyOption[] values) {
-    int n = values.length;
+  public static java.nio.file.CopyOption[] decode(j$.nio.file.CopyOption[] encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    int n = encoded.length;
     var results = new java.nio.file.CopyOption[n];
     for (int i = 0; i < n; i++) {
-      results[i] = decode(values[i]);
+      results[i] = decode(encoded[i]);
     }
     return results;
   }

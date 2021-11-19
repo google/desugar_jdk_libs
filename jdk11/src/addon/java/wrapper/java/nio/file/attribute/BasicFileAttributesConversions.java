@@ -61,6 +61,9 @@ public final class BasicFileAttributesConversions {
 
   public static Class<? extends j$.nio.file.attribute.BasicFileAttributes> encode(
       Class<? extends java.nio.file.attribute.BasicFileAttributes> rawType) {
+    if (rawType == null) {
+      return null;
+    }
     if (rawType == java.nio.file.attribute.PosixFileAttributes.class) {
       return j$.nio.file.attribute.PosixFileAttributes.class;
     }
@@ -105,17 +108,20 @@ public final class BasicFileAttributesConversions {
   }
 
   public static Class<? extends java.nio.file.attribute.BasicFileAttributes> decode(
-      Class<? extends j$.nio.file.attribute.BasicFileAttributes> attributeType) {
-    if (attributeType == j$.nio.file.attribute.PosixFileAttributes.class) {
+      Class<? extends j$.nio.file.attribute.BasicFileAttributes> encoded) {
+    if (encoded == null) {
+      return null;
+    }
+    if (encoded == j$.nio.file.attribute.PosixFileAttributes.class) {
       return java.nio.file.attribute.PosixFileAttributes.class;
     }
-    if (attributeType == j$.nio.file.attribute.DosFileAttributes.class) {
+    if (encoded == j$.nio.file.attribute.DosFileAttributes.class) {
       return java.nio.file.attribute.DosFileAttributes.class;
     }
-    if (attributeType == j$.nio.file.attribute.BasicFileAttributes.class) {
+    if (encoded == j$.nio.file.attribute.BasicFileAttributes.class) {
       return java.nio.file.attribute.BasicFileAttributes.class;
     }
-    throw new UnsupportedOperationException("Unsupported file attribute type: " + attributeType);
+    throw new UnsupportedOperationException("Unsupported file attribute type: " + encoded);
   }
 
   private BasicFileAttributesConversions() {}

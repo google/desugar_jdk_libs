@@ -36,12 +36,12 @@ public final class WatchEventConversions {
     return new EncodedWatchEvent<>(raw);
   }
 
-  public static List<j$.nio.file.WatchEvent<?>> encode(List<java.nio.file.WatchEvent<?>> events) {
-    if (events == null) {
+  public static List<j$.nio.file.WatchEvent<?>> encode(List<java.nio.file.WatchEvent<?>> raw) {
+    if (raw == null) {
       return null;
     }
     var results = new ArrayList<j$.nio.file.WatchEvent<?>>();
-    for (var event : events) {
+    for (var event : raw) {
       results.add(encode(event));
     }
     return results;
@@ -57,13 +57,12 @@ public final class WatchEventConversions {
     return new DecodedWatchEvent<>(encoded);
   }
 
-  public static List<java.nio.file.WatchEvent<?>> decode(
-      List<j$.nio.file.WatchEvent<?>> encodedEvents) {
-    if (encodedEvents == null) {
+  public static List<java.nio.file.WatchEvent<?>> decode(List<j$.nio.file.WatchEvent<?>> encoded) {
+    if (encoded == null) {
       return null;
     }
     var results = new ArrayList<java.nio.file.WatchEvent<?>>();
-    for (var event : encodedEvents) {
+    for (var event : encoded) {
       results.add(decode(event));
     }
     return results;

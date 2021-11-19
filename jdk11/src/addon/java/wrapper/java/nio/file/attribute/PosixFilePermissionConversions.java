@@ -60,12 +60,12 @@ public class PosixFilePermissionConversions {
   }
 
   public static Set<j$.nio.file.attribute.PosixFilePermission> encode(
-      Set<java.nio.file.attribute.PosixFilePermission> values) {
-    if (values == null) {
+      Set<java.nio.file.attribute.PosixFilePermission> raw) {
+    if (raw == null) {
       return null;
     }
     var results = new LinkedHashSet<j$.nio.file.attribute.PosixFilePermission>();
-    for (var permission : values) {
+    for (var permission : raw) {
       results.add(encode(permission));
     }
     return results;
@@ -100,9 +100,12 @@ public class PosixFilePermissionConversions {
   }
 
   public static Set<java.nio.file.attribute.PosixFilePermission> decode(
-      Set<j$.nio.file.attribute.PosixFilePermission> values) {
+      Set<j$.nio.file.attribute.PosixFilePermission> encoded) {
+    if (encoded == null) {
+      return null;
+    }
     var results = new LinkedHashSet<java.nio.file.attribute.PosixFilePermission>();
-    for (var permission : values) {
+    for (var permission : encoded) {
       results.add(decode(permission));
     }
     return results;
