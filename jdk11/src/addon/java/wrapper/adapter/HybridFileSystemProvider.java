@@ -20,6 +20,7 @@
 
 package wrapper.adapter;
 
+import android.os.Build.VERSION;
 import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy;
 import j$.desugar.sun.nio.fs.DesugarDefaultFileSystemProvider;
@@ -38,10 +39,10 @@ public final class HybridFileSystemProvider {
       INSTANCE.getFileSystem(URI.create("file:///"));
 
   private static FileSystemProvider getFileSystemProvider() {
-    try {
+    if (VERSION.SDK_INT >= 26) {
       return FileSystemProviderConversions.encode(
           java.nio.file.FileSystems.getDefault().provider());
-    } catch (NoClassDefFoundError e) {
+    } else {
       // TODO(b/207004118): Fix the strict mode allowlisting.
       ThreadPolicy threadPolicy = StrictMode.getThreadPolicy();
       StrictMode.setThreadPolicy(new ThreadPolicy.Builder(threadPolicy).permitDiskReads().build());
