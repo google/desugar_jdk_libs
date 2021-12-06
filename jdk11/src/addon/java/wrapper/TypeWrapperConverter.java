@@ -179,7 +179,10 @@ public final class TypeWrapperConverter {
             inPaths.build(),
             outPath,
             internalName ->
-                internalName.startsWith("java/nio/") || internalName.startsWith("j$/nio/"),
+                internalName.startsWith("java/nio/")
+                    || internalName.startsWith("j$/nio/")
+                    || internalName.startsWith("java/io/")
+                    || internalName.startsWith("j$/io/"),
             internalName -> "__wrapper__/" + internalName);
     typeConverter.convert();
   }
