@@ -61,11 +61,11 @@ public final class FileChannelConversions {
     }
 
     @Override
-    public int read(ByteBuffer dst) {
+    public int read(ByteBuffer dst) throws IOException {
       try {
         return delegate.read(dst);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -74,16 +74,16 @@ public final class FileChannelConversions {
       try {
         return delegate.read(dsts, offset, length);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public int write(ByteBuffer src) {
+    public int write(ByteBuffer src) throws IOException {
       try {
         return delegate.write(src);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -92,43 +92,43 @@ public final class FileChannelConversions {
       try {
         return delegate.write(srcs, offset, length);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public long position() {
+    public long position() throws IOException {
       try {
         return delegate.position();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public EncodedFileChannel position(long newPosition) {
+    public EncodedFileChannel position(long newPosition) throws IOException {
       try {
         return (EncodedFileChannel) encode(delegate.position(newPosition));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public long size() {
+    public long size() throws IOException {
       try {
         return delegate.size();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public EncodedFileChannel truncate(long size) {
+    public EncodedFileChannel truncate(long size) throws IOException {
       try {
         return (EncodedFileChannel) encode(delegate.truncate(size));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -137,7 +137,7 @@ public final class FileChannelConversions {
       try {
         delegate.force(metaData);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -147,7 +147,7 @@ public final class FileChannelConversions {
       try {
         return delegate.transferTo(position, count, target);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -157,7 +157,7 @@ public final class FileChannelConversions {
       try {
         return delegate.transferFrom(src, position, count);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -166,7 +166,7 @@ public final class FileChannelConversions {
       try {
         return delegate.read(dst, position);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -175,7 +175,7 @@ public final class FileChannelConversions {
       try {
         return delegate.write(src, position);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -184,7 +184,7 @@ public final class FileChannelConversions {
       try {
         return delegate.map(mode, position, size);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -193,7 +193,7 @@ public final class FileChannelConversions {
       try {
         return delegate.lock(position, size, shared);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -202,7 +202,7 @@ public final class FileChannelConversions {
       try {
         return delegate.tryLock(position, size, shared);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -217,7 +217,7 @@ public final class FileChannelConversions {
       } catch (ReflectiveOperationException e) {
         Throwable cause = e.getCause();
         if (cause instanceof IOException) {
-          throw IOExceptionConversions.encodeUnchecked((IOException) cause);
+          throw IOExceptionConversions.encodeChecked((IOException) cause);
         }
         throw new AssertionError(e);
       }

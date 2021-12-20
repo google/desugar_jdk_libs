@@ -65,20 +65,22 @@ public class UserPrincipalLookupServiceConversions {
     }
 
     @Override
-    public j$.nio.file.attribute.UserPrincipal lookupPrincipalByName(String name) {
+    public j$.nio.file.attribute.UserPrincipal lookupPrincipalByName(String name)
+        throws IOException {
       try {
         return UserPrincipalConversions.encode(delegate.lookupPrincipalByName(name));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public j$.nio.file.attribute.GroupPrincipal lookupPrincipalByGroupName(String group) {
+    public j$.nio.file.attribute.GroupPrincipal lookupPrincipalByGroupName(String group)
+        throws IOException {
       try {
         return GroupPrincipalConversions.encode(delegate.lookupPrincipalByGroupName(group));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 

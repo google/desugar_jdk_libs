@@ -76,38 +76,38 @@ public final class FileStoreConversions {
     }
 
     @Override
-    public long getTotalSpace() {
+    public long getTotalSpace() throws IOException {
       try {
         return delegate.getTotalSpace();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public long getUsableSpace() {
+    public long getUsableSpace() throws IOException {
       try {
         return delegate.getUsableSpace();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public long getBlockSize() {
+    public long getBlockSize() throws IOException {
       try {
         return delegate.getBlockSize();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public long getUnallocatedSpace() {
+    public long getUnallocatedSpace() throws IOException {
       try {
         return delegate.getUnallocatedSpace();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -132,11 +132,11 @@ public final class FileStoreConversions {
     }
 
     @Override
-    public Object getAttribute(String attribute) {
+    public Object getAttribute(String attribute) throws IOException {
       try {
         return delegate.getAttribute(attribute);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }

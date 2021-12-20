@@ -160,11 +160,11 @@ public final class PathConversions {
     }
 
     @Override
-    public j$.nio.file.Path toRealPath(j$.nio.file.LinkOption... options) {
+    public j$.nio.file.Path toRealPath(j$.nio.file.LinkOption... options) throws IOException {
       try {
         return encode(delegate.toRealPath(LinkOptionConversions.decode(options)));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -177,7 +177,8 @@ public final class PathConversions {
     public j$.nio.file.WatchKey register(
         j$.nio.file.WatchService watcher,
         j$.nio.file.WatchEvent.Kind<?>[] events,
-        j$.nio.file.WatchEvent.Modifier... modifiers) {
+        j$.nio.file.WatchEvent.Modifier... modifiers)
+        throws IOException {
       try {
         return WatchKeyConversions.encode(
             delegate.register(
@@ -185,19 +186,20 @@ public final class PathConversions {
                 WatchEventKindConversions.decode(events),
                 WatchEventModifierConversions.decode(modifiers)));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
     public j$.nio.file.WatchKey register(
-        j$.nio.file.WatchService watcher, j$.nio.file.WatchEvent.Kind<?>... events) {
+        j$.nio.file.WatchService watcher, j$.nio.file.WatchEvent.Kind<?>... events)
+        throws IOException {
       try {
         return WatchKeyConversions.encode(
             delegate.register(
                 WatchServiceConversions.decode(watcher), WatchEventKindConversions.decode(events)));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 

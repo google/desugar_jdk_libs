@@ -71,20 +71,20 @@ public final class FileOwnerAttributeViewConversions {
     }
 
     @Override
-    public j$.nio.file.attribute.UserPrincipal getOwner() {
+    public j$.nio.file.attribute.UserPrincipal getOwner() throws IOException {
       try {
         return UserPrincipalConversions.encode(delegate.getOwner());
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setOwner(j$.nio.file.attribute.UserPrincipal owner) {
+    public void setOwner(j$.nio.file.attribute.UserPrincipal owner) throws IOException {
       try {
         delegate.setOwner(UserPrincipalConversions.decode(owner));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }

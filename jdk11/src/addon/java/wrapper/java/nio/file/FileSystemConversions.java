@@ -66,11 +66,11 @@ public final class FileSystemConversions {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
       try {
         delegate.close();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -155,11 +155,11 @@ public final class FileSystemConversions {
     }
 
     @Override
-    public j$.nio.file.WatchService newWatchService() {
+    public j$.nio.file.WatchService newWatchService() throws IOException {
       try {
         return WatchServiceConversions.encode(delegate.newWatchService());
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 

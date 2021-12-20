@@ -64,56 +64,56 @@ public final class SeekableByteChannelConversions {
     }
 
     @Override
-    public int read(ByteBuffer dst) {
+    public int read(ByteBuffer dst) throws IOException {
       try {
         return delegate.read(dst);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public int write(ByteBuffer src) {
+    public int write(ByteBuffer src) throws IOException {
       try {
         return delegate.write(src);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public long position() {
+    public long position() throws IOException {
       try {
         return delegate.position();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public j$.nio.channels.SeekableByteChannel position(long newPosition) {
+    public j$.nio.channels.SeekableByteChannel position(long newPosition) throws IOException {
       try {
         return encode(delegate.position(newPosition));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public long size() {
+    public long size() throws IOException {
       try {
         return delegate.size();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public j$.nio.channels.SeekableByteChannel truncate(long size) {
+    public j$.nio.channels.SeekableByteChannel truncate(long size) throws IOException {
       try {
         return encode(delegate.truncate(size));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 

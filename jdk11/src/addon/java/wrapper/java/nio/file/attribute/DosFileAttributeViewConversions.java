@@ -65,47 +65,47 @@ public final class DosFileAttributeViewConversions {
     }
 
     @Override
-    public j$.nio.file.attribute.DosFileAttributes readAttributes() {
+    public j$.nio.file.attribute.DosFileAttributes readAttributes() throws IOException {
       try {
         return DosFileAttributesConversions.encode(delegate.readAttributes());
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setReadOnly(boolean value) {
+    public void setReadOnly(boolean value) throws IOException {
       try {
         delegate.setReadOnly(value);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setHidden(boolean value) {
+    public void setHidden(boolean value) throws IOException {
       try {
         delegate.setHidden(value);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setSystem(boolean value) {
+    public void setSystem(boolean value) throws IOException {
       try {
         delegate.setSystem(value);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setArchive(boolean value) {
+    public void setArchive(boolean value) throws IOException {
       try {
         delegate.setArchive(value);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }

@@ -66,11 +66,11 @@ public class DirectoryStreamFilterConversions {
     }
 
     @Override
-    public boolean accept(T entry) {
+    public boolean accept(T entry) throws IOException {
       try {
         return delegate.accept(decoder.translate(entry));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }

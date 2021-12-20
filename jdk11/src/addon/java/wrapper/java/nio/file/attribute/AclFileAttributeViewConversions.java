@@ -71,20 +71,20 @@ public final class AclFileAttributeViewConversions {
     }
 
     @Override
-    public List<j$.nio.file.attribute.AclEntry> getAcl() {
+    public List<j$.nio.file.attribute.AclEntry> getAcl() throws IOException {
       try {
         return AclEntryConversions.encode(delegate.getAcl());
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setAcl(List<j$.nio.file.attribute.AclEntry> acl) {
+    public void setAcl(List<j$.nio.file.attribute.AclEntry> acl) throws IOException {
       try {
         delegate.setAcl(AclEntryConversions.decode(acl));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }

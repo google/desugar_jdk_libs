@@ -85,30 +85,30 @@ public final class AsynchronousFileChannelConversions {
     }
 
     @Override
-    public long size() {
+    public long size() throws IOException {
       try {
         return delegate.size();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public j$.nio.channels.AsynchronousFileChannel truncate(long size) {
+    public j$.nio.channels.AsynchronousFileChannel truncate(long size) throws IOException {
       try {
         delegate.truncate(size);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
       return this;
     }
 
     @Override
-    public void force(boolean metaData) {
+    public void force(boolean metaData) throws IOException {
       try {
         delegate.force(metaData);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -129,11 +129,11 @@ public final class AsynchronousFileChannelConversions {
     }
 
     @Override
-    public FileLock tryLock(long position, long size, boolean shared) {
+    public FileLock tryLock(long position, long size, boolean shared) throws IOException {
       try {
         return delegate.tryLock(position, size, shared);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -166,11 +166,11 @@ public final class AsynchronousFileChannelConversions {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
       try {
         delegate.close();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 

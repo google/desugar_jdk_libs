@@ -34,10 +34,6 @@ import java.nio.file.NotLinkException;
 /** Converts between {@link java.io.IOException} derived types. */
 public final class IOExceptionConversions {
 
-  public static UncheckedIOException encodeUnchecked(java.io.IOException e) {
-    return new UncheckedIOException(encode(e));
-  }
-
   public static UncheckedIOException decodeUnchecked(java.io.IOException e) {
     return new UncheckedIOException(encode(e));
   }

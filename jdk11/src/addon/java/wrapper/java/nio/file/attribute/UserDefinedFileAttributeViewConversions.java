@@ -73,47 +73,47 @@ public final class UserDefinedFileAttributeViewConversions {
     }
 
     @Override
-    public List<String> list() {
+    public List<String> list() throws IOException {
       try {
         return delegate.list();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public int size(String name) {
+    public int size(String name) throws IOException {
       try {
         return delegate.size(name);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public int read(String name, ByteBuffer dst) {
+    public int read(String name, ByteBuffer dst) throws IOException {
       try {
         return delegate.read(name, dst);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public int write(String name, ByteBuffer src) {
+    public int write(String name, ByteBuffer src) throws IOException {
       try {
         return delegate.write(name, src);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void delete(String name) {
+    public void delete(String name) throws IOException {
       try {
         delegate.delete(name);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }

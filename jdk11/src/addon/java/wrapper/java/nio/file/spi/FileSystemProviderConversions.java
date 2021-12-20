@@ -103,11 +103,11 @@ public final class FileSystemProviderConversions {
     }
 
     @Override
-    public j$.nio.file.FileSystem newFileSystem(URI uri, Map<String, ?> env) {
+    public j$.nio.file.FileSystem newFileSystem(URI uri, Map<String, ?> env) throws IOException {
       try {
         return FileSystemConversions.encode(delegate.newFileSystem(uri, env));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       } catch (FileSystemAlreadyExistsException e) {
         throw new j$.nio.file.FileSystemAlreadyExistsException();
       }
@@ -124,32 +124,35 @@ public final class FileSystemProviderConversions {
     }
 
     @Override
-    public j$.nio.file.FileSystem newFileSystem(j$.nio.file.Path path, Map<String, ?> env) {
+    public j$.nio.file.FileSystem newFileSystem(j$.nio.file.Path path, Map<String, ?> env)
+        throws IOException {
       try {
         return FileSystemConversions.encode(
             delegate.newFileSystem(PathConversions.decode(path), env));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public InputStream newInputStream(j$.nio.file.Path path, j$.nio.file.OpenOption... options) {
+    public InputStream newInputStream(j$.nio.file.Path path, j$.nio.file.OpenOption... options)
+        throws IOException {
       try {
         return delegate.newInputStream(
             PathConversions.decode(path), OpenOptionConversions.decode(options));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public OutputStream newOutputStream(j$.nio.file.Path path, j$.nio.file.OpenOption... options) {
+    public OutputStream newOutputStream(j$.nio.file.Path path, j$.nio.file.OpenOption... options)
+        throws IOException {
       try {
         return delegate.newOutputStream(
             PathConversions.decode(path), OpenOptionConversions.decode(options));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -157,14 +160,15 @@ public final class FileSystemProviderConversions {
     public FileChannel newFileChannel(
         j$.nio.file.Path path,
         Set<? extends j$.nio.file.OpenOption> options,
-        j$.nio.file.attribute.FileAttribute<?>... attrs) {
+        j$.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       try {
         return delegate.newFileChannel(
             PathConversions.decode(path),
             OpenOptionConversions.decode(options),
             FileAttributeConversions.decode(attrs));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -173,7 +177,8 @@ public final class FileSystemProviderConversions {
         j$.nio.file.Path path,
         Set<? extends j$.nio.file.OpenOption> options,
         ExecutorService executor,
-        j$.nio.file.attribute.FileAttribute<?>... attrs) {
+        j$.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       try {
         return AsynchronousFileChannelConversions.encode(
             delegate.newAsynchronousFileChannel(
@@ -182,7 +187,7 @@ public final class FileSystemProviderConversions {
                 executor,
                 FileAttributeConversions.decode(attrs)));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -190,7 +195,8 @@ public final class FileSystemProviderConversions {
     public j$.nio.channels.SeekableByteChannel newByteChannel(
         j$.nio.file.Path path,
         Set<? extends j$.nio.file.OpenOption> options,
-        j$.nio.file.attribute.FileAttribute<?>... attrs) {
+        j$.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       try {
         SeekableByteChannel javaSeekableByteChannel =
             delegate.newByteChannel(
@@ -199,13 +205,14 @@ public final class FileSystemProviderConversions {
                 FileAttributeConversions.decode(attrs));
         return SeekableByteChannelConversions.encode(javaSeekableByteChannel);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
     public j$.nio.file.DirectoryStream<j$.nio.file.Path> newDirectoryStream(
-        j$.nio.file.Path dir, j$.nio.file.DirectoryStream.Filter<? super j$.nio.file.Path> filter) {
+        j$.nio.file.Path dir, j$.nio.file.DirectoryStream.Filter<? super j$.nio.file.Path> filter)
+        throws IOException {
       try {
         Path javaPath = PathConversions.decode(dir);
         java.nio.file.DirectoryStream.Filter<Path> javaFilter =
@@ -214,20 +221,20 @@ public final class FileSystemProviderConversions {
             delegate.newDirectoryStream(javaPath, javaFilter);
         return DirectoryStreamConversions.encode(javaDirectoryStream, PathConversions::encode);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
     public void createDirectory(
-        j$.nio.file.Path dir, j$.nio.file.attribute.FileAttribute<?>... attrs) {
+        j$.nio.file.Path dir, j$.nio.file.attribute.FileAttribute<?>... attrs) throws IOException {
       try {
         Path javaPath = PathConversions.decode(dir);
         java.nio.file.attribute.FileAttribute<?>[] javaFileAttrs =
             FileAttributeConversions.decode(attrs);
         delegate.createDirectory(javaPath, javaFileAttrs);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -235,7 +242,8 @@ public final class FileSystemProviderConversions {
     public void createSymbolicLink(
         j$.nio.file.Path link,
         j$.nio.file.Path target,
-        j$.nio.file.attribute.FileAttribute<?>... attrs) {
+        j$.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       try {
         Path javaLink = PathConversions.decode(link);
         Path javaTarget = PathConversions.decode(target);
@@ -243,118 +251,121 @@ public final class FileSystemProviderConversions {
             FileAttributeConversions.decode(attrs);
         delegate.createSymbolicLink(javaLink, javaTarget, javaFileAttrs);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void createLink(j$.nio.file.Path link, j$.nio.file.Path existing) {
+    public void createLink(j$.nio.file.Path link, j$.nio.file.Path existing) throws IOException {
       try {
         Path javaLink = PathConversions.decode(link);
         Path javaExisting = PathConversions.decode(existing);
         delegate.createLink(javaLink, javaExisting);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void delete(j$.nio.file.Path path) {
+    public void delete(j$.nio.file.Path path) throws IOException {
       try {
         Path javaPath = PathConversions.decode(path);
         delegate.delete(javaPath);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public boolean deleteIfExists(j$.nio.file.Path path) {
+    public boolean deleteIfExists(j$.nio.file.Path path) throws IOException {
       try {
         Path javaPath = PathConversions.decode(path);
         return delegate.deleteIfExists(javaPath);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public j$.nio.file.Path readSymbolicLink(j$.nio.file.Path link) {
+    public j$.nio.file.Path readSymbolicLink(j$.nio.file.Path link) throws IOException {
       try {
         Path javaLink = PathConversions.decode(link);
         Path actualPath = delegate.readSymbolicLink(javaLink);
         return PathConversions.encode(actualPath);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
     public void copy(
-        j$.nio.file.Path source, j$.nio.file.Path target, j$.nio.file.CopyOption... options) {
+        j$.nio.file.Path source, j$.nio.file.Path target, j$.nio.file.CopyOption... options)
+        throws IOException {
       try {
         Path javaSource = PathConversions.decode(source);
         Path javaTarget = PathConversions.decode(target);
         java.nio.file.CopyOption[] javaCopyOptions = CopyOptionConversions.decode(options);
         delegate.copy(javaSource, javaTarget, javaCopyOptions);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
     public void move(
-        j$.nio.file.Path source, j$.nio.file.Path target, j$.nio.file.CopyOption... options) {
+        j$.nio.file.Path source, j$.nio.file.Path target, j$.nio.file.CopyOption... options)
+        throws IOException {
       try {
         Path javaSource = PathConversions.decode(source);
         Path javaTarget = PathConversions.decode(target);
         java.nio.file.CopyOption[] javaCopyOptions = CopyOptionConversions.decode(options);
         delegate.move(javaSource, javaTarget, javaCopyOptions);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public boolean isSameFile(j$.nio.file.Path path, j$.nio.file.Path path2) {
+    public boolean isSameFile(j$.nio.file.Path path, j$.nio.file.Path path2) throws IOException {
       Path javaPath = PathConversions.decode(path);
       Path javaPath2 = PathConversions.decode(path2);
       try {
         return delegate.isSameFile(javaPath, javaPath2);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public boolean isHidden(j$.nio.file.Path path) {
+    public boolean isHidden(j$.nio.file.Path path) throws IOException {
       Path javaPath = PathConversions.decode(path);
       try {
         return delegate.isHidden(javaPath);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public j$.nio.file.FileStore getFileStore(j$.nio.file.Path path) {
+    public j$.nio.file.FileStore getFileStore(j$.nio.file.Path path) throws IOException {
       Path javaPath = PathConversions.decode(path);
       try {
         java.nio.file.FileStore javaFileStore = delegate.getFileStore(javaPath);
         return FileStoreConversions.encode(javaFileStore);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void checkAccess(j$.nio.file.Path path, j$.nio.file.AccessMode... modes) {
+    public void checkAccess(j$.nio.file.Path path, j$.nio.file.AccessMode... modes)
+        throws IOException {
       Path javaPath = PathConversions.decode(path);
       java.nio.file.AccessMode[] javaAccessModes = AccessModeConversions.decode(modes);
       try {
         delegate.checkAccess(javaPath, javaAccessModes);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -371,7 +382,8 @@ public final class FileSystemProviderConversions {
 
     @Override
     public <A extends j$.nio.file.attribute.BasicFileAttributes> A readAttributes(
-        j$.nio.file.Path path, Class<A> type, j$.nio.file.LinkOption... options) {
+        j$.nio.file.Path path, Class<A> type, j$.nio.file.LinkOption... options)
+        throws IOException {
       Path javaPath = PathConversions.decode(path);
       Class<? extends java.nio.file.attribute.BasicFileAttributes> javaType =
           BasicFileAttributesConversions.decode(type);
@@ -380,25 +392,27 @@ public final class FileSystemProviderConversions {
         return BasicFileAttributesConversions.encode(
             delegate.readAttributes(javaPath, javaType, javaLinkOptions), type);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
     public Map<String, Object> readAttributes(
-        j$.nio.file.Path path, String attributes, j$.nio.file.LinkOption... options) {
+        j$.nio.file.Path path, String attributes, j$.nio.file.LinkOption... options)
+        throws IOException {
       try {
         return JavaNioCentralConversions.encodeMapValue(
             delegate.readAttributes(
                 PathConversions.decode(path), attributes, LinkOptionConversions.decode(options)));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
     public void setAttribute(
-        j$.nio.file.Path path, String attribute, Object value, j$.nio.file.LinkOption... options) {
+        j$.nio.file.Path path, String attribute, Object value, j$.nio.file.LinkOption... options)
+        throws IOException {
       try {
         delegate.setAttribute(
             PathConversions.decode(path),
@@ -406,7 +420,7 @@ public final class FileSystemProviderConversions {
             JavaNioCentralConversions.decode(value),
             LinkOptionConversions.decode(options));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 

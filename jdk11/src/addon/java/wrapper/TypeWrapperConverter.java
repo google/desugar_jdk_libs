@@ -149,17 +149,6 @@ public final class TypeWrapperConverter {
     public InvocationRetargetMethodVisitor(int api, MethodVisitor methodVisitor) {
       super(api, methodVisitor);
     }
-
-    @Override
-    public void visitMethodInsn(
-        int opcode, String owner, String name, String descriptor, boolean isInterface) {
-      if ("wrapper/java/nio/file/IOExceptionConversions".equals(owner)
-          && "encodeUnchecked".equals(name)) {
-        name = "encodeChecked";
-        descriptor = "(Ljava/io/IOException;)Ljava/io/IOException;";
-      }
-      super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-    }
   }
 
   public static void main(String[] args) throws IOException {

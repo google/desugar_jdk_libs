@@ -71,12 +71,12 @@ public class BasicFileAttributeViewConversions {
     }
 
     @Override
-    public j$.nio.file.attribute.BasicFileAttributes readAttributes() {
+    public j$.nio.file.attribute.BasicFileAttributes readAttributes() throws IOException {
       try {
         return BasicFileAttributesConversions.encode(
             getDelegate().readAttributes(), j$.nio.file.attribute.BasicFileAttributes.class);
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
@@ -84,14 +84,15 @@ public class BasicFileAttributeViewConversions {
     public void setTimes(
         j$.nio.file.attribute.FileTime lastModifiedTime,
         j$.nio.file.attribute.FileTime lastAccessTime,
-        j$.nio.file.attribute.FileTime createTime) {
+        j$.nio.file.attribute.FileTime createTime)
+        throws IOException {
       try {
         delegate.setTimes(
             FileTimeConversions.decode(lastModifiedTime),
             FileTimeConversions.decode(lastAccessTime),
             FileTimeConversions.decode(createTime));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }

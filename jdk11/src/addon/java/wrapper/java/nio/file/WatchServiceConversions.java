@@ -60,11 +60,11 @@ public final class WatchServiceConversions {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
       try {
         delegate.close();
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 

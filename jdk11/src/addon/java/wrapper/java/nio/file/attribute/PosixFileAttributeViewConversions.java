@@ -74,48 +74,48 @@ public final class PosixFileAttributeViewConversions {
     }
 
     @Override
-    public j$.nio.file.attribute.PosixFileAttributes readAttributes() {
+    public j$.nio.file.attribute.PosixFileAttributes readAttributes() throws IOException {
       try {
         return PosixFileAttributesConversions.encode(delegate.readAttributes());
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setPermissions(Set<j$.nio.file.attribute.PosixFilePermission> perms) {
+    public void setPermissions(Set<j$.nio.file.attribute.PosixFilePermission> perms)
+        throws IOException {
       try {
         delegate.setPermissions(PosixFilePermissionConversions.decode(perms));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setGroup(j$.nio.file.attribute.GroupPrincipal group) {
+    public void setGroup(j$.nio.file.attribute.GroupPrincipal group) throws IOException {
       try {
         delegate.setGroup(GroupPrincipalConversions.decode(group));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public j$.nio.file.attribute.UserPrincipal getOwner() {
+    public j$.nio.file.attribute.UserPrincipal getOwner() throws IOException {
       try {
-
         return UserPrincipalConversions.encode(delegate.getOwner());
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
 
     @Override
-    public void setOwner(j$.nio.file.attribute.UserPrincipal owner) {
+    public void setOwner(j$.nio.file.attribute.UserPrincipal owner) throws IOException {
       try {
         delegate.setOwner(UserPrincipalConversions.decode(owner));
       } catch (IOException e) {
-        throw IOExceptionConversions.encodeUnchecked(e);
+        throw IOExceptionConversions.encodeChecked(e);
       }
     }
   }
