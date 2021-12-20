@@ -350,7 +350,7 @@ public final class PathConversions {
     }
 
     @Override
-    public java.nio.file.Path toRealPath(java.nio.file.LinkOption... options) {
+    public java.nio.file.Path toRealPath(java.nio.file.LinkOption... options) throws IOException {
       return decode(delegate.toRealPath(LinkOptionConversions.encode(options)));
     }
 
@@ -363,7 +363,8 @@ public final class PathConversions {
     public java.nio.file.WatchKey register(
         java.nio.file.WatchService watcher,
         java.nio.file.WatchEvent.Kind<?>[] events,
-        java.nio.file.WatchEvent.Modifier... modifiers) {
+        java.nio.file.WatchEvent.Modifier... modifiers)
+        throws IOException {
       return WatchKeyConversions.decode(
           delegate.register(
               WatchServiceConversions.encode(watcher),
@@ -373,7 +374,8 @@ public final class PathConversions {
 
     @Override
     public java.nio.file.WatchKey register(
-        java.nio.file.WatchService watcher, java.nio.file.WatchEvent.Kind<?>... events) {
+        java.nio.file.WatchService watcher, java.nio.file.WatchEvent.Kind<?>... events)
+        throws IOException {
       return WatchKeyConversions.decode(
           delegate.register(
               WatchServiceConversions.encode(watcher), WatchEventKindConversions.encode(events)));

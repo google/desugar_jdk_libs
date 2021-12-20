@@ -97,7 +97,8 @@ public final class WatchableConversions {
     public java.nio.file.WatchKey register(
         java.nio.file.WatchService watcher,
         java.nio.file.WatchEvent.Kind<?>[] events,
-        java.nio.file.WatchEvent.Modifier... modifiers) {
+        java.nio.file.WatchEvent.Modifier... modifiers)
+        throws IOException {
       return WatchKeyConversions.decode(
           delegate.register(
               WatchServiceConversions.encode(watcher),
@@ -107,7 +108,8 @@ public final class WatchableConversions {
 
     @Override
     public java.nio.file.WatchKey register(
-        java.nio.file.WatchService watcher, java.nio.file.WatchEvent.Kind<?>... events) {
+        java.nio.file.WatchService watcher, java.nio.file.WatchEvent.Kind<?>... events)
+        throws IOException {
       return WatchKeyConversions.decode(
           delegate.register(
               WatchServiceConversions.encode(watcher), WatchEventKindConversions.encode(events)));

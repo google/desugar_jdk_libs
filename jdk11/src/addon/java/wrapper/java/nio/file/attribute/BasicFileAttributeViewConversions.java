@@ -105,7 +105,7 @@ public class BasicFileAttributeViewConversions {
     }
 
     @Override
-    public java.nio.file.attribute.BasicFileAttributes readAttributes() {
+    public java.nio.file.attribute.BasicFileAttributes readAttributes() throws IOException {
       return BasicFileAttributesConversions.decode(
           delegate.readAttributes(), java.nio.file.attribute.BasicFileAttributes.class);
     }
@@ -114,7 +114,8 @@ public class BasicFileAttributeViewConversions {
     public void setTimes(
         java.nio.file.attribute.FileTime lastModifiedTime,
         java.nio.file.attribute.FileTime lastAccessTime,
-        java.nio.file.attribute.FileTime createTime) {
+        java.nio.file.attribute.FileTime createTime)
+        throws IOException {
       delegate.setTimes(
           FileTimeConversions.encode(lastModifiedTime),
           FileTimeConversions.encode(lastAccessTime),

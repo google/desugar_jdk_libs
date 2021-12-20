@@ -119,27 +119,27 @@ public final class DosFileAttributeViewConversions {
     }
 
     @Override
-    public java.nio.file.attribute.DosFileAttributes readAttributes() {
+    public java.nio.file.attribute.DosFileAttributes readAttributes() throws IOException {
       return DosFileAttributesConversions.decode(delegate.readAttributes());
     }
 
     @Override
-    public void setReadOnly(boolean value) {
+    public void setReadOnly(boolean value) throws IOException {
       delegate.setReadOnly(value);
     }
 
     @Override
-    public void setHidden(boolean value) {
+    public void setHidden(boolean value) throws IOException {
       delegate.setHidden(value);
     }
 
     @Override
-    public void setSystem(boolean value) {
+    public void setSystem(boolean value) throws IOException {
       delegate.setSystem(value);
     }
 
     @Override
-    public void setArchive(boolean value) {
+    public void setArchive(boolean value) throws IOException {
       delegate.setArchive(value);
     }
   }

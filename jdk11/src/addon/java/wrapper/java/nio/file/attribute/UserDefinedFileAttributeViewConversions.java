@@ -133,27 +133,27 @@ public final class UserDefinedFileAttributeViewConversions {
     }
 
     @Override
-    public List<String> list() {
+    public List<String> list() throws IOException {
       return delegate.list();
     }
 
     @Override
-    public int size(String name) {
+    public int size(String name) throws IOException {
       return delegate.size(name);
     }
 
     @Override
-    public int read(String name, ByteBuffer dst) {
+    public int read(String name, ByteBuffer dst) throws IOException {
       return delegate.read(name, dst);
     }
 
     @Override
-    public int write(String name, ByteBuffer src) {
+    public int write(String name, ByteBuffer src) throws IOException {
       return delegate.write(name, src);
     }
 
     @Override
-    public void delete(String name) {
+    public void delete(String name) throws IOException {
       delegate.delete(name);
     }
   }

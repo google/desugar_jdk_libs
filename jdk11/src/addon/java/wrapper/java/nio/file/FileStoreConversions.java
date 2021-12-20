@@ -165,22 +165,22 @@ public final class FileStoreConversions {
     }
 
     @Override
-    public long getTotalSpace() {
+    public long getTotalSpace() throws IOException {
       return delegate.getTotalSpace();
     }
 
     @Override
-    public long getUsableSpace() {
+    public long getUsableSpace() throws IOException {
       return delegate.getUsableSpace();
     }
 
     @Override
-    public long getBlockSize() {
+    public long getBlockSize() throws IOException {
       return delegate.getBlockSize();
     }
 
     @Override
-    public long getUnallocatedSpace() {
+    public long getUnallocatedSpace() throws IOException {
       return delegate.getUnallocatedSpace();
     }
 
@@ -208,7 +208,7 @@ public final class FileStoreConversions {
     }
 
     @Override
-    public Object getAttribute(String attribute) {
+    public Object getAttribute(String attribute) throws IOException {
       return delegate.getAttribute(attribute);
     }
   }

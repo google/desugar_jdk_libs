@@ -112,12 +112,14 @@ public class UserPrincipalLookupServiceConversions {
     }
 
     @Override
-    public java.nio.file.attribute.UserPrincipal lookupPrincipalByName(String name) {
+    public java.nio.file.attribute.UserPrincipal lookupPrincipalByName(String name)
+        throws IOException {
       return UserPrincipalConversions.decode(delegate.lookupPrincipalByName(name));
     }
 
     @Override
-    public java.nio.file.attribute.GroupPrincipal lookupPrincipalByGroupName(String group) {
+    public java.nio.file.attribute.GroupPrincipal lookupPrincipalByGroupName(String group)
+        throws IOException {
       return GroupPrincipalConversions.decode(delegate.lookupPrincipalByGroupName(group));
     }
 

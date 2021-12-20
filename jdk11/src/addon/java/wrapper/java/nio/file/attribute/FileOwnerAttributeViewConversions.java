@@ -103,12 +103,12 @@ public final class FileOwnerAttributeViewConversions {
     }
 
     @Override
-    public java.nio.file.attribute.UserPrincipal getOwner() {
+    public java.nio.file.attribute.UserPrincipal getOwner() throws IOException {
       return UserPrincipalConversions.decode(delegate.getOwner());
     }
 
     @Override
-    public void setOwner(java.nio.file.attribute.UserPrincipal owner) {
+    public void setOwner(java.nio.file.attribute.UserPrincipal owner) throws IOException {
       delegate.setOwner(UserPrincipalConversions.encode(owner));
     }
   }

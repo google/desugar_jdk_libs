@@ -81,7 +81,7 @@ public final class FileTypeDetectorConversions {
     }
 
     @Override
-    public String probeContentType(java.nio.file.Path path) {
+    public String probeContentType(java.nio.file.Path path) throws IOException {
       return delegate.probeContentType(PathConversions.encode(path));
     }
   }

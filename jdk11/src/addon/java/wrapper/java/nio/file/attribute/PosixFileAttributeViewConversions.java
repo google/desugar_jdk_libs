@@ -137,27 +137,28 @@ public final class PosixFileAttributeViewConversions {
     }
 
     @Override
-    public java.nio.file.attribute.PosixFileAttributes readAttributes() {
+    public java.nio.file.attribute.PosixFileAttributes readAttributes() throws IOException {
       return PosixFileAttributesConversions.decode(delegate.readAttributes());
     }
 
     @Override
-    public void setPermissions(Set<java.nio.file.attribute.PosixFilePermission> perms) {
+    public void setPermissions(Set<java.nio.file.attribute.PosixFilePermission> perms)
+        throws IOException {
       delegate.setPermissions(PosixFilePermissionConversions.encode(perms));
     }
 
     @Override
-    public void setGroup(java.nio.file.attribute.GroupPrincipal group) {
+    public void setGroup(java.nio.file.attribute.GroupPrincipal group) throws IOException {
       delegate.setGroup(GroupPrincipalConversions.encode(group));
     }
 
     @Override
-    public java.nio.file.attribute.UserPrincipal getOwner() {
+    public java.nio.file.attribute.UserPrincipal getOwner() throws IOException {
       return UserPrincipalConversions.decode(delegate.getOwner());
     }
 
     @Override
-    public void setOwner(java.nio.file.attribute.UserPrincipal owner) {
+    public void setOwner(java.nio.file.attribute.UserPrincipal owner) throws IOException {
       delegate.setOwner(UserPrincipalConversions.encode(owner));
     }
   }

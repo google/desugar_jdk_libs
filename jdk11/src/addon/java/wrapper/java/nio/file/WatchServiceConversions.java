@@ -102,7 +102,7 @@ public final class WatchServiceConversions {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
       delegate.close();
     }
 
@@ -112,12 +112,12 @@ public final class WatchServiceConversions {
     }
 
     @Override
-    public java.nio.file.WatchKey poll(long timeout, TimeUnit unit) {
+    public java.nio.file.WatchKey poll(long timeout, TimeUnit unit) throws InterruptedException {
       return WatchKeyConversions.decode(delegate.poll(timeout, unit));
     }
 
     @Override
-    public java.nio.file.WatchKey take() {
+    public java.nio.file.WatchKey take() throws InterruptedException {
       return WatchKeyConversions.decode(delegate.take());
     }
   }

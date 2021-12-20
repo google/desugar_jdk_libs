@@ -189,18 +189,18 @@ public final class AsynchronousFileChannelConversions {
     }
 
     @Override
-    public long size() {
+    public long size() throws IOException {
       return delegate.size();
     }
 
     @Override
-    public java.nio.channels.AsynchronousFileChannel truncate(long size) {
+    public java.nio.channels.AsynchronousFileChannel truncate(long size) throws IOException {
       delegate.truncate(size);
       return this;
     }
 
     @Override
-    public void force(boolean metaData) {
+    public void force(boolean metaData) throws IOException {
       delegate.force(metaData);
     }
 
@@ -221,7 +221,7 @@ public final class AsynchronousFileChannelConversions {
     }
 
     @Override
-    public FileLock tryLock(long position, long size, boolean shared) {
+    public FileLock tryLock(long position, long size, boolean shared) throws IOException {
       return delegate.tryLock(position, size, shared);
     }
 
@@ -254,7 +254,7 @@ public final class AsynchronousFileChannelConversions {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
       delegate.close();
     }
 

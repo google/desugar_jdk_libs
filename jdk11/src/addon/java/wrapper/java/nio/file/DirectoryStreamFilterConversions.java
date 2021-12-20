@@ -88,7 +88,7 @@ public class DirectoryStreamFilterConversions {
     }
 
     @Override
-    public boolean accept(S entry) {
+    public boolean accept(S entry) throws IOException {
       return delegate.accept(encoder.translate(entry));
     }
   }

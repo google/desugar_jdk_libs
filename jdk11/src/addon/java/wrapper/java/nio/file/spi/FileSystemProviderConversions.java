@@ -451,7 +451,7 @@ public final class FileSystemProviderConversions {
     }
 
     @Override
-    public java.nio.file.FileSystem newFileSystem(URI uri, Map<String, ?> env) {
+    public java.nio.file.FileSystem newFileSystem(URI uri, Map<String, ?> env) throws IOException {
       try {
         return FileSystemConversions.decode(delegate.newFileSystem(uri, env));
       } catch (FileSystemAlreadyExistsException e) {
@@ -470,21 +470,22 @@ public final class FileSystemProviderConversions {
     }
 
     @Override
-    public java.nio.file.FileSystem newFileSystem(java.nio.file.Path path, Map<String, ?> env) {
+    public java.nio.file.FileSystem newFileSystem(java.nio.file.Path path, Map<String, ?> env)
+        throws IOException {
       return FileSystemConversions.decode(
           delegate.newFileSystem(PathConversions.encode(path), env));
     }
 
     @Override
-    public InputStream newInputStream(
-        java.nio.file.Path path, java.nio.file.OpenOption... options) {
+    public InputStream newInputStream(java.nio.file.Path path, java.nio.file.OpenOption... options)
+        throws IOException {
       return delegate.newInputStream(
           PathConversions.encode(path), OpenOptionConversions.encode(options));
     }
 
     @Override
     public OutputStream newOutputStream(
-        java.nio.file.Path path, java.nio.file.OpenOption... options) {
+        java.nio.file.Path path, java.nio.file.OpenOption... options) throws IOException {
       return delegate.newOutputStream(
           PathConversions.encode(path), OpenOptionConversions.encode(options));
     }
@@ -493,7 +494,8 @@ public final class FileSystemProviderConversions {
     public FileChannel newFileChannel(
         java.nio.file.Path path,
         Set<? extends java.nio.file.OpenOption> options,
-        java.nio.file.attribute.FileAttribute<?>... attrs) {
+        java.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       return delegate.newFileChannel(
           PathConversions.encode(path),
           OpenOptionConversions.encode(options),
@@ -505,7 +507,8 @@ public final class FileSystemProviderConversions {
         java.nio.file.Path path,
         Set<? extends java.nio.file.OpenOption> options,
         ExecutorService executor,
-        java.nio.file.attribute.FileAttribute<?>... attrs) {
+        java.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       return AsynchronousFileChannelConversions.decode(
           delegate.newAsynchronousFileChannel(
               PathConversions.encode(path),
@@ -518,7 +521,8 @@ public final class FileSystemProviderConversions {
     public java.nio.channels.SeekableByteChannel newByteChannel(
         java.nio.file.Path path,
         Set<? extends java.nio.file.OpenOption> options,
-        java.nio.file.attribute.FileAttribute<?>... attrs) {
+        java.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       return SeekableByteChannelConversions.decode(
           delegate.newByteChannel(
               PathConversions.encode(path),
@@ -529,7 +533,8 @@ public final class FileSystemProviderConversions {
     @Override
     public java.nio.file.DirectoryStream<java.nio.file.Path> newDirectoryStream(
         java.nio.file.Path dir,
-        java.nio.file.DirectoryStream.Filter<? super java.nio.file.Path> filter) {
+        java.nio.file.DirectoryStream.Filter<? super java.nio.file.Path> filter)
+        throws IOException {
       return DirectoryStreamConversions.decode(
           delegate.newDirectoryStream(
               PathConversions.encode(dir), DirectoryStreamFilterConversions.encode(filter, null)),
@@ -538,7 +543,8 @@ public final class FileSystemProviderConversions {
 
     @Override
     public void createDirectory(
-        java.nio.file.Path dir, java.nio.file.attribute.FileAttribute<?>... attrs) {
+        java.nio.file.Path dir, java.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       delegate.createDirectory(PathConversions.encode(dir), FileAttributeConversions.encode(attrs));
     }
 
@@ -546,7 +552,8 @@ public final class FileSystemProviderConversions {
     public void createSymbolicLink(
         java.nio.file.Path link,
         java.nio.file.Path target,
-        java.nio.file.attribute.FileAttribute<?>... attrs) {
+        java.nio.file.attribute.FileAttribute<?>... attrs)
+        throws IOException {
       delegate.createSymbolicLink(
           PathConversions.encode(link),
           PathConversions.encode(target),
@@ -554,28 +561,34 @@ public final class FileSystemProviderConversions {
     }
 
     @Override
-    public void createLink(java.nio.file.Path link, java.nio.file.Path existing) {
+    public void createLink(java.nio.file.Path link, java.nio.file.Path existing)
+        throws IOException {
       delegate.createLink(PathConversions.encode(link), PathConversions.encode(existing));
     }
 
     @Override
-    public void delete(java.nio.file.Path path) {
-      delegate.delete(PathConversions.encode(path));
+    public void delete(java.nio.file.Path path) throws IOException {
+      try {
+        delegate.delete(PathConversions.encode(path));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
 
     @Override
-    public boolean deleteIfExists(java.nio.file.Path path) {
+    public boolean deleteIfExists(java.nio.file.Path path) throws IOException {
       return delegate.deleteIfExists(PathConversions.encode(path));
     }
 
     @Override
-    public java.nio.file.Path readSymbolicLink(java.nio.file.Path link) {
+    public java.nio.file.Path readSymbolicLink(java.nio.file.Path link) throws IOException {
       return PathConversions.decode(delegate.readSymbolicLink(PathConversions.encode(link)));
     }
 
     @Override
     public void copy(
-        java.nio.file.Path source, java.nio.file.Path target, java.nio.file.CopyOption... options) {
+        java.nio.file.Path source, java.nio.file.Path target, java.nio.file.CopyOption... options)
+        throws IOException {
       delegate.copy(
           PathConversions.encode(source),
           PathConversions.encode(target),
@@ -584,7 +597,8 @@ public final class FileSystemProviderConversions {
 
     @Override
     public void move(
-        java.nio.file.Path source, java.nio.file.Path target, java.nio.file.CopyOption... options) {
+        java.nio.file.Path source, java.nio.file.Path target, java.nio.file.CopyOption... options)
+        throws IOException {
       delegate.move(
           PathConversions.encode(source),
           PathConversions.encode(target),
@@ -592,22 +606,24 @@ public final class FileSystemProviderConversions {
     }
 
     @Override
-    public boolean isSameFile(java.nio.file.Path path, java.nio.file.Path path2) {
+    public boolean isSameFile(java.nio.file.Path path, java.nio.file.Path path2)
+        throws IOException {
       return delegate.isSameFile(PathConversions.encode(path), PathConversions.encode(path2));
     }
 
     @Override
-    public boolean isHidden(java.nio.file.Path path) {
+    public boolean isHidden(java.nio.file.Path path) throws IOException {
       return delegate.isHidden(PathConversions.encode(path));
     }
 
     @Override
-    public java.nio.file.FileStore getFileStore(java.nio.file.Path path) {
+    public java.nio.file.FileStore getFileStore(java.nio.file.Path path) throws IOException {
       return FileStoreConversions.decode(delegate.getFileStore(PathConversions.encode(path)));
     }
 
     @Override
-    public void checkAccess(java.nio.file.Path path, java.nio.file.AccessMode... modes) {
+    public void checkAccess(java.nio.file.Path path, java.nio.file.AccessMode... modes)
+        throws IOException {
       delegate.checkAccess(PathConversions.encode(path), AccessModeConversions.encode(modes));
     }
 
@@ -626,7 +642,8 @@ public final class FileSystemProviderConversions {
 
     @Override
     public <A extends java.nio.file.attribute.BasicFileAttributes> A readAttributes(
-        java.nio.file.Path path, Class<A> type, java.nio.file.LinkOption... options) {
+        java.nio.file.Path path, Class<A> type, java.nio.file.LinkOption... options)
+        throws IOException {
       return BasicFileAttributesConversions.decode(
           delegate.readAttributes(
               PathConversions.encode(path),
@@ -637,7 +654,8 @@ public final class FileSystemProviderConversions {
 
     @Override
     public Map<String, Object> readAttributes(
-        java.nio.file.Path path, String attributes, java.nio.file.LinkOption... options) {
+        java.nio.file.Path path, String attributes, java.nio.file.LinkOption... options)
+        throws IOException {
       return JavaNioCentralConversions.decodeMapValue(
           delegate.readAttributes(
               PathConversions.encode(path), attributes, LinkOptionConversions.encode(options)));
@@ -648,7 +666,8 @@ public final class FileSystemProviderConversions {
         java.nio.file.Path path,
         String attribute,
         Object value,
-        java.nio.file.LinkOption... options) {
+        java.nio.file.LinkOption... options)
+        throws IOException {
       delegate.setAttribute(
           PathConversions.encode(path),
           attribute,

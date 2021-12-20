@@ -137,32 +137,32 @@ public final class SeekableByteChannelConversions {
     }
 
     @Override
-    public int read(ByteBuffer dst) {
+    public int read(ByteBuffer dst) throws IOException {
       return delegate.read(dst);
     }
 
     @Override
-    public int write(ByteBuffer src) {
+    public int write(ByteBuffer src) throws IOException {
       return delegate.write(src);
     }
 
     @Override
-    public long position() {
+    public long position() throws IOException {
       return delegate.position();
     }
 
     @Override
-    public java.nio.channels.SeekableByteChannel position(long newPosition) {
+    public java.nio.channels.SeekableByteChannel position(long newPosition) throws IOException {
       return decode(delegate.position(newPosition));
     }
 
     @Override
-    public long size() {
+    public long size() throws IOException {
       return delegate.size();
     }
 
     @Override
-    public java.nio.channels.SeekableByteChannel truncate(long size) {
+    public java.nio.channels.SeekableByteChannel truncate(long size) throws IOException {
       return decode(delegate.truncate(size));
     }
 

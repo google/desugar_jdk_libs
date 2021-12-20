@@ -196,7 +196,7 @@ public final class FileSystemConversions {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
       delegate.close();
     }
 
@@ -281,7 +281,7 @@ public final class FileSystemConversions {
     }
 
     @Override
-    public java.nio.file.WatchService newWatchService() {
+    public java.nio.file.WatchService newWatchService() throws IOException {
       return WatchServiceConversions.decode(delegate.newWatchService());
     }
   }

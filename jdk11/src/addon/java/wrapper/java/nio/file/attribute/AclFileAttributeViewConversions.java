@@ -103,12 +103,12 @@ public final class AclFileAttributeViewConversions {
     }
 
     @Override
-    public List<java.nio.file.attribute.AclEntry> getAcl() {
+    public List<java.nio.file.attribute.AclEntry> getAcl() throws IOException {
       return AclEntryConversions.decode(delegate.getAcl());
     }
 
     @Override
-    public void setAcl(List<java.nio.file.attribute.AclEntry> acl) {
+    public void setAcl(List<java.nio.file.attribute.AclEntry> acl) throws IOException {
       delegate.setAcl(AclEntryConversions.encode(acl));
     }
   }
