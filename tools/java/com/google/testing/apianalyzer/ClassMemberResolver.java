@@ -35,7 +35,8 @@ public final class ClassMemberResolver {
             className, HeadlessClassMemberKey.create(method.getName(), method.getDesc()));
       }
     }
-    return new ClassMemberResolver(typePool.build(), superTypeMap.build(), classMemberMap.build());
+    return new ClassMemberResolver(
+        typePool.buildOrThrow(), superTypeMap.build(), classMemberMap.build());
   }
 
   private ClassMemberResolver(
