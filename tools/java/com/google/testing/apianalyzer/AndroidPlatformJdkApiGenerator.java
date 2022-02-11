@@ -11,6 +11,11 @@ import java.nio.file.Paths;
 /** Generates a text-format proto-based representation of DJK types in the given android.jar. */
 public final class AndroidPlatformJdkApiGenerator {
 
+  private static final String TEXT_PROTO_HEADER =
+      "# proto-file:"
+          + " third_party/java_src/desugar_jdk_libs/tools/java/com/google/testing/apianalyzer/class_digest.proto\n"
+          + "# proto-message: testing.apianalyzer.ClassDigestCollection\n";
+
   private static final ImmutableSet<String> JDK_TYPE_PREFIXES =
       ImmutableSet.of("com/sun/", "java/", "javax/", "jdk/", "sun/", "j$/");
 
@@ -25,7 +30,7 @@ public final class AndroidPlatformJdkApiGenerator {
     ClassDigestGenerator digestGenerator =
         new ClassDigestGenerator(classDigest -> isJdkType(classDigest.getName()));
     ClassDigestCollection digestCollection = digestGenerator.read(inPath);
-    String digestText = ClassDigestGenerator.prettyTextFormat(digestCollection);
+    String digestText = TEXT_PROTO_HEADER + ClassDigestGenerator.prettyTextFormat(digestCollection);
     Files.write(outPath, digestText.getBytes(UTF_8));
   }
 
