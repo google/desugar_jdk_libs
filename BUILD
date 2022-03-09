@@ -31,15 +31,15 @@ genrule(
     name = "maven_release_jdk11",
     srcs = [
         ":desugar_jdk_libs_jdk11",
-        "VERSION.txt",
-        "DEPENDENCIES.txt",
+        "VERSION_JDK11.txt",
+        "DEPENDENCIES_JDK11.txt",
     ],
     outs = ["desugar_jdk_libs_jdk11.zip"],
     cmd = "$(location :build_maven_artifact)" +
           " --jar $(location :desugar_jdk_libs_jdk11)" +
           " --artifact_id desugar_jdk_libs" +
-          " --version_file $(location VERSION.txt)" +
-          " --dependencies_file $(location DEPENDENCIES.txt)" +
+          " --version_file $(location VERSION_JDK11.txt)" +
+          " --dependencies_file $(location DEPENDENCIES_JDK11.txt)" +
           " --out $@",
     exec_tools = [":build_maven_artifact"],
 )

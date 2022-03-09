@@ -98,7 +98,12 @@ def determine_version(options):
     print('More than one line in version file ' + options.version_file)
     exit(1)
   version = lines[0].strip()
-  reg = re.compile('^([0-9]+)\\.([0-9]+)\\.([0-9]+)$')
+  # This is not fully complient with what is suggested on
+  # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string.
+  reg = re.compile(
+      '^([0-9]+)\\.([0-9]+)\\.([0-9]+)'
+      + r'(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)'
+      + r'(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?$')
   if not reg.match(version):
     print('Invalid version \''
           + version
