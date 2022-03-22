@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.2.0-alpha01 *(2022-03-22)*
+------------------------------------
+
+* Release based on JDK-11. Will require Android Studio Dolphin (AGP
+  version 7.3.0-alpha07 or later).
+
 Version 1.1.5 *(2021-02-24)*
 -----------------------------
 
