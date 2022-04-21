@@ -76,6 +76,7 @@ public final class JarFileClassEntrySelector {
     "java/nio/channels/AsynchronousChannel",
     "java/nio/channels/AsynchronousFileChannel",
     "java/nio/channels/CompletionHandler",
+    "java/nio/channels/FileChannel",
     "java/nio/channels/SeekableByteChannel",
     "java/nio/charset/*",
     "java/nio/file/*",
