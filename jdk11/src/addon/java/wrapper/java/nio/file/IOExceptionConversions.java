@@ -20,6 +20,7 @@
 
 package wrapper.java.nio.file;
 
+import android.os.Build.VERSION;
 import j$.io.UncheckedIOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -50,6 +51,11 @@ public final class IOExceptionConversions {
     if (e == null) {
       return null;
     }
+
+    if (VERSION.SDK_INT < 26) {
+      return e;
+    }
+
     if (e instanceof AccessDeniedException) {
       return AccessDeniedExceptionConversions.encode((java.nio.file.AccessDeniedException) e);
     }
