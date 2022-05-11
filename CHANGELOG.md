@@ -1,11 +1,15 @@
 Change Log
 ==========
 
-Version 1.2.0-alpha01 *(2022-03-22)*
+Version 1.2.0 *(2022-05-12)*
 ------------------------------------
 
-* Release based on JDK-11. Will require Android Studio Dolphin (AGP
-  version 7.3.0-alpha07 or later).
+* Release based on JDK-11. Will require AGP version 7.3.0-beta02 or later
+  (Android Studio Dolphin).
+* support for all `java.util` methods added in API level 31 (classes
+  `java.util.Duration` and `java.util.LocalTime`).
+* Support for all  methods on `java.util.concurrent.ConcurrentHashMap`.
+* Added class `java.util.concurrent.Flow`.
 
 Version 1.1.5 *(2021-02-24)*
 -----------------------------
@@ -46,7 +50,7 @@ Version 1.1.0 *(2020-11-02)*
   ([issue 167649682](https://issuetracker.google.com/167649682)).
   This also requires D8 version 2.1.70.
 * Updated the Lint configuration to not include methods which are not
-  implemented by the defugared library implementation. This was mainly methods
+  implemented by the desugared library implementation. This was mainly methods
   on `ConcurrentHashMap`.
 
 Version 1.0.11 *(2020-07-29)*
