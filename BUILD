@@ -28,6 +28,40 @@ genrule(
 )
 
 genrule(
+    name = "maven_release_jdk11_legacy",
+    srcs = [
+        ":desugar_jdk_libs_jdk11",
+        "VERSION_JDK11_LEGACY.txt",
+        "DEPENDENCIES_JDK11_LEGACY.txt",
+    ],
+    outs = ["desugar_jdk_libs_jdk11.zip"],
+    cmd = "$(location :build_maven_artifact)" +
+          " --jar $(location :desugar_jdk_libs_jdk11)" +
+          " --artifact_id desugar_jdk_libs" +
+          " --version_file $(location VERSION_JDK11_LEGACY.txt)" +
+          " --dependencies_file $(location DEPENDENCIES_JDK11_LEGACY.txt)" +
+          " --out $@",
+    exec_tools = [":build_maven_artifact"],
+)
+
+genrule(
+    name = "maven_release_jdk11_minimal",
+    srcs = [
+        ":desugar_jdk_libs_jdk11",
+        "VERSION_JDK11_MINIMAL.txt",
+        "DEPENDENCIES_JDK11_MINIMAL.txt",
+    ],
+    outs = ["desugar_jdk_libs_jdk11.zip"],
+    cmd = "$(location :build_maven_artifact)" +
+          " --jar $(location :desugar_jdk_libs_jdk11)" +
+          " --artifact_id desugar_jdk_libs_minimal" +
+          " --version_file $(location VERSION_JDK11_MINIMAL.txt)" +
+          " --dependencies_file $(location DEPENDENCIES_JDK11_MINIMAL.txt)" +
+          " --out $@",
+    exec_tools = [":build_maven_artifact"],
+)
+
+genrule(
     name = "maven_release_jdk11",
     srcs = [
         ":desugar_jdk_libs_jdk11",
@@ -40,6 +74,23 @@ genrule(
           " --artifact_id desugar_jdk_libs" +
           " --version_file $(location VERSION_JDK11.txt)" +
           " --dependencies_file $(location DEPENDENCIES_JDK11.txt)" +
+          " --out $@",
+    exec_tools = [":build_maven_artifact"],
+)
+
+genrule(
+    name = "maven_release_jdk11_nio",
+    srcs = [
+        ":desugar_jdk_libs_jdk11",
+        "VERSION_JDK11_NIO.txt",
+        "DEPENDENCIES_JDK11_NIO.txt",
+    ],
+    outs = ["desugar_jdk_libs_jdk11.zip"],
+    cmd = "$(location :build_maven_artifact)" +
+          " --jar $(location :desugar_jdk_libs_jdk11)" +
+          " --artifact_id desugar_jdk_libs_nio" +
+          " --version_file $(location VERSION_JDK11_NIO.txt)" +
+          " --dependencies_file $(location DEPENDENCIES_JDK11_NIO.txt)" +
           " --out $@",
     exec_tools = [":build_maven_artifact"],
 )
