@@ -34,7 +34,7 @@ genrule(
         "VERSION_JDK11_LEGACY.txt",
         "DEPENDENCIES_JDK11_LEGACY.txt",
     ],
-    outs = ["desugar_jdk_libs_jdk11.zip"],
+    outs = ["desugar_jdk_libs_jdk11_legacy.zip"],
     cmd = "$(location :build_maven_artifact)" +
           " --jar $(location :desugar_jdk_libs_jdk11)" +
           " --artifact_id desugar_jdk_libs" +
@@ -51,7 +51,7 @@ genrule(
         "VERSION_JDK11_MINIMAL.txt",
         "DEPENDENCIES_JDK11_MINIMAL.txt",
     ],
-    outs = ["desugar_jdk_libs_jdk11.zip"],
+    outs = ["desugar_jdk_libs_jdk11_minimal.zip"],
     cmd = "$(location :build_maven_artifact)" +
           " --jar $(location :desugar_jdk_libs_jdk11)" +
           " --artifact_id desugar_jdk_libs_minimal" +
@@ -85,7 +85,7 @@ genrule(
         "VERSION_JDK11_NIO.txt",
         "DEPENDENCIES_JDK11_NIO.txt",
     ],
-    outs = ["desugar_jdk_libs_jdk11.zip"],
+    outs = ["desugar_jdk_libs_jdk11_nio.zip"],
     cmd = "$(location :build_maven_artifact)" +
           " --jar $(location :desugar_jdk_libs_jdk11)" +
           " --artifact_id desugar_jdk_libs_nio" +
