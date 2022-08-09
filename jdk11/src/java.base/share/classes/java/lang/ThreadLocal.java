@@ -24,6 +24,7 @@
  */
 
 package java.lang;
+import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import jdk.internal.misc.TerminatingThreadLocal;
 
 import java.lang.ref.*;
@@ -139,6 +140,7 @@ public class ThreadLocal<T> {
      * @throws NullPointerException if the specified supplier is null
      * @since 1.8
      */
+    @DesugarSupportedApi
     public static <S> ThreadLocal<S> withInitial(Supplier<? extends S> supplier) {
         return new SuppliedThreadLocal<>(supplier);
     }
