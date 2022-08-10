@@ -21,7 +21,6 @@
 package wrapper.java.nio.file;
 
 import android.os.Build.VERSION;
-import j$.io.UncheckedIOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.DirectoryNotEmptyException;
@@ -34,10 +33,6 @@ import java.nio.file.NotLinkException;
 
 /** Converts between {@link java.io.IOException} derived types. */
 public final class IOExceptionConversions {
-
-  public static UncheckedIOException decodeUnchecked(java.io.IOException e) {
-    return new UncheckedIOException(encode(e));
-  }
 
   public static java.io.IOException encodeChecked(java.io.IOException e) {
     return encode(e);
