@@ -24,7 +24,7 @@
  */
 package jdk.internal.module;
 
-import sun.nio.cs.UTF_8;
+import java.nio.charset.StandardCharsets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -91,7 +91,7 @@ public class IllegalAccessMaps {
             throw new InternalError(rn + " not found");
         }
         try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(in, UTF_8.INSTANCE)))
+                new InputStreamReader(in, StandardCharsets.UTF_8)))
         {
             br.lines()
                 .filter(line -> !line.isEmpty() && !line.startsWith("#"))

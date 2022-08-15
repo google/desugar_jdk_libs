@@ -25,11 +25,10 @@
 package jdk.internal.perf;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.Permission;
 import java.security.PrivilegedAction;
 import java.io.IOException;
-
-import sun.nio.cs.UTF_8;
 
 import jdk.internal.ref.CleanerFactory;
 
@@ -415,7 +414,7 @@ public final class Perf {
     public ByteBuffer createString(String name, int variability,
                                    int units, String value, int maxLength)
     {
-        byte[] v = value.getBytes(UTF_8.INSTANCE);
+        byte[] v = value.getBytes(StandardCharsets.UTF_8);
         byte[] v1 = new byte[v.length+1];
         System.arraycopy(v, 0, v1, 0, v.length);
         v1[v.length] = '\0';
@@ -454,7 +453,7 @@ public final class Perf {
     public ByteBuffer createString(String name, int variability,
                                    int units, String value)
     {
-        byte[] v = value.getBytes(UTF_8.INSTANCE);
+        byte[] v = value.getBytes(StandardCharsets.UTF_8);
         byte[] v1 = new byte[v.length+1];
         System.arraycopy(v, 0, v1, 0, v.length);
         v1[v.length] = '\0';

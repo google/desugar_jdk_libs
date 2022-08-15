@@ -39,6 +39,7 @@ import java.lang.module.ModuleDescriptor.Builder;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -60,8 +61,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-
-import sun.nio.cs.UTF_8;
 
 import jdk.internal.jmod.JmodFile;
 import jdk.internal.jmod.JmodFile.Section;
@@ -545,7 +544,7 @@ public class ModulePath implements ModuleFinder {
             List<String> providerClasses = new ArrayList<>();
             try (InputStream in = jf.getInputStream(entry)) {
                 BufferedReader reader
-                    = new BufferedReader(new InputStreamReader(in, UTF_8.INSTANCE));
+                    = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
                 String cn;
                 while ((cn = nextLine(reader)) != null) {
                     if (!cn.isEmpty()) {

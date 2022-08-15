@@ -33,7 +33,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CodingErrorAction;
 
-import sun.nio.cs.UTF_8;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Utility class for zipfile name and comment decoding and encoding
@@ -67,10 +67,10 @@ class ZipCoder {
     }
 
     // UTF_8.ArrayEn/Decoder is stateless, so make it singleton.
-    private static ZipCoder utf8 = new UTF8(UTF_8.INSTANCE);
+    private static ZipCoder utf8 = new UTF8(StandardCharsets.UTF_8);
 
     public static ZipCoder get(Charset charset) {
-        if (charset == UTF_8.INSTANCE)
+        if (charset == StandardCharsets.UTF_8)
             return utf8;
         return new ZipCoder(charset);
     }

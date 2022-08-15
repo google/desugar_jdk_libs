@@ -37,6 +37,7 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.MalformedInputException;
+import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnmappableCharacterException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
@@ -70,7 +71,7 @@ class StringCoding {
 
     private static final Charset ISO_8859_1 = sun.nio.cs.ISO_8859_1.INSTANCE;
     private static final Charset US_ASCII = sun.nio.cs.US_ASCII.INSTANCE;
-    private static final Charset UTF_8 = sun.nio.cs.UTF_8.INSTANCE;
+    private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     private static <T> T deref(ThreadLocal<SoftReference<T>> tl) {
         SoftReference<T> sr = tl.get();

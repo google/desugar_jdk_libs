@@ -76,7 +76,6 @@ import java.util.Spliterators;
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import sun.nio.cs.UTF_8;
 import sun.nio.fs.AbstractFileSystemProvider;
 
 /**
@@ -2872,7 +2871,7 @@ public final class Files {
      * @since 1.8
      */
     public static BufferedReader newBufferedReader(Path path) throws IOException {
-        return newBufferedReader(path, UTF_8.INSTANCE);
+        return newBufferedReader(path, StandardCharsets.UTF_8);
     }
 
     /**
@@ -2964,7 +2963,7 @@ public final class Files {
     public static BufferedWriter newBufferedWriter(Path path, OpenOption... options)
         throws IOException
     {
-        return newBufferedWriter(path, UTF_8.INSTANCE, options);
+        return newBufferedWriter(path, StandardCharsets.UTF_8, options);
     }
 
     /**
@@ -3246,7 +3245,7 @@ public final class Files {
      * @since 11
      */
     public static String readString(Path path) throws IOException {
-        return readString(path, UTF_8.INSTANCE);
+        return readString(path, StandardCharsets.UTF_8);
     }
 
     /**
@@ -3377,7 +3376,7 @@ public final class Files {
      * @since 1.8
      */
     public static List<String> readAllLines(Path path) throws IOException {
-        return readAllLines(path, UTF_8.INSTANCE);
+        return readAllLines(path, StandardCharsets.UTF_8);
     }
 
     /**
@@ -3548,7 +3547,7 @@ public final class Files {
                              OpenOption... options)
         throws IOException
     {
-        return write(path, lines, UTF_8.INSTANCE, options);
+        return write(path, lines, StandardCharsets.UTF_8, options);
     }
 
     /**
@@ -3588,7 +3587,7 @@ public final class Files {
     public static Path writeString(Path path, CharSequence csq, OpenOption... options)
             throws IOException
     {
-        return writeString(path, csq, UTF_8.INSTANCE, options);
+        return writeString(path, csq, StandardCharsets.UTF_8, options);
     }
 
     /**

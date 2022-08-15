@@ -25,7 +25,7 @@
 
 package jdk.internal.util.jar;
 
-import sun.nio.cs.UTF_8;
+import java.nio.charset.StandardCharsets;
 
 import java.io.*;
 import java.util.*;
@@ -253,7 +253,7 @@ public class JarIndex {
      */
     public void write(OutputStream out) throws IOException {
         BufferedWriter bw = new BufferedWriter
-            (new OutputStreamWriter(out, UTF_8.INSTANCE));
+            (new OutputStreamWriter(out, StandardCharsets.UTF_8));
         bw.write("JarIndex-Version: 1.0\n\n");
 
         if (jarFiles != null) {
@@ -283,7 +283,7 @@ public class JarIndex {
      */
     public void read(InputStream is) throws IOException {
         BufferedReader br = new BufferedReader
-            (new InputStreamReader(is, UTF_8.INSTANCE));
+            (new InputStreamReader(is, StandardCharsets.UTF_8));
         String line = null;
         String currentJar = null;
 

@@ -36,11 +36,11 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.CharacterCodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import jdk.internal.misc.JavaNetUriAccess;
 import jdk.internal.misc.SharedSecrets;
 import sun.nio.cs.ThreadLocalCoders;
-import sun.nio.cs.UTF_8;
 
 import java.lang.Character;             // for javadoc
 import java.lang.NullPointerException;  // for javadoc
@@ -2714,7 +2714,7 @@ public final class URI
     private static void appendEncoded(StringBuilder sb, char c) {
         ByteBuffer bb = null;
         try {
-            bb = ThreadLocalCoders.encoderFor(UTF_8.INSTANCE)
+            bb = ThreadLocalCoders.encoderFor(StandardCharsets.UTF_8)
                 .encode(CharBuffer.wrap("" + c));
         } catch (CharacterCodingException x) {
             assert false;
@@ -2782,7 +2782,7 @@ public final class URI
         String ns = Normalizer.normalize(s, Normalizer.Form.NFC);
         ByteBuffer bb = null;
         try {
-            bb = ThreadLocalCoders.encoderFor(UTF_8.INSTANCE)
+            bb = ThreadLocalCoders.encoderFor(StandardCharsets.UTF_8)
                 .encode(CharBuffer.wrap(ns));
         } catch (CharacterCodingException x) {
             assert false;
@@ -2840,7 +2840,7 @@ public final class URI
         StringBuilder sb = new StringBuilder(n);
         ByteBuffer bb = ByteBuffer.allocate(n);
         CharBuffer cb = CharBuffer.allocate(n);
-        CharsetDecoder dec = ThreadLocalCoders.decoderFor(UTF_8.INSTANCE)
+        CharsetDecoder dec = ThreadLocalCoders.decoderFor(StandardCharsets.UTF_8)
                 .onMalformedInput(CodingErrorAction.REPLACE)
                 .onUnmappableCharacter(CodingErrorAction.REPLACE);
 
