@@ -1251,7 +1251,7 @@ public class StandardCharsets extends CharsetProvider {
         Map<String,Charset> map = cache;
         if (map == null) {
             map = new Cache();
-            map.put("utf-8", java.nio.charset.StandardCharsets.UTF_8);
+            map.put("utf-8", UTF_8.INSTANCE);
             map.put("iso-8859-1", ISO_8859_1.INSTANCE);
             map.put("us-ascii", US_ASCII.INSTANCE);
             map.put("utf-16", java.nio.charset.StandardCharsets.UTF_16);
@@ -1298,7 +1298,7 @@ public class StandardCharsets extends CharsetProvider {
         // may delay initialization of performance critical VM subsystems.
         String csn;
         if (charsetName.equals("UTF-8")) {
-            return java.nio.charset.StandardCharsets.UTF_8;
+            return UTF_8.INSTANCE;
         } else if (charsetName.equals("US-ASCII")) {
             return US_ASCII.INSTANCE;
         } else if (charsetName.equals("ISO-8859-1")) {

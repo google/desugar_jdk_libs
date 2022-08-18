@@ -25,7 +25,7 @@
 
 package com.sun.java.util.jar.pack;
 
-import java.nio.charset.StandardCharsets;
+import sun.nio.cs.UTF_8;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -445,7 +445,7 @@ class Driver {
                     // Skip sig4, disks4, entries4, clen4, coff4, cmt2
                     i += 4+4+4+4+4+2;
                     if (i < tail.length)
-                        return new String(tail, i, tail.length-i, StandardCharsets.UTF_8);
+                        return new String(tail, i, tail.length-i, UTF_8.INSTANCE);
                     return "";
                 }
             }

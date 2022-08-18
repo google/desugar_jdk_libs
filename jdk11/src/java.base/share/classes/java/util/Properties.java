@@ -40,7 +40,6 @@ import java.io.StreamCorruptedException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -51,6 +50,7 @@ import jdk.internal.misc.SharedSecrets;
 import jdk.internal.misc.Unsafe;
 import jdk.internal.util.xml.PropertiesDefaultHandler;
 
+import sun.nio.cs.UTF_8;
 import sun.nio.cs.ISO_8859_1;
 
 /**
@@ -1010,7 +1010,7 @@ class Properties extends Hashtable<Object,Object> {
     public void storeToXML(OutputStream os, String comment)
         throws IOException
     {
-        storeToXML(os, comment, StandardCharsets.UTF_8);
+        storeToXML(os, comment, UTF_8.INSTANCE);
     }
 
     /**

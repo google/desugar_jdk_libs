@@ -37,8 +37,8 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
-import java.nio.charset.StandardCharsets;
 import sun.nio.cs.ThreadLocalCoders;
+import sun.nio.cs.UTF_8;
 
 /**
  * A class that contains useful routines common to sun.net.www
@@ -177,7 +177,7 @@ public final class ParseUtil {
         StringBuilder sb = new StringBuilder(n);
         ByteBuffer bb = ByteBuffer.allocate(n);
         CharBuffer cb = CharBuffer.allocate(n);
-        CharsetDecoder dec = ThreadLocalCoders.decoderFor(StandardCharsets.UTF_8)
+        CharsetDecoder dec = ThreadLocalCoders.decoderFor(UTF_8.INSTANCE)
             .onMalformedInput(CodingErrorAction.REPORT)
             .onUnmappableCharacter(CodingErrorAction.REPORT);
 
@@ -497,7 +497,7 @@ public final class ParseUtil {
     private static void appendEncoded(StringBuffer sb, char c) {
         ByteBuffer bb = null;
         try {
-            bb = ThreadLocalCoders.encoderFor(StandardCharsets.UTF_8)
+            bb = ThreadLocalCoders.encoderFor(UTF_8.INSTANCE)
                 .encode(CharBuffer.wrap("" + c));
         } catch (CharacterCodingException x) {
             assert false;

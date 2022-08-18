@@ -25,7 +25,6 @@
 
 package java.net;
 
-import java.nio.charset.StandardCharsets;
 import java.util.NavigableSet;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -51,6 +50,7 @@ import jdk.internal.misc.SharedSecrets;
 import sun.security.action.*;
 import sun.net.InetAddressCachePolicy;
 import sun.net.util.IPAddressUtil;
+import sun.nio.cs.UTF_8;
 
 /**
  * This class represents an Internet Protocol (IP) address.
@@ -991,7 +991,7 @@ class InetAddress implements java.io.Serializable {
 
             String addrString = addrToString(addr);
             try (Scanner hostsFileScanner = new Scanner(new File(hostsFile),
-                StandardCharsets.UTF_8))
+                                                        UTF_8.INSTANCE))
             {
                 while (hostsFileScanner.hasNextLine()) {
                     hostEntry = hostsFileScanner.nextLine();
@@ -1042,7 +1042,7 @@ class InetAddress implements java.io.Serializable {
 
             // lookup the file and create a list InetAddress for the specfied host
             try (Scanner hostsFileScanner = new Scanner(new File(hostsFile),
-                StandardCharsets.UTF_8))
+                                                        UTF_8.INSTANCE))
             {
                 while (hostsFileScanner.hasNextLine()) {
                     hostEntry = hostsFileScanner.nextLine();

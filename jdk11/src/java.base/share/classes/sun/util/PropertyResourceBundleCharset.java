@@ -73,7 +73,7 @@ public class PropertyResourceBundleCharset extends Charset {
 
     private final class PropertiesFileDecoder extends CharsetDecoder {
 
-        private CharsetDecoder cdUTF_8 = ((UTF_8) StandardCharsets.UTF_8).newDecoder()
+        private CharsetDecoder cdUTF_8 = UTF_8.INSTANCE.newDecoder()
                                 .onMalformedInput(CodingErrorAction.REPORT)
                                 .onUnmappableCharacter(CodingErrorAction.REPORT);
         private CharsetDecoder cdISO_8859_1 = null;

@@ -35,7 +35,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -45,6 +44,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import sun.nio.cs.UTF_8;
 
 import jdk.internal.loader.BootLoader;
 import jdk.internal.loader.ClassLoaders;
@@ -1163,7 +1164,7 @@ public final class ServiceLoader<S>
                 uc.setUseCaches(false);
                 try (InputStream in = uc.getInputStream();
                      BufferedReader r
-                         = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)))
+                         = new BufferedReader(new InputStreamReader(in, UTF_8.INSTANCE)))
                 {
                     int lc = 1;
                     while ((lc = parseLine(u, r, lc, names)) >= 0);

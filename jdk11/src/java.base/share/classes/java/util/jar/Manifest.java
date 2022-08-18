@@ -30,9 +30,10 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.HashMap;
+
+import sun.nio.cs.UTF_8;
 
 /**
  * The Manifest class is used to maintain Manifest entry names and their
@@ -188,7 +189,7 @@ public class Manifest implements Cloneable {
             StringBuffer buffer = new StringBuffer("Name: ");
             String value = e.getKey();
             if (value != null) {
-                byte[] vb = value.getBytes(StandardCharsets.UTF_8);
+                byte[] vb = value.getBytes(UTF_8.INSTANCE);
                 value = new String(vb, 0, 0, vb.length);
             }
             buffer.append(value);
@@ -273,7 +274,7 @@ public class Manifest implements Cloneable {
                     lastline = buf;
                     continue;
                 }
-                name = new String(buf, 0, buf.length, StandardCharsets.UTF_8);
+                name = new String(buf, 0, buf.length, UTF_8.INSTANCE);
                 lastline = null;
             }
             Attributes attr = getAttributes(name);
@@ -298,7 +299,7 @@ public class Manifest implements Cloneable {
         if (toLower(lbuf[0]) == 'n' && toLower(lbuf[1]) == 'a' &&
             toLower(lbuf[2]) == 'm' && toLower(lbuf[3]) == 'e' &&
             lbuf[4] == ':' && lbuf[5] == ' ') {
-            return new String(lbuf, 6, len - 6, StandardCharsets.UTF_8);
+            return new String(lbuf, 6, len - 6, UTF_8.INSTANCE);
         }
         return null;
     }
