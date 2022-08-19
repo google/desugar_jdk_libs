@@ -1,15 +1,35 @@
 Change Log
 ==========
 
-Version 1.2.0 *(2022-06-21)*
-------------------------------------
+Version 1.2.2 *(2022-08-19)*
+----------------------------
 
-* Release based on JDK-11. Will require AGP version 7.3.0-beta03 or later
-  (Android Studio Dolphin).
+* Add support for API level 33.
+
+Version 1.2.1 *(2022-07-08)*
+-----------------------------
+
+* Update to cover all APIs up to API level 32 (API level 33 still unsupported).
+
+Version 1.2.0 *(2022-06-21)*
+----------------------------
+
+* Release based on JDK-11. Require AGP version 7.3.0-beta03 or later
+  (Android Studio 2021.3.1).
 * support for all `java.util` methods added in API level 31 (classes
   `java.util.Duration` and `java.util.LocalTime`).
 * Support for all  methods on `java.util.concurrent.ConcurrentHashMap`.
 * Added class `java.util.concurrent.Flow`.
+
+Version 1.1.8 *(2022-08-19)*
+-----------------------------
+
+Same as in version _1.2.2_ above.
+
+Version 1.1.7 *(2022-07-08)*
+-----------------------------
+
+Same as in version _1.2.1_ above.
 
 Version 1.1.6 *(2022-06-21)*
 -----------------------------
