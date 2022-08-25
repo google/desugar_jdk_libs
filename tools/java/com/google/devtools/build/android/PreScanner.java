@@ -189,7 +189,6 @@ public final class PreScanner {
 
     // TODO(b/207007439): Move to full_desugar_jdk_libs.json configuration
     // once the proper Android SDK levels have been accessed.
-    typeReplacements.put("jdk/internal/misc/Unsafe", "sun/misc/DesugarUnsafe");
     typeReplacements.put(
         "sun/nio/fs/DefaultFileSystemProvider", "wrapper/adapter/HybridFileSystemProvider");
     typeReplacements.put(
