@@ -186,13 +186,6 @@ public final class PreScanner {
             AsmHelpers.getReplacementTypeInternalName(anonymousClassInternalName));
       }
     }
-
-    // TODO(b/207007439): Move to full_desugar_jdk_libs.json configuration
-    // once the proper Android SDK levels have been accessed.
-    typeReplacements.put(
-        "sun/nio/fs/DefaultFileSystemProvider", "wrapper/adapter/HybridFileSystemProvider");
-    typeReplacements.put(
-        "sun/nio/fs/DefaultFileTypeDetector", "wrapper/adapter/HybridFileTypeDetector");
   }
 
   @Nullable
