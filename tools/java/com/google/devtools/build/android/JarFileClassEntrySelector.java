@@ -115,6 +115,7 @@ public final class JarFileClassEntrySelector {
     "java/util/concurrent/ConcurrentHashMap",
     "java/util/concurrent/ConcurrentMap",
     "java/util/concurrent/ConcurrentNavigableMap",
+    "java/util/concurrent/Desugar*",
     "java/util/concurrent/Flow",
     "java/util/concurrent/Helpers",
     "java/util/concurrent/ThreadLocalRandom",
