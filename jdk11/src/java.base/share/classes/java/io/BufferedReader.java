@@ -28,7 +28,6 @@ package java.io;
 
 import com.google.devtools.build.android.annotations.DesugarSupportedApi;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -564,35 +563,10 @@ public class BufferedReader extends Reader {
      */
     @DesugarSupportedApi
     public Stream<String> lines() {
-        Iterator<String> iter = new Iterator<>() {
-            String nextLine = null;
-
-            @Override
-            public boolean hasNext() {
-                if (nextLine != null) {
-                    return true;
-                } else {
-                    try {
-                        nextLine = readLine();
-                        return (nextLine != null);
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
-                }
-            }
-
-            @Override
-            public String next() {
-                if (nextLine != null || hasNext()) {
-                    String line = nextLine;
-                    nextLine = null;
-                    return line;
-                } else {
-                    throw new NoSuchElementException();
-                }
-            }
-        };
+    Iterator<String> iter = new DesugarBufferedReaderLinesIterator(this);
+        // For desugar: Avoid the complexity of the retargeting of an inner class.
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
                 iter, Spliterator.ORDERED | Spliterator.NONNULL), false);
     }
+
 }
