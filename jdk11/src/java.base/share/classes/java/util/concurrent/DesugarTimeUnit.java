@@ -35,6 +35,7 @@
 
 package java.util.concurrent;
 
+import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -72,6 +73,15 @@ import java.util.Objects;
  * @author Doug Lea
  */
 public class DesugarTimeUnit {
+
+  // Scales as constants
+  private static final long NANO_SCALE = 1L;
+  private static final long MICRO_SCALE = 1000L * NANO_SCALE;
+  private static final long MILLI_SCALE = 1000L * MICRO_SCALE;
+  private static final long SECOND_SCALE = 1000L * MILLI_SCALE;
+  private static final long MINUTE_SCALE = 60L * SECOND_SCALE;
+  private static final long HOUR_SCALE = 60L * MINUTE_SCALE;
+  private static final long DAY_SCALE = 24L * HOUR_SCALE;
 
     private DesugarTimeUnit() {}
 
@@ -118,4 +128,24 @@ public class DesugarTimeUnit {
                 "No TimeUnit equivalent for " + chronoUnit);
         }
     }
+
+  /**
+   * Converts the given time duration to this unit.
+   *
+   * <p>For any TimeUnit {@code unit}, {@code unit.convert(Duration.ofNanos(n))} is equivalent to
+   * {@code unit.convert(n, NANOSECONDS)}, and {@code unit.convert(Duration.of(n,
+   * unit.toChronoUnit()))} is equivalent to {@code n} (in the absence of overflow).
+   *
+   * @apiNote This method differs from {@link Duration#toNanos()} in that it does not throw {@link
+   *     ArithmeticException} on numeric overflow.
+   * @param duration the time duration
+   * @return the converted duration in this unit, or {@code Long.MIN_VALUE} if conversion would
+   *     negatively overflow, or {@code Long.MAX_VALUE} if it would positively overflow.
+   * @throws NullPointerException if {@code duration} is null
+   * @see Duration#of(long,TemporalUnit)
+   * @since 11
+   */
+  public static long convert(TimeUnit timeUnit, Duration duration) {
+    return timeUnit.convert(duration.toNanos(), TimeUnit.NANOSECONDS);
+  }
 }
