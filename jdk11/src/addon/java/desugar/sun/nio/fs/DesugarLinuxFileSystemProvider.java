@@ -157,16 +157,6 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
   }
 
   @Override
-  public InputStream newInputStream(Path path, OpenOption... options) throws IOException {
-    return new FileInputStream(path.toFile());
-  }
-
-  @Override
-  public OutputStream newOutputStream(Path path, OpenOption... options) throws IOException {
-    return new FileOutputStream(path.toFile());
-  }
-
-  @Override
   public DesugarSeekableByteChannel newByteChannel(
       Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs) throws IOException {
     if (path.toFile().isDirectory()) {

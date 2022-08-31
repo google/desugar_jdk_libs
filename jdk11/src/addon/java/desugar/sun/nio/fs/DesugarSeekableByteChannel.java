@@ -26,6 +26,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SeekableByteChannel;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -40,6 +41,19 @@ public class DesugarSeekableByteChannel implements SeekableByteChannel {
 
   public static DesugarSeekableByteChannel create(Path path, Set<? extends OpenOption> openOptions)
       throws IOException {
+    // Validations that resemble sun.nio.fs.UnixChannelFactory#newFileChannel.
+    if (openOptions.contains(StandardOpenOption.READ)
+        && openOptions.contains(StandardOpenOption.APPEND)) {
+      throw new IllegalArgumentException("READ + APPEND not allowed");
+    }
+    if (openOptions.contains(StandardOpenOption.APPEND)
+        && openOptions.contains(StandardOpenOption.TRUNCATE_EXISTING)) {
+      throw new IllegalArgumentException("APPEND + TRUNCATE_EXISTING not allowed");
+    }
+    if (openOptions.contains(StandardOpenOption.APPEND) && !path.toFile().exists()) {
+      throw new NoSuchFileException(path.toString());
+    }
+
     RandomAccessFile randomAccessFile =
         new RandomAccessFile(path.toFile(), getFileAccessModeText(openOptions));
     if (openOptions.contains(StandardOpenOption.TRUNCATE_EXISTING)) {
