@@ -68,20 +68,15 @@ public class InvocationSiteReplacementClassVisitor extends ClassVisitor {
     public void visitMethodInsn(
         int opcode, String owner, String name, String descriptor, boolean isInterface) {
       ClassMemberKey methodKey = ClassMemberKey.create(owner, name, descriptor);
-      // TODO(b/245860052): Remove the enclosing method once retargeting migration is done.
-      if (methodKey.owner().equals("java/lang/NumberFormatException")
-          || (methodKey.owner().equals("java/lang/Long")
-              && methodKey.name().equals("toUnsignedBigInteger"))) {
-        ClassMemberKey replacementKey = preScanner.getReplacementMethod(methodKey);
-        if (replacementKey != null) {
-          super.visitMethodInsn(
-              Opcodes.INVOKESTATIC,
-              replacementKey.owner(),
-              replacementKey.name(),
-              replacementKey.desc(),
-              /* isInterface= */ false);
-          return;
-        }
+      ClassMemberKey replacementKey = preScanner.getReplacementMethod(methodKey);
+      if (replacementKey != null) {
+        super.visitMethodInsn(
+            Opcodes.INVOKESTATIC,
+            replacementKey.owner(),
+            replacementKey.name(),
+            replacementKey.desc(),
+            /* isInterface= */ false);
+        return;
       }
       super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
