@@ -4820,7 +4820,11 @@ public class Arrays {
 
     @DesugarSupportedApiHelper
     static boolean deepEquals0(Object e1, Object e2) {
-        assert e1 != null;
+        // For desugar: avoid synthetic methods.
+        // assert e1 != null;
+        if (e1 == null) {
+            throw new NullPointerException("e1 is null!");
+        }
         boolean eq;
         if (e1 instanceof Object[] && e2 instanceof Object[])
             eq = deepEquals ((Object[]) e1, (Object[]) e2);

@@ -290,7 +290,6 @@ public final class JarFileClassEntrySelector {
       if (isGeneratedOutputEntryUnderSelection(outputEntryName)) {
         ClassWriter cw = new ClassWriter(0);
         ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM7);
-        cv = new InvocationSiteReplacementClassVisitor(AsmHelpers.ASM_API_LEVEL, cv, preScanner);
         outputClassNode.accept(cv);
         byte[] outBytes = cw.toByteArray();
         JarEntry outJarEntry = createJarEntry(outputEntryName, outBytes);
