@@ -1,12 +1,12 @@
 package com.google.testing.apianalyzer;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /** Generates a text-format proto-based representation of DJK types in the given android.jar. */
 public final class AndroidPlatformJdkApiGenerator {
@@ -31,7 +31,12 @@ public final class AndroidPlatformJdkApiGenerator {
         new ClassDigestGenerator(classDigest -> isJdkType(classDigest.getName()));
     ClassDigestCollection digestCollection = digestGenerator.read(inPath);
     String digestText = TEXT_PROTO_HEADER + ClassDigestGenerator.prettyTextFormat(digestCollection);
-    Files.write(outPath, digestText.getBytes(UTF_8));
+    if (Files.exists(outPath)) {
+      Files.writeString(outPath, digestText);
+    } else {
+      Files.createDirectories(outPath.getParent());
+      Files.writeString(outPath, digestText, StandardOpenOption.CREATE_NEW);
+    }
   }
 
   public static boolean isJdkType(String typeInternalName) {
