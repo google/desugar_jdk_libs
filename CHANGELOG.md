@@ -1,6 +1,20 @@
 Change Log
 ==========
 
+Version 2.0.0 *(2022-09-16)*
+----------------------------
+
+* Release based on JDK-11. Require AGP version 7.4.0-alpha10 or later
+  (Android Studio 2022.1.1).
+* Supports three different configurations `desugar_jdk_libs_minimal`,
+  `desugar_jdk_libs` and `desugar_jdk_libs_nio`.
+    * `desugar_jdk_libs_minimal` limits desugaring to package
+      `java.util.function` and class `java.util.Optional`.
+    * `desugar_jdk_libs` desugars the same APIs as in version `1.1.x` and
+    `1.2.x`.
+    * `desugar_jdk_libs_nio` includes desugaring of package `java.nio`.
+
+
 Version 1.2.2 *(2022-08-19)*
 ----------------------------
 
