@@ -56,6 +56,10 @@ public final class ClassMemberResolver {
     return isResolvable(method.getOwner(), method.getName(), method.getDesc());
   }
 
+  public boolean isResolvable(Field field) {
+    return isResolvable(field.getOwner(), field.getName(), field.getDesc());
+  }
+
   public boolean isResolvable(String owner, String name, String desc) {
     HeadlessClassMemberKey memberKey = HeadlessClassMemberKey.create(name, desc);
     ArrayDeque<String> queue = new ArrayDeque<>();
