@@ -125,7 +125,7 @@ public final class DesugarDuration {
     public static long dividedBy(Duration receiver, Duration divisor) {
         Objects.requireNonNull(divisor, "divisor");
         BigDecimal dividendBigD = toBigDecimalSeconds(receiver);
-        BigDecimal divisorBigD = toBigDecimalSeconds(receiver);
+        BigDecimal divisorBigD = toBigDecimalSeconds(divisor);
         return dividendBigD.divideToIntegralValue(divisorBigD).longValueExact();
     }
 
@@ -158,7 +158,7 @@ public final class DesugarDuration {
      * @return the number of hours part in the duration, may be negative
      * @since 9
      */
-    public int toHoursPart(Duration receiver) {
+    public static int toHoursPart(Duration receiver) {
         return (int) (receiver.toHours() % 24);
     }
 
@@ -174,7 +174,7 @@ public final class DesugarDuration {
      * @return the number of minutes parts in the duration, may be negative
      * @since 9
      */
-    public int toMinutesPart(Duration receiver) {
+    public static int toMinutesPart(Duration receiver) {
         return (int) (receiver.toMinutes() % MINUTES_PER_HOUR);
     }
 
@@ -190,7 +190,7 @@ public final class DesugarDuration {
      * @return the number of seconds parts in the duration, may be negative
      * @since 9
      */
-    public int toSecondsPart(Duration receiver) {
+    public static int toSecondsPart(Duration receiver) {
         long seconds = receiver.getSeconds();
         return (int) (seconds % SECONDS_PER_MINUTE);
     }
@@ -209,7 +209,7 @@ public final class DesugarDuration {
      * @return the number of milliseconds part of the duration.
      * @since 9
      */
-    public int toMillisPart(Duration receiver) {
+    public static int toMillisPart(Duration receiver) {
         int nanos = receiver.getNano();
         return nanos / 1000_000;
     }
