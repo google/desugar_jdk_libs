@@ -32,7 +32,11 @@ import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 
 import com.google.common.collect.ImmutableList;
+import java.lang.invoke.LambdaMetafactory;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -50,6 +54,59 @@ public class DesugarSupportedApiClassGenerator {
     this.preScanner = preScanner;
   }
 
+  private class LambdaTargetOwnerRewriter extends MethodVisitor {
+
+    private final String lambdaMetafactoryInternalName =
+      // Expected to be "java/lang/invoke/LambdaMetafactory"
+      Type.getType(LambdaMetafactory.class).getInternalName();
+
+    private final String baseName = baseClassNode.name;
+    private final String rewrittenName = getReplacementTypeInternalName(baseClassNode.name);
+
+    public LambdaTargetOwnerRewriter(int api, MethodVisitor mv) {
+      super(api, mv);
+    }
+
+    @Override
+    public void visitInvokeDynamicInsn(
+        String name,
+        String descriptor,
+        Handle bootstrapMethodHandle,
+        Object... bootstrapMethodArguments) {
+      if (bootstrapMethodHandle.getOwner().equals(lambdaMetafactoryInternalName)) {
+        if (bootstrapMethodHandle.getName().equals("metafactory")) {
+          Object[] newArgs = bootstrapMethodArguments.clone();
+          if (newArgs.length != 3 || !(newArgs[1] instanceof Handle)) {
+            throw new AssertionError(
+                "Unsupported desugaring with invalid arguments in lambda metafactory in the class "
+                    + baseName
+                    + " (number of arguments "
+                    + newArgs.length
+                    + ")");
+          }
+          Handle handle = (Handle) newArgs[1];
+          if (handle.getOwner().equals(baseName)) {
+            newArgs[1] =
+                new Handle(
+                    handle.getTag(),
+                    rewrittenName,
+                    handle.getName(),
+                    handle.getDesc(),
+                    handle.isInterface());
+          }
+          super.visitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, newArgs);
+          return;
+        }
+        if (bootstrapMethodHandle.getName().equals("altMetafactory")) {
+          throw new AssertionError(
+              "Unsupported desugaring with lambda altMetafactory in the class " + baseName);
+        }
+      }
+      super.visitInvokeDynamicInsn(
+          name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
+    }
+  }
+
   /** Generates a list of class nodes that enclose supported APIs. */
   public ImmutableList<ClassNode> getClassNodesWithSupportedMembers() {
     ImmutableList<FieldNode> allDesugarSupportedFields = findAllDesugarSupportedFields();
@@ -57,7 +114,17 @@ public class DesugarSupportedApiClassGenerator {
     if (allDesugarSupportedFields.isEmpty() && allDesugarSupportedClassMembers.isEmpty()) {
       return ImmutableList.of();
     }
-    ClassNode generatedClassNode = new ClassNode();
+
+    ClassNode generatedClassNode =
+        new ClassNode(AsmHelpers.ASM_API_LEVEL) {
+          @Override
+          public MethodVisitor visitMethod(
+              int access, String name, String descriptor, String signature, String[] exceptions) {
+            MethodVisitor subvisitor =
+                super.visitMethod(access, name, descriptor, signature, exceptions);
+            return new LambdaTargetOwnerRewriter(AsmHelpers.ASM_API_LEVEL, subvisitor);
+          }
+        };
 
     generatedClassNode.visit(
         AsmHelpers.JAVA_LANGUAGE_LEVEL,
