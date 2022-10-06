@@ -130,6 +130,21 @@ public final class DesugarDuration {
     }
 
     /**
+     * Gets the number of seconds in this duration.
+     * <p>
+     * This returns the total number of whole seconds in the duration.
+     * <p>
+     * This instance is immutable and unaffected by this method call.
+     *
+     * @return the whole seconds part of the length of the duration, positive or negative
+     * @since 9
+     */
+    public static long toSeconds(Duration receiver) {
+        // For desugar: Use the same implementation that's available on SDK 26 or above.
+        return receiver.getSeconds();
+    }
+
+    /**
      * Extracts the number of days in the duration.
      * <p>
      * This returns the total number of days in the duration by dividing the
