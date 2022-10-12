@@ -25,8 +25,6 @@
 
 package java.lang;
 
-import com.google.devtools.build.android.annotations.DesugarSupportedApi;
-import com.google.devtools.build.android.annotations.DesugarSupportedApiHelper;
 import java.lang.annotation.Native;
 import java.math.*;
 import java.util.Objects;
@@ -240,7 +238,6 @@ public final class Long extends Number implements Comparable<Long> {
      * Return a BigInteger equal to the unsigned value of the
      * argument.
      */
-    @DesugarSupportedApiHelper
     private static BigInteger toUnsignedBigInteger(long i) {
         if (i >= 0L)
             return BigInteger.valueOf(i);
@@ -497,7 +494,6 @@ public final class Long extends Number implements Comparable<Long> {
      * @see     #toUnsignedString(long, int)
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static String toUnsignedString(long i) {
         return toUnsignedString(i, 10);
     }
@@ -734,7 +730,6 @@ public final class Long extends Number implements Comparable<Long> {
      *             {@link java.lang.Character#MAX_RADIX}.
      * @since  9
      */
-    @DesugarSupportedApi
     public static long parseLong(CharSequence s, int beginIndex, int endIndex, int radix)
                 throws NumberFormatException {
         s = Objects.requireNonNull(s);
@@ -865,7 +860,6 @@ public final class Long extends Number implements Comparable<Long> {
      *             does not contain a parsable {@code long}.
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static long parseUnsignedLong(String s, int radix)
                 throws NumberFormatException {
         if (s == null)  {
@@ -982,7 +976,6 @@ public final class Long extends Number implements Comparable<Long> {
      *             {@link java.lang.Character#MAX_RADIX}.
      * @since  9
      */
-    @DesugarSupportedApi
     public static long parseUnsignedLong(CharSequence s, int beginIndex, int endIndex, int radix)
                 throws NumberFormatException {
         s = Objects.requireNonNull(s);
@@ -1090,7 +1083,6 @@ public final class Long extends Number implements Comparable<Long> {
      *            parsable unsigned integer.
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static long parseUnsignedLong(String s) throws NumberFormatException {
         return parseUnsignedLong(s, 10);
     }
@@ -1418,7 +1410,6 @@ public final class Long extends Number implements Comparable<Long> {
      * @return a hash code value for a {@code long} value.
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static int hashCode(long value) {
         return (int)(value ^ (value >>> 32));
     }
@@ -1610,7 +1601,6 @@ public final class Long extends Number implements Comparable<Long> {
      *         a value greater than {@code 0} if {@code x > y}
      * @since 1.7
      */
-    @DesugarSupportedApi
     public static int compare(long x, long y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
@@ -1627,7 +1617,6 @@ public final class Long extends Number implements Comparable<Long> {
      *         unsigned values
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static int compareUnsigned(long x, long y) {
         return compare(x + MIN_VALUE, y + MIN_VALUE);
     }
@@ -1651,7 +1640,6 @@ public final class Long extends Number implements Comparable<Long> {
      * @see #remainderUnsigned
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static long divideUnsigned(long dividend, long divisor) {
         if (divisor < 0L) { // signed comparison
             // Answer must be 0 or 1 depending on relative magnitude
@@ -1685,7 +1673,6 @@ public final class Long extends Number implements Comparable<Long> {
      * @see #divideUnsigned
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static long remainderUnsigned(long dividend, long divisor) {
         if (dividend > 0 && divisor > 0) { // signed comparisons
             return dividend % divisor;
@@ -1935,7 +1922,6 @@ public final class Long extends Number implements Comparable<Long> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static long sum(long a, long b) {
         return a + b;
     }
@@ -1950,7 +1936,6 @@ public final class Long extends Number implements Comparable<Long> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static long max(long a, long b) {
         return Math.max(a, b);
     }
@@ -1965,7 +1950,6 @@ public final class Long extends Number implements Comparable<Long> {
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
-    @DesugarSupportedApi
     public static long min(long a, long b) {
         return Math.min(a, b);
     }

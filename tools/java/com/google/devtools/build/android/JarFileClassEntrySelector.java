@@ -61,9 +61,9 @@ public final class JarFileClassEntrySelector {
   private static final String[] D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
     "java/io/Desugar*",
     "java/io/UncheckedIOException",
-    "java/lang/Desugar*",
     "java/lang/AbstractStringBuilder",
     "java/lang/CharSequence",
+    "java/lang/DesugarCharacter",
     "java/lang/FunctionalInterface",
     "java/lang/Iterable",
     "java/lang/ReflectiveOperationException",
