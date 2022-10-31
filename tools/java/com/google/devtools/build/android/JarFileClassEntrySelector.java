@@ -59,6 +59,7 @@ public final class JarFileClassEntrySelector {
       LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
   private static final String[] D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
+    "java/io/BufferedInputStream",
     "java/io/Desugar*",
     "java/io/UncheckedIOException",
     "java/lang/AbstractStringBuilder",
@@ -112,12 +113,24 @@ public final class JarFileClassEntrySelector {
     "java/util/Tripwire",
     "java/util/concurrent/BlockingDeque",
     "java/util/concurrent/BlockingQueue",
+    "java/util/concurrent/CompletableFuture",
     "java/util/concurrent/ConcurrentHashMap",
+    "java/util/concurrent/ConcurrentLinkedDeque",
+    "java/util/concurrent/ConcurrentLinkedQueue",
     "java/util/concurrent/ConcurrentMap",
     "java/util/concurrent/ConcurrentNavigableMap",
+    "java/util/concurrent/CountedCompleter",
     "java/util/concurrent/Desugar*",
+    "java/util/concurrent/Exchanger",
     "java/util/concurrent/Flow",
+    "java/util/concurrent/ForkJoinPool",
+    "java/util/concurrent/ForkJoinTask",
+    "java/util/concurrent/FutureTask",
     "java/util/concurrent/Helpers",
+    "java/util/concurrent/LinkedTransferQueue",
+    "java/util/concurrent/Phaser",
+    "java/util/concurrent/SubmissionPublisher",
+    "java/util/concurrent/SynchronousQueue",
     "java/util/concurrent/ThreadLocalRandom",
     "java/util/concurrent/TransferQueue",
     "java/util/concurrent/atomic/Desugar*",
@@ -132,8 +145,20 @@ public final class JarFileClassEntrySelector {
   };
 
   private static final String[] ANDROID_CONCURRENT_FIX_LIB_TOP_LEVEL_TYPE_PATTERNS = {
+    "java/io/BufferedInputStream",
+    "java/util/concurrent/CompletableFuture",
     "java/util/concurrent/ConcurrentHashMap",
+    "java/util/concurrent/ConcurrentLinkedDeque",
+    "java/util/concurrent/ConcurrentLinkedQueue",
+    "java/util/concurrent/CountedCompleter",
+    "java/util/concurrent/Exchanger",
+    "java/util/concurrent/ForkJoinPool",
+    "java/util/concurrent/ForkJoinTask",
+    "java/util/concurrent/FutureTask",
     "java/util/concurrent/Helpers",
+    "java/util/concurrent/LinkedTransferQueue",
+    "java/util/concurrent/Phaser",
+    "java/util/concurrent/SynchronousQueue",
     "java/util/concurrent/ThreadLocalRandom",
     "sun/misc/Desugar*"
   };
