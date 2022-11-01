@@ -140,7 +140,7 @@ public final class DesugarDateTimeFormatterBuilder {
      * @return this, for chaining, not null
      * @since 9
      */
-    public DateTimeFormatterBuilder appendGenericZoneText(
+    public static DateTimeFormatterBuilder appendGenericZoneText(
         DateTimeFormatterBuilder receiver, TextStyle textStyle) {
         appendInternal(
             receiver, new ZoneTextPrinterParser(textStyle, null, true));

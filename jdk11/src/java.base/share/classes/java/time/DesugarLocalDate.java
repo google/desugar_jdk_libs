@@ -121,7 +121,7 @@ public final class DesugarLocalDate {
      * @throws IllegalArgumentException if end date is before this date
      * @since 9
      */
-    public Stream<LocalDate> datesUntil(LocalDate receiver, LocalDate endExclusive) {
+    public static Stream<LocalDate> datesUntil(LocalDate receiver, LocalDate endExclusive) {
         long end = endExclusive.toEpochDay();
         long start = receiver.toEpochDay();
         if (end < start) {

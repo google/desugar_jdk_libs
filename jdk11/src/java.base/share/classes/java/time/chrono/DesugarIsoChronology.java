@@ -123,7 +123,7 @@ public final class DesugarIsoChronology {
      *         or if the day-of-month is invalid for the month-of-year
      * @since 9
      */
-    public long epochSecond(IsoChronology receiver,int prolepticYear, int month, int dayOfMonth,
+    public static long epochSecond(IsoChronology receiver, int prolepticYear, int month, int dayOfMonth,
         int hour, int minute, int second, ZoneOffset zoneOffset) {
         YEAR.checkValidValue(prolepticYear);
         MONTH_OF_YEAR.checkValidValue(month);
