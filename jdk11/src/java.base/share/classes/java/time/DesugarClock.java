@@ -61,7 +61,7 @@
  */
 package java.time;
 
-import java.time.Clock.TickClock;
+import java.io.Serializable;
 import java.util.TimeZone;
 
 /**
@@ -157,6 +157,64 @@ public abstract class DesugarClock {
      * @since 9
      */
     public static Clock tickMillis(ZoneId zone) {
-        return new TickClock(Clock.system(zone), NANOS_PER_MILLI);
+        return new DesugarTickClock(Clock.system(zone), NANOS_PER_MILLI);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Implementation of a clock that adds an offset to an underlying clock.
+     */
+    static final class DesugarTickClock extends Clock implements Serializable {
+        private static final long serialVersionUID = 6504659149906368850L;
+        private final Clock baseClock;
+        private final long tickNanos;
+
+        DesugarTickClock(Clock baseClock, long tickNanos) {
+            this.baseClock = baseClock;
+            this.tickNanos = tickNanos;
+        }
+        @Override
+        public ZoneId getZone() {
+            return baseClock.getZone();
+        }
+        @Override
+        public Clock withZone(ZoneId zone) {
+            if (zone.equals(baseClock.getZone())) {  // intentional NPE
+                return this;
+            }
+            return new DesugarTickClock(baseClock.withZone(zone), tickNanos);
+        }
+        @Override
+        public long millis() {
+            long millis = baseClock.millis();
+            return millis - Math.floorMod(millis, tickNanos / 1000_000L);
+        }
+        @Override
+        public Instant instant() {
+            if ((tickNanos % 1000_000) == 0) {
+                long millis = baseClock.millis();
+                return Instant.ofEpochMilli(millis - Math.floorMod(millis, tickNanos / 1000_000L));
+            }
+            Instant instant = baseClock.instant();
+            long nanos = instant.getNano();
+            long adjust = Math.floorMod(nanos, tickNanos);
+            return instant.minusNanos(adjust);
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof DesugarTickClock) {
+                DesugarTickClock other = (DesugarTickClock) obj;
+                return baseClock.equals(other.baseClock) && tickNanos == other.tickNanos;
+            }
+            return false;
+        }
+        @Override
+        public int hashCode() {
+            return baseClock.hashCode() ^ ((int) (tickNanos ^ (tickNanos >>> 32)));
+        }
+        @Override
+        public String toString() {
+            return "DesugarTickClock[" + baseClock + "," + Duration.ofNanos(tickNanos) + "]";
+        }
     }
 }
