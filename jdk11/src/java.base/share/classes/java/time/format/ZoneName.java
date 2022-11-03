@@ -1013,4 +1013,10 @@ class ZoneName {
             aliases.put(aliasMap[i], aliasMap[i + 1]);
         }
     }
+
+    // BEGIN Android-added: Get non-custom system canonical time zone Id from ICU.
+    public static String getSystemCanonicalID(String zid) {
+        throw new RuntimeException("stub");
+    }
+    // END Android-added: Get non-custom system canonical time zone Id from ICU.
 }

@@ -878,4 +878,9 @@ public abstract class TimeZone implements Serializable, Cloneable {
         }
         return zi;
     }
+
+    public static String createGmtOffsetString(boolean includeGmt,
+        boolean includeMinuteSeparator, int offsetMillis) {
+        throw new RuntimeException("stub");
+    }
 }
