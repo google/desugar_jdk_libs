@@ -15,6 +15,8 @@ java_library(
     deps = [
         "//jdk11/desugarconfig",
         "//jdk11/src/addon",
+        "//:android_jar",
+        "//jdk11/src/stubs",
     ],
 )
 

@@ -107,3 +107,13 @@ alias(
     actual = "//tools/java/com/google/devtools/build/android:jdk_type_selector",
     visibility = ["//visibility:public"],
 )
+
+genrule(
+    name = "android_jar",
+    srcs = [
+        "@androidsdk//:platforms/android-32/android.jar",
+    ],
+    outs = ["android_jar.jar"],
+    cmd = "cp $(location @androidsdk//:platforms/android-32/android.jar) $@",
+    visibility = ["//visibility:public"],
+)
