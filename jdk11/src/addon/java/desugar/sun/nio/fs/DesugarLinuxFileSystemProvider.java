@@ -30,27 +30,28 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.FileChannel;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.AccessMode;
 import java.nio.file.CopyOption;
+import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystemAlreadyExistsException;
+import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.FileAttributeView;
 import java.nio.file.spi.FileSystemProvider;
 import java.nio.file.spi.FileTypeDetector;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -109,23 +110,17 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
   @Override
   public DirectoryStream<Path> newDirectoryStream(Path dir, Filter<? super Path> filter)
       throws IOException {
-    File dirAsFile = dir.toFile();
-    List<Path> listedFilePaths = new ArrayList<>();
-    File[] files = dirAsFile.listFiles();
-    if (files != null) {
-      for (File file : files) {
-        Path pathEntry = new DesugarUnixPath(theFileSystem, file.getPath(), userDir, rootDir);
-        if (filter.accept(pathEntry)) {
-          listedFilePaths.add(pathEntry);
-        }
-      }
+    if (filter == null) {
+      throw new NullPointerException();
     }
-
-    return new PathCollectionBasedDirectoryStream(listedFilePaths);
+    return new DesugarDirectoryStream(dir, filter);
   }
 
   @Override
   public void createDirectory(Path dir, FileAttribute<?>... attrs) throws IOException {
+    if (dir.getParent() != null && !Files.exists(dir.getParent())) {
+      throw new NoSuchFileException(dir.toString());
+    }
     File dirFile = dir.toFile();
     boolean mkdirStatus = dirFile.mkdirs();
     if (!mkdirStatus) {
@@ -148,7 +143,7 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
       deleteIfExists(path);
       return;
     }
-    throw new IOException(String.format("Expected there exists %s before deletion.", path));
+    throw new NoSuchFileException(path.toString());
   }
 
   @Override
@@ -157,19 +152,20 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
   }
 
   @Override
-  public DesugarSeekableByteChannel newByteChannel(
+  public SeekableByteChannel newByteChannel(
       Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs) throws IOException {
-    if (path.toFile().isDirectory()) {
-      throw new UnsupportedOperationException(
-          "The desugar library does not support creating a file channel on a directory: " + path);
-    }
-    return DesugarSeekableByteChannel.create(path, options);
+    // A FileChannel is a SeekableByteChannel.
+    return newFileChannel(path, options, attrs);
   }
 
   @Override
   public FileChannel newFileChannel(
       Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs) throws IOException {
-    return newByteChannel(path, options, attrs).getFileChannel();
+    if (path.toFile().isDirectory()) {
+      throw new UnsupportedOperationException(
+          "The desugar library does not support creating a file channel on a directory: " + path);
+    }
+    return DesugarFileChannel.openEmulatedFileChannel(path, options, attrs);
   }
 
   @Override
@@ -200,6 +196,12 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
 
   @Override
   public void copy(Path source, Path target, CopyOption... options) throws IOException {
+    if (!containsCopyOption(options, StandardCopyOption.REPLACE_EXISTING) && Files.exists(target)) {
+      throw new FileAlreadyExistsException(target.toString());
+    }
+    if (containsCopyOption(options, StandardCopyOption.ATOMIC_MOVE)) {
+      throw new UnsupportedOperationException("Unsupported copy option");
+    }
     try (InputStream in = new FileInputStream(source.toFile());
         OutputStream out = new FileOutputStream(target.toFile())) {
       byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
@@ -212,13 +214,36 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
 
   @Override
   public void move(Path source, Path target, CopyOption... options) throws IOException {
+    if (!containsCopyOption(options, StandardCopyOption.REPLACE_EXISTING) && Files.exists(target)) {
+      throw new FileAlreadyExistsException(target.toString());
+    }
+    if (containsCopyOption(options, StandardCopyOption.COPY_ATTRIBUTES)) {
+      throw new UnsupportedOperationException("Unsupported copy option");
+    }
     File sourceFile = source.toFile();
     File targetFile = target.toFile();
     sourceFile.renameTo(targetFile);
   }
 
+  private boolean containsCopyOption(CopyOption[] options, CopyOption option) {
+    for (CopyOption copyOption : options) {
+      if (copyOption == option) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Override
   public boolean isSameFile(Path path, Path path2) throws IOException {
+    // If the paths are equals, then it answers true even if they do not exist.
+    if (path.equals(path2)) {
+      return true;
+    }
+    // If the paths are not equal, they could still be equal due to symbolic link and so on, but
+    // in that case accessibility is checked.
+    checkAccess(path);
+    checkAccess(path2);
     return path.toFile().equals(path2.toFile());
   }
 
@@ -379,16 +404,62 @@ public class DesugarLinuxFileSystemProvider extends FileSystemProvider {
     }
   }
 
-  static class PathCollectionBasedDirectoryStream implements DirectoryStream<Path> {
-    private final Collection<Path> paths;
+  class DesugarPathIterator implements Iterator<Path> {
 
-    PathCollectionBasedDirectoryStream(Collection<Path> paths) {
-      this.paths = paths;
+    private final Filter<? super Path> filter;
+    private final File[] candidates;
+    private int index = 0;
+
+    DesugarPathIterator(Path dir, Filter<? super Path> filter) {
+      // We compute the list of files upfront instead of lazily, which can lead to exceptions
+      // being raised at a slightly different time.
+      File[] theCandidates = dir.toFile().listFiles();
+      this.candidates = theCandidates == null ? new File[] {} : theCandidates;
+      this.filter = filter;
+    }
+
+    @Override
+    public boolean hasNext() {
+      if (next() != null) {
+        index--;
+        return true;
+      }
+      return false;
+    }
+
+    @Override
+    public Path next() {
+      // Look for the next matching path, if none, return null;
+      for (; ; ) {
+        if (index >= candidates.length) {
+          return null;
+        }
+        File nextFile = candidates[index++];
+        Path pathEntry = new DesugarUnixPath(theFileSystem, nextFile.getPath(), userDir, rootDir);
+        boolean accept;
+        try {
+          accept = filter.accept(pathEntry);
+        } catch (IOException ioe) {
+          throw new DirectoryIteratorException(ioe);
+        }
+        if (accept) {
+          return pathEntry;
+        }
+      }
+    }
+  }
+
+  class DesugarDirectoryStream implements DirectoryStream<Path> {
+
+    DesugarPathIterator iterator;
+
+    DesugarDirectoryStream(Path dir, Filter<? super Path> filter) {
+      this.iterator = new DesugarPathIterator(dir, filter);
     }
 
     @Override
     public Iterator<Path> iterator() {
-      return paths.iterator();
+      return iterator;
     }
 
     @Override

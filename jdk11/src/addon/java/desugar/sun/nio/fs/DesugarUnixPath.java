@@ -119,7 +119,7 @@ public class DesugarUnixPath implements Path {
   @Override
   public DesugarUnixPath getFileName() {
     return fileNames.isEmpty()
-        ? null
+        ? (isAbsolutePath ? null : this)
         : new DesugarUnixPath(fileSystem, fileNames.get(getNameCount() - 1), userDir, rootDir);
   }
 

@@ -39,6 +39,7 @@ class DesugarBasicFileAttributeView extends DesugarAbstractBasicFileAttributeVie
 
   @Override
   public BasicFileAttributes readAttributes() throws IOException {
+    path.getFileSystem().provider().checkAccess(path);
     return DesugarBasicFileAttributes.create(path.toFile());
   }
 
