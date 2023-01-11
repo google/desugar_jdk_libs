@@ -31,7 +31,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -82,7 +81,7 @@ public class DesugarFileChannel {
         throw new NullPointerException();
       }
     }
-    if (Files.exists(path)) {
+    if (path.toFile().exists()) {
       if (openOptions.contains(StandardOpenOption.CREATE_NEW)
           && openOptions.contains(StandardOpenOption.WRITE)) {
         throw new FileAlreadyExistsException(path.toString());
@@ -257,7 +256,7 @@ public class DesugarFileChannel {
       // We cannot call the protected method, this should be effectively equivalent.
       delegate.close();
       if (deleteOnClose) {
-        Files.deleteIfExists(path);
+        path.toFile().delete();
       }
     }
   }
