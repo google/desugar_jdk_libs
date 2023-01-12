@@ -26,6 +26,7 @@ import static java.util.Arrays.stream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.AccessMode;
 import java.nio.file.FileSystem;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -339,6 +340,7 @@ public class DesugarUnixPath implements Path {
 
   @Override
   public DesugarUnixPath toRealPath(LinkOption... options) throws IOException {
+    getFileSystem().provider().checkAccess(this, AccessMode.READ);
     if (Arrays.asList(options).contains(LinkOption.NOFOLLOW_LINKS)) {
       return toAbsolutePath();
     }
