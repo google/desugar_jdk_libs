@@ -160,6 +160,7 @@ public final class JarFileClassEntrySelector {
     "java/util/concurrent/Phaser",
     "java/util/concurrent/SynchronousQueue",
     "java/util/concurrent/ThreadLocalRandom",
+    "java/util/function/*",
     "sun/misc/Desugar*"
   };
 
