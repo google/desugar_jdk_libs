@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 2.0.1 *(2023-01-27)*
+----------------------------
+
+* Updated the JDK-11 based release fixing multiple issues. Version 2.0.0
+  should be considered a beta release.
+* Require AGP version 7.4.0 or later (Android Studio 2022.1.1 stable).
+
 Version 2.0.0 *(2022-09-16)*
 ----------------------------
 
