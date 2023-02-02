@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 2.0.2 *(2023-02-02)*
+----------------------------
+
+* Disable desugaring of `ConcurrentLinkedQueue`. It requires desugaring of
+  `VarHandle` which is not present in AGP version 7.4.x
+  ([issue 72683872](https://issuetracker.google.com/72683872))
+
 Version 2.0.1 *(2023-01-27)*
 ----------------------------
 
