@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 2.0.3 *(2023-03-29)*
+----------------------------
+
+* Improved lint information including fields.
+* Update to Android U APIs.
+
 Version 2.0.2 *(2023-02-02)*
 ----------------------------
 
@@ -29,6 +35,12 @@ Version 2.0.0 *(2022-09-16)*
     * `desugar_jdk_libs_nio` includes desugaring of package `java.nio`.
 
 
+Version 1.2.3 *(2023-03-29)*
+----------------------------
+
+* Improved lint information including fields.
+* Update to Android U APIs.
+
 Version 1.2.2 *(2022-08-19)*
 ----------------------------
 
@@ -48,6 +60,12 @@ Version 1.2.0 *(2022-06-21)*
   `java.util.Duration` and `java.util.LocalTime`).
 * Support for all  methods on `java.util.concurrent.ConcurrentHashMap`.
 * Added class `java.util.concurrent.Flow`.
+
+Version 1.1.9 *(2023-03-29)*
+----------------------------
+
+* Improved lint information including fields.
+* Update to Android U APIs.
 
 Version 1.1.8 *(2022-08-19)*
 -----------------------------
