@@ -83,6 +83,7 @@ public final class JarFileClassEntrySelector {
     "java/nio/file/*",
     "java/time/*",
     "java/util/AbstractList",
+    "java/util/Base64",
     "java/util/CollSer",
     "java/util/Collection",
     "java/util/Comparator",
