@@ -233,7 +233,8 @@ public final class TestNgJUnit4 extends BlockJUnit4ClassRunner {
     } else {
       // TODO(deltazulu): Add multi-exception support once there is a real case for it.
       throw new UnsupportedOperationException(
-          String.format("%s does not support multiple expected exceptions on %s", getClass(), method));
+          String.format(
+              "%s does not support multiple expected exceptions on %s", getClass(), method));
     }
   }
 
@@ -255,7 +256,9 @@ public final class TestNgJUnit4 extends BlockJUnit4ClassRunner {
       if (afterMethod.getMethod().getParameterCount() != 0) {
         // TestNg supports parameter injections of a TestResult instance in an @AfterMethod-method.
         // Under this runner, inject a default instance since the presented result won't be used.
-        stmt = stmt.andThen(new InvokeMethodWithParams(afterMethod, target, new TestResult()));
+        stmt =
+            stmt.andThen(
+                new InvokeMethodWithParams(afterMethod, target, TestResult.newEmptyTestResult()));
       } else {
         stmt = stmt.andThen(new InvokeMethod(afterMethod, target));
       }
