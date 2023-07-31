@@ -18,7 +18,7 @@ genrule(
           " --version_file $(location VERSION_JDK11_LEGACY.txt)" +
           " --dependencies_file $(location DEPENDENCIES_JDK11_LEGACY.txt)" +
           " --out $@",
-    exec_tools = [":build_maven_artifact"],
+    tools = [":build_maven_artifact"],
 )
 
 genrule(
@@ -35,7 +35,7 @@ genrule(
           " --version_file $(location VERSION_JDK11_MINIMAL.txt)" +
           " --dependencies_file $(location DEPENDENCIES_JDK11_MINIMAL.txt)" +
           " --out $@",
-    exec_tools = [":build_maven_artifact"],
+    tools = [":build_maven_artifact"],
 )
 
 genrule(
@@ -52,7 +52,7 @@ genrule(
           " --version_file $(location VERSION_JDK11.txt)" +
           " --dependencies_file $(location DEPENDENCIES_JDK11.txt)" +
           " --out $@",
-    exec_tools = [":build_maven_artifact"],
+    tools = [":build_maven_artifact"],
 )
 
 genrule(
@@ -69,7 +69,7 @@ genrule(
           " --version_file $(location VERSION_JDK11_NIO.txt)" +
           " --dependencies_file $(location DEPENDENCIES_JDK11_NIO.txt)" +
           " --out $@",
-    exec_tools = [":build_maven_artifact"],
+    tools = [":build_maven_artifact"],
 )
 
 py_binary(
