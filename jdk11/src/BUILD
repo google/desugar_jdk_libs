@@ -29,7 +29,7 @@ genrule(
     cmd = """
       $(location //:tools/jdk_type_selector) $(location :java_base_all) $@ "--config=d8_desugar"
     """,
-    exec_tools = ["//:tools/jdk_type_selector"],
+    tools = ["//:tools/jdk_type_selector"],
     visibility = ["//:__pkg__"],
 )
 
@@ -62,6 +62,6 @@ genrule(
     cmd = """
       $(location //:tools/jdk_type_selector) $(location :java_base_all) $@ "--config=android_fix_libs"
     """,
-    exec_tools = ["//:tools/jdk_type_selector"],
+    tools = ["//:tools/jdk_type_selector"],
     visibility = ["//:__pkg__"],
 )
