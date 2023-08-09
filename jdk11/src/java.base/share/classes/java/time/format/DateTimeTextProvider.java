@@ -69,9 +69,7 @@ import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
 import java.text.DateFormatSymbols;
 import java.time.chrono.Chronology;
 import java.time.chrono.IsoChronology;
-import java.time.chrono.JapaneseChronology;
 import java.time.temporal.ChronoField;
-import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalField;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
@@ -399,6 +397,10 @@ class DateTimeTextProvider {
             //     }
             // }
             DateFormatSymbols symbols = DateFormatSymbols.getInstance(locale);
+
+            // For desugar: Include standalone formats.
+            DesugarDateTimeTextProviderHelper.fillWithStandaloneStyleMap(styleMap, symbols, locale);
+
             Map<Long, String> longMap = new HashMap<>();
             Map<Long, String> narrowMap = new HashMap<>();
             String[] longMonths = symbols.getMonths();
