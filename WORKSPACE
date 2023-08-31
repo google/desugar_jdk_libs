@@ -1,16 +1,26 @@
 workspace(name = "desugar_jdk_libs")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
-http_archive(
-    name = "google_bazel_common",
-    sha256 = "d8aa0ef609248c2a494d5dbdd4c89ef2a527a97c5a87687e5a218eb0b77ff640",
-    strip_prefix = "bazel-common-4a8d451e57fb7e1efecbf9495587a10684a19eb2",
-    urls = ["https://github.com/google/bazel-common/archive/4a8d451e57fb7e1efecbf9495587a10684a19eb2.zip"],
+maybe(
+    android_sdk_repository,
+    name = "androidsdk",
 )
 
-load("@google_bazel_common//:workspace_defs.bzl", "google_common_workspace_rules")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-google_common_workspace_rules()
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "66ffd9315665bfaafc96b52278f57c7e2dd09f5ede279ea6d39b2be471e7e3aa",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.2/bazel-skylib-1.4.2.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.2/bazel-skylib-1.4.2.tar.gz",
+    ],
+)
+
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+
+bazel_skylib_workspace()
 
 http_archive(
     name = "rules_java",
@@ -47,10 +57,14 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 maven_install(
     artifacts = [
+        "com.google.auto:auto-common:1.2.1",
+        "com.google.auto.value:auto-value:1.8.2",
+        "com.google.auto.value:auto-value-annotations:1.9",
+        "com.google.code.findbugs:jsr305:3.0.2",
+        "com.google.guava:guava:23.0",
         "org.ow2.asm:asm:9.0",
         "org.ow2.asm:asm-commons:9.0",
         "org.ow2.asm:asm-tree:9.0",
-        "com.google.guava:guava:23.0",
     ],
     repositories = [
         "https://repo1.maven.org/maven2",
