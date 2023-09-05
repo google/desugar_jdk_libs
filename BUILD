@@ -5,6 +5,13 @@ alias(
 )
 
 genrule(
+    name = "desugar_jdk_libs",
+    srcs = [":desugar_jdk_libs_jdk11"],
+    outs = ["desugar_jdk_libs.jar"],
+    cmd = "cp $< $@",
+)
+
+genrule(
     name = "maven_release_jdk11_legacy",
     srcs = [
         ":desugar_jdk_libs_jdk11",
