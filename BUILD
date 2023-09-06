@@ -9,6 +9,7 @@ genrule(
     srcs = [":desugar_jdk_libs_jdk11"],
     outs = ["desugar_jdk_libs.jar"],
     cmd = "cp $< $@",
+    visibility = ["//visibility:public"],
 )
 
 genrule(
