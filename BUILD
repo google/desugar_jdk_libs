@@ -95,9 +95,9 @@ alias(
 genrule(
     name = "android_jar",
     srcs = [
-        "@androidsdk//:platforms/android-32/android.jar",
+        "@bazel_tools//tools/android:android_jar",
     ],
     outs = ["android_jar.jar"],
-    cmd = "cp $(location @androidsdk//:platforms/android-32/android.jar) $@",
+    cmd = "cp $(location @bazel_tools//tools/android:android_jar) $@",
     visibility = ["//visibility:public"],
 )
