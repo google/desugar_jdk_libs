@@ -43,9 +43,9 @@ genrule(
     outs = ["d8_java_base_selected_with_addon.jar"],
     cmd = """
         TMPDIR="$$(mktemp -d)"
-        unzip -o $(location d8_java_base_selected) -d "$$TMPDIR"/
-        unzip -o $(location //jdk11/src/libcore:libcore_addon) -d "$$TMPDIR"/
-        unzip -o $(location //jdk11/src/addon) -d "$$TMPDIR"/
+        unzip -oq $(location d8_java_base_selected) -d "$$TMPDIR"/
+        unzip -oq $(location //jdk11/src/libcore:libcore_addon) -d "$$TMPDIR"/
+        unzip -oq $(location //jdk11/src/addon) -d "$$TMPDIR"/
         MYHOME=$$PWD
         cd $$TMPDIR
         zip -DXr1 "$$MYHOME/$@" .
