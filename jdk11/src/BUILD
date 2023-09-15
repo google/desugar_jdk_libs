@@ -48,7 +48,7 @@ genrule(
         unzip -oq $(location //jdk11/src/addon) -d "$$TMPDIR"/
         MYHOME=$$PWD
         cd $$TMPDIR
-        zip -DXr1 "$$MYHOME/$@" .
+        zip -qDXr1 "$$MYHOME/$@" .
     """,
     visibility = ["//:__pkg__"],
 )
