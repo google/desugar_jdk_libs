@@ -30,7 +30,7 @@ genrule(
       $(location //:tools/jdk_type_selector) $(location :java_base_all) $@ "--config=d8_desugar"
     """,
     tools = ["//:tools/jdk_type_selector"],
-    visibility = ["//:__pkg__"],
+    visibility = ["//visibility:public"],
 )
 
 genrule(

@@ -1,6 +1,9 @@
 package(default_visibility = ["//:__subpackages__"])
 
-alias(
+genrule(
     name = "addon",
-    actual = "//jdk11/src/addon/java/desugar/sun/nio/fs",
+    outs = ["addon.jar"],
+    srcs = ["//jdk11/src/addon/java/desugar/sun/nio/fs"],
+    cmd = "cp $< $@",
+    visibility = ["//visibility:public"],
 )
