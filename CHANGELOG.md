@@ -4,7 +4,10 @@ Change Log
 Version 2.0.4 *(2023-11-01)*
 ----------------------------
 
-* Added support for `java.util.Base64`` introduced in API level 26
+* Better support for "stand-alone" month names ("LLLL" format).
+  See ([issue 160113376](https://issuetracker.google.com/160113376))
+  for details.
+* Added support for `java.util.Base64` introduced in API level 26
 * Workaround for some non ASCII characters
   ([issue 293388944](https://issuetracker.google.com/293388944))
 
