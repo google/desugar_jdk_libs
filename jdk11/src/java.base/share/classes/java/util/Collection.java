@@ -538,10 +538,6 @@ public interface Collection<E> extends Iterable<E> {
      * @since 1.8
      */
     default boolean removeIf(Predicate<? super E> filter) {
-        // For Desugar: SynchronizedCollection support.
-        if (DesugarCollections.SYNCHRONIZED_COLLECTION.isInstance(this)) {
-           return DesugarCollections.removeIf(this, filter);
-        }
         Objects.requireNonNull(filter);
         boolean removed = false;
         final Iterator<E> each = iterator();
