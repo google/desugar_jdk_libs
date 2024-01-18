@@ -145,26 +145,6 @@ public final class JarFileClassEntrySelector {
     "jdk/internal/util/Preconditions",
   };
 
-  private static final String[] ANDROID_CONCURRENT_FIX_LIB_TOP_LEVEL_TYPE_PATTERNS = {
-    "java/io/BufferedInputStream",
-    "java/util/concurrent/CompletableFuture",
-    "java/util/concurrent/ConcurrentHashMap",
-    "java/util/concurrent/ConcurrentLinkedDeque",
-    "java/util/concurrent/ConcurrentLinkedQueue",
-    "java/util/concurrent/CountedCompleter",
-    "java/util/concurrent/Exchanger",
-    "java/util/concurrent/ForkJoinPool",
-    "java/util/concurrent/ForkJoinTask",
-    "java/util/concurrent/FutureTask",
-    "java/util/concurrent/Helpers",
-    "java/util/concurrent/LinkedTransferQueue",
-    "java/util/concurrent/Phaser",
-    "java/util/concurrent/SynchronousQueue",
-    "java/util/concurrent/ThreadLocalRandom",
-    "java/util/function/*",
-    "sun/misc/Desugar*"
-  };
-
   private static final ImmutableSet<String> OMITTED_ANNOTATIONS =
       ImmutableSet.of(
           "Lcom/google/devtools/build/android/annotations/DesugarSupportedApi;",
@@ -376,9 +356,6 @@ public final class JarFileClassEntrySelector {
       switch (args[2]) {
         case "--config=d8_desugar":
           Collections.addAll(patterns, D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS);
-          break;
-        case "--config=android_fix_libs":
-          Collections.addAll(patterns, ANDROID_CONCURRENT_FIX_LIB_TOP_LEVEL_TYPE_PATTERNS);
           break;
         default:
           throw new UnsupportedOperationException("Unexpected build config: " + args[2]);
