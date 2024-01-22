@@ -25,6 +25,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.AccessMode;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
@@ -46,7 +47,16 @@ class DesugarBasicFileAttributeView extends DesugarAbstractBasicFileAttributeVie
   @Override
   public void setTimes(FileTime lastModifiedTime, FileTime lastAccessTime, FileTime createTime)
       throws IOException {
+    // null => don't change
+    if (lastModifiedTime == null && lastAccessTime == null) {
+      // no effect
+      return;
+    }
+    path.getFileSystem().provider().checkAccess(path, AccessMode.WRITE);
     File file = path.toFile();
-    file.setLastModified(lastModifiedTime.to(MILLISECONDS));
+    boolean setLastModifiedSuccessfully = file.setLastModified(lastModifiedTime.to(MILLISECONDS));
+    if (!setLastModifiedSuccessfully) {
+      throw new IOException("File.setLastModified did not succeed on " + path);
+    }
   }
 }
