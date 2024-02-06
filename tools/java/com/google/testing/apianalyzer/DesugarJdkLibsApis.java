@@ -83,12 +83,6 @@ public final class DesugarJdkLibsApis {
       if ((classAccess & Opcodes.ACC_PUBLIC) != 0 && (access & Opcodes.ACC_PUBLIC) != 0) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(className).append(',');
-        sb.append(name).append(',');
-        sb.append(descriptor);
-
-        sb.append(",");
-
         if (className.contains("/Desugar")) {
           String originalClassName = className.replace("/Desugar", "/");
 
