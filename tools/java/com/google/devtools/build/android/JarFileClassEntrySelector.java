@@ -24,6 +24,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.devtools.java.asm.GoogleOpcodes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -44,7 +45,6 @@ import java.util.zip.CRC32;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 
 /**
@@ -206,6 +206,10 @@ public final class JarFileClassEntrySelector {
             .filter(entryName -> entryName.endsWith(".class")) // only match class files.
             .sorted()
             .collect(toList());
+    if (inputTypes.isEmpty()) {
+      throw new IllegalArgumentException(
+          String.format("No .class files were found in %s", inputJarPath));
+    }
     List<String> topLevelTypePatterns =
         selectedTopLevelTypePatterns.stream().sorted().distinct().collect(toList());
     Set<String> selectedEntryNames = new LinkedHashSet<>();
@@ -296,7 +300,8 @@ public final class JarFileClassEntrySelector {
       String outputEntryName = outputClassNode.name + ".class";
       if (isGeneratedOutputEntryUnderSelection(outputEntryName)) {
         ClassWriter cw = new ClassWriter(0);
-        ClassVisitor cv = new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM7);
+        ClassVisitor cv =
+            new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, GoogleOpcodes.LATEST);
         outputClassNode.accept(cv);
         byte[] outBytes = cw.toByteArray();
         JarEntry outJarEntry = createJarEntry(outputEntryName, outBytes);
