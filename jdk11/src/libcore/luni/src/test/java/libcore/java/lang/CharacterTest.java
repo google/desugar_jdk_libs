@@ -38,13 +38,13 @@ public class CharacterTest {
     // http://java.sun.com/docs/books/jls/third_edition/html/conversions.html#5.1.7
     // Harmony caches 0-512 and tests for this behavior, so we suppress that test and use this.
     for (char c = '\u0000'; c <= '\u007f'; ++c) {
-      Character e = new Character(c);
+      Character e = c;
       Character a = Character.valueOf(c);
       assertEquals(e, a);
       assertSame(Character.valueOf(c), Character.valueOf(c));
     }
     for (int c = '\u0080'; c <= Character.MAX_VALUE; ++c) {
-      assertEquals(new Character((char) c), Character.valueOf((char) c));
+      assertEquals(Character.valueOf((char) c), Character.valueOf((char) c));
     }
   }
 
@@ -325,7 +325,7 @@ public class CharacterTest {
 
   @Test
   public void testStaticHashCode() {
-    assertEquals(new Character('A').hashCode(), Character.hashCode('A'));
+    assertEquals(Character.hashCode('A'), Character.hashCode('A'));
   }
 
   @Test
