@@ -59,6 +59,7 @@ public final class JarFileClassEntrySelector {
       LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
   private static final String[] D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
+    // keep-sorted start
     "java/io/BufferedInputStream",
     "java/io/Desugar*",
     "java/io/UncheckedIOException",
@@ -73,10 +74,10 @@ public final class JarFileClassEntrySelector {
     "java/lang/annotation/Repeatable",
     "java/net/URLDecoder",
     "java/net/URLEncoder",
-    "java/nio/channels/Desugar*",
     "java/nio/channels/AsynchronousChannel",
     "java/nio/channels/AsynchronousFileChannel",
     "java/nio/channels/CompletionHandler",
+    "java/nio/channels/Desugar*",
     "java/nio/channels/FileChannel",
     "java/nio/channels/SeekableByteChannel",
     "java/nio/charset/*",
@@ -137,16 +138,18 @@ public final class JarFileClassEntrySelector {
     "java/util/concurrent/atomic/Desugar*",
     "java/util/function/*",
     "java/util/stream/*",
+    "jdk/internal/util/Preconditions",
+    "jdk/internal/util/StaticProperty",
     "sun/misc/Desugar*",
     "sun/nio/*",
     "sun/security/action/*",
     "sun/util/PreHashedMap",
-    "jdk/internal/util/StaticProperty",
-    "jdk/internal/util/Preconditions",
+    // keep-sorted end
   };
 
   private static final ImmutableSet<String> OMITTED_ANNOTATIONS =
       ImmutableSet.of(
+          // keep-sorted start
           "Lcom/google/devtools/build/android/annotations/DesugarSupportedApi;",
           "Lcom/google/devtools/build/android/annotations/DesugarSupportedApiHelper;",
           "Ljdk/internal/HotSpotIntrinsicCandidate;",
@@ -155,7 +158,9 @@ public final class JarFileClassEntrySelector {
           "Ljdk/internal/vm/annotation/ForceInline;",
           "Ljdk/internal/vm/annotation/Preserve;",
           "Ljdk/internal/vm/annotation/ReservedStackAccess;",
-          "Ljdk/internal/vm/annotation/Stable;");
+          "Ljdk/internal/vm/annotation/Stable;"
+          // keep-sorted end
+          );
 
   private static final String INTO_DESUGAR_EXTENDED_CLASS_ANNOTATION_NAME =
       "com/google/devtools/build/android/annotations/DesugarSupportedApiHelper";
