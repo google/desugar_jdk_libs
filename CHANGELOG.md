@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 2.1.0 *(2024-07-31)*
+----------------------------
+
+* Support default method `java.util.Collection#toArray(java.util.function.IntFunction)`.
+* Improve collection wrapping through `java.util.Collections`.
+  See [c01a5446ca13586b801dbba4d83c6821337b3cc2](https://github.com/google/desugar_jdk_libs/commit/c01a5446ca13586b801dbba4d83c6821337b3cc2) for implementation details.
+* Requires AGP version 8.0.0 or later (Android Studio 2022.2.1 stable).
+
 Version 2.0.4 *(2023-11-01)*
 ----------------------------
 

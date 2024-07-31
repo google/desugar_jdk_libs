@@ -1,2 +1,2 @@
 # Dependencies to add when releasing as JDK 11 based Maven artifact.
-com.android.tools:desugar_jdk_libs_configuration:2.0.4
+com.android.tools:desugar_jdk_libs_configuration:2.1.0
