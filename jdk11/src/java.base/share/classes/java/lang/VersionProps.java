@@ -78,11 +78,12 @@ class VersionProps {
         "";
 
     private static String VENDOR_URL_BUG =
-        "http://b.corp.google.com/createIssue?component=32554";
+        "https://issuetracker.google.com/issues/new?component=317603";
+
 
     // This field is read by HotSpot
     private static String VENDOR_URL_VM_BUG =
-        "http://b.corp.google.com/createIssue?component=32554";
+        "https://issuetracker.google.com/issues/new?component=317603";
 
     static {
         init();

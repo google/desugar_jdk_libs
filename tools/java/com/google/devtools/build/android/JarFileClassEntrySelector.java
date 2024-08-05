@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.devtools.java.asm.GoogleOpcodes;
+import org.objectweb.asm.Opcodes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -306,7 +306,7 @@ public final class JarFileClassEntrySelector {
       if (isGeneratedOutputEntryUnderSelection(outputEntryName)) {
         ClassWriter cw = new ClassWriter(0);
         ClassVisitor cv =
-            new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, GoogleOpcodes.LATEST);
+            new AnnotationFilterClassVisitor(OMITTED_ANNOTATIONS, cw, Opcodes.ASM9);
         outputClassNode.accept(cv);
         byte[] outBytes = cw.toByteArray();
         JarEntry outJarEntry = createJarEntry(outputEntryName, outBytes);
