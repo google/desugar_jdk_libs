@@ -47,7 +47,7 @@ public class DesugarDateTimeTextProviderHelper {
     String longMonth = "LLLL";
     String shortMonth = "LLL";
 
-    for (int i = 1; i < numMonth; i++) {
+    for (int i = 1; i <= numMonth; i++) {
       String longName = computeStandaloneMonthName(i, longMonth, loc);
       longStandAloneMap.put((long) i, longName);
       narrowStandAloneMap.put((long) i, firstCodePoint(longName));
@@ -56,9 +56,6 @@ public class DesugarDateTimeTextProviderHelper {
     }
 
     if (numMonth > 0) {
-      longStandAloneMap.put((long) numMonth, "");
-      narrowStandAloneMap.put((long) numMonth, "");
-      shortStandAloneMap.put((long) numMonth, "");
       styleMapMap.put(TextStyle.FULL_STANDALONE, longStandAloneMap);
       styleMapMap.put(TextStyle.NARROW_STANDALONE, narrowStandAloneMap);
       styleMapMap.put(TextStyle.SHORT_STANDALONE, shortStandAloneMap);
@@ -70,7 +67,8 @@ public class DesugarDateTimeTextProviderHelper {
     SimpleDateFormat writer = new SimpleDateFormat(standalonePattern, loc);
     writer.setTimeZone(legacyUtc);
     Calendar calendar = Calendar.getInstance();
-    calendar.set(0, id, 0);
+    calendar.setTimeZone(legacyUtc);
+    calendar.set(0, id, 0, 0, 0, 0);
     Date legacy = calendar.getTime();
     return writer.format(legacy);
   }
