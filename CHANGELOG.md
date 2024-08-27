@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 2.1.1 *(2024-08-26)*
+----------------------------
+
+* Fixed issue with incorrect standalone month name.
+  See [issue 355577226](https://issuetracker.google.com/355577226)
+
 Version 2.1.0 *(2024-07-31)*
 ----------------------------
 
