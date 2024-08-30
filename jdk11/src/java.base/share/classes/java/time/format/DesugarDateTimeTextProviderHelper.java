@@ -33,7 +33,7 @@ import java.util.TimeZone;
 /** Utilities for {@link DateTimeTextProvider}. */
 public class DesugarDateTimeTextProviderHelper {
 
-  public static void fillWithStandaloneStyleMap(
+  public static void fillWithStandaloneMonthStyleMap(
       Map<TextStyle, Map<Long, String>> styleMapMap,
       DateFormatSymbols dateFormatSymbols,
       Locale loc) {
@@ -75,6 +75,48 @@ public class DesugarDateTimeTextProviderHelper {
 
   private static String firstCodePoint(String string) {
     return string.substring(0, Character.charCount(string.codePointAt(0)));
+  }
+
+  public static void fillWithStandaloneDayOfWeekStyleMap(
+      Map<TextStyle, Map<Long, String>> styleMapMap,
+      DateFormatSymbols dateFormatSymbols,
+      Locale loc) {
+
+    int numDaysOfWeek = dateFormatSymbols.getWeekdays().length;
+
+    Map<Long, String> longStandAloneMap = new LinkedHashMap<>();
+    Map<Long, String> narrowStandAloneMap = new LinkedHashMap<>();
+    Map<Long, String> shortStandAloneMap = new LinkedHashMap<>();
+
+    String longDay = "cccc";
+    String shortDay = "ccc";
+
+    for (int i = 1; i <= numDaysOfWeek; i++) {
+      String longName = computeStandaloneDayOfWeekName(i, longDay, loc);
+      longStandAloneMap.put((long) i, longName);
+      narrowStandAloneMap.put((long) i, firstCodePoint(longName));
+      String shortName = computeStandaloneDayOfWeekName(i, shortDay, loc);
+      shortStandAloneMap.put((long) i, shortName);
+    }
+
+    if (numDaysOfWeek > 0) {
+      styleMapMap.put(TextStyle.FULL_STANDALONE, longStandAloneMap);
+      styleMapMap.put(TextStyle.NARROW_STANDALONE, narrowStandAloneMap);
+      styleMapMap.put(TextStyle.SHORT_STANDALONE, shortStandAloneMap);
+    }
+  }
+
+  private static String computeStandaloneDayOfWeekName(
+      int id, String standalonePattern, Locale loc) {
+    TimeZone legacyUtc = TimeZone.getTimeZone("UTC");
+    SimpleDateFormat writer = new SimpleDateFormat(standalonePattern, loc);
+    writer.setTimeZone(legacyUtc);
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeZone(legacyUtc);
+    // Jan 1st 2016 is a Monday.
+    calendar.set(2016, 1, id, 0, 0, 0);
+    Date legacy = calendar.getTime();
+    return writer.format(legacy);
   }
 
   private DesugarDateTimeTextProviderHelper() {}

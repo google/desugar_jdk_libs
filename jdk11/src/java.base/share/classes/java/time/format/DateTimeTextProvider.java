@@ -398,8 +398,8 @@ class DateTimeTextProvider {
             // }
             DateFormatSymbols symbols = DateFormatSymbols.getInstance(locale);
 
-            // For desugar: Include standalone formats.
-            DesugarDateTimeTextProviderHelper.fillWithStandaloneStyleMap(styleMap, symbols, locale);
+      // For desugar: Include standalone formats.
+      DesugarDateTimeTextProviderHelper.fillWithStandaloneMonthStyleMap(styleMap, symbols, locale);
 
             Map<Long, String> longMap = new HashMap<>();
             Map<Long, String> narrowMap = new HashMap<>();
@@ -458,6 +458,11 @@ class DateTimeTextProvider {
             //     }
             // }
             DateFormatSymbols symbols = DateFormatSymbols.getInstance(locale);
+
+      // For desugar: Include standalone formats.
+      DesugarDateTimeTextProviderHelper.fillWithStandaloneDayOfWeekStyleMap(
+          styleMap, symbols, locale);
+
             Map<Long, String> longMap = new HashMap<>();
             String[] longSymbols = symbols.getWeekdays();
             // per getWeekdays() javadoc Calendar.MONDAY etc. are supposed to be present
