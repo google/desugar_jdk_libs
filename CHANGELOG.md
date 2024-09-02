@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 2.1.2 *(2024-08-30)*
+----------------------------
+
+* Added support for standalone weekday names. Before they were returned as
+  numbers 1 through 7.
+  See [issue 362277530](https://issuetracker.google.com/362277530)
+
 Version 2.1.1 *(2024-08-26)*
 ----------------------------
 
