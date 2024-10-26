@@ -47,12 +47,12 @@ public class DesugarDateTimeTextProviderHelper {
     String longMonth = "LLLL";
     String shortMonth = "LLL";
 
-    for (int i = 1; i <= numMonth; i++) {
+    for (long i = 1; i <= numMonth; i++) {
       String longName = computeStandaloneMonthName(i, longMonth, loc);
-      longStandAloneMap.put((long) i, longName);
-      narrowStandAloneMap.put((long) i, firstCodePoint(longName));
+      longStandAloneMap.put(i, longName);
+      narrowStandAloneMap.put(i, firstCodePoint(longName));
       String shortName = computeStandaloneMonthName(i, shortMonth, loc);
-      shortStandAloneMap.put((long) i, shortName);
+      shortStandAloneMap.put(i, shortName);
     }
 
     if (numMonth > 0) {
@@ -62,19 +62,25 @@ public class DesugarDateTimeTextProviderHelper {
     }
   }
 
-  private static String computeStandaloneMonthName(int id, String standalonePattern, Locale loc) {
+  private static String computeStandaloneMonthName(long id, String standalonePattern, Locale loc) {
     TimeZone legacyUtc = TimeZone.getTimeZone("UTC");
     SimpleDateFormat writer = new SimpleDateFormat(standalonePattern, loc);
     writer.setTimeZone(legacyUtc);
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeZone(legacyUtc);
-    calendar.set(0, id, 0, 0, 0, 0);
+    calendar.set(0, (int) id, 0, 0, 0, 0);
     Date legacy = calendar.getTime();
     return writer.format(legacy);
   }
 
   private static String firstCodePoint(String string) {
     return string.substring(0, Character.charCount(string.codePointAt(0)));
+  }
+
+  private static String lastCodePoint(String rawText) {
+    int n = rawText.length();
+    int codePoint = rawText.codePointBefore(n);
+    return new StringBuilder().appendCodePoint(codePoint).toString();
   }
 
   public static void fillWithStandaloneDayOfWeekStyleMap(
@@ -91,12 +97,16 @@ public class DesugarDateTimeTextProviderHelper {
     String longDay = "cccc";
     String shortDay = "ccc";
 
-    for (int i = 1; i <= numDaysOfWeek; i++) {
+    boolean useLastCodePointAsNarrowName =
+        loc == Locale.SIMPLIFIED_CHINESE || loc == Locale.TRADITIONAL_CHINESE;
+
+    for (long i = 1; i <= numDaysOfWeek; i++) {
       String longName = computeStandaloneDayOfWeekName(i, longDay, loc);
-      longStandAloneMap.put((long) i, longName);
-      narrowStandAloneMap.put((long) i, firstCodePoint(longName));
+      longStandAloneMap.put(i, longName);
+      narrowStandAloneMap.put(
+          i, useLastCodePointAsNarrowName ? lastCodePoint(longName) : firstCodePoint(longName));
       String shortName = computeStandaloneDayOfWeekName(i, shortDay, loc);
-      shortStandAloneMap.put((long) i, shortName);
+      shortStandAloneMap.put(i, shortName);
     }
 
     if (numDaysOfWeek > 0) {
@@ -107,14 +117,14 @@ public class DesugarDateTimeTextProviderHelper {
   }
 
   private static String computeStandaloneDayOfWeekName(
-      int id, String standalonePattern, Locale loc) {
+      long id, String standalonePattern, Locale loc) {
     TimeZone legacyUtc = TimeZone.getTimeZone("UTC");
     SimpleDateFormat writer = new SimpleDateFormat(standalonePattern, loc);
     writer.setTimeZone(legacyUtc);
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeZone(legacyUtc);
     // Jan 1st 2016 is a Monday.
-    calendar.set(2016, 1, id, 0, 0, 0);
+    calendar.set(2016, 1, (int) id, 0, 0, 0);
     Date legacy = calendar.getTime();
     return writer.format(legacy);
   }
