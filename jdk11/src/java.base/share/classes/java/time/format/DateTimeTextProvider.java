@@ -399,33 +399,33 @@ class DateTimeTextProvider {
             DateFormatSymbols symbols = DateFormatSymbols.getInstance(locale);
 
       // For desugar: Include standalone formats.
-      DesugarDateTimeTextProviderHelper.fillWithStandaloneMonthStyleMap(styleMap, symbols, locale);
+      DesugarDateTimeTextProviderHelper.populateMonthStyleMap(styleMap, symbols, locale);
 
-            Map<Long, String> longMap = new HashMap<>();
-            Map<Long, String> narrowMap = new HashMap<>();
-            String[] longMonths = symbols.getMonths();
-            for (int i = 0; i < longMonths.length; ++i) {
-                if (!longMonths[i].isEmpty()) {
-                    longMap.put((long) i + 1, longMonths[i]);
-                    narrowMap.put((long) i + 1, firstCodePoint(longMonths[i]));
-                }
-            }
-            if (!longMap.isEmpty()) {
-                styleMap.put(TextStyle.FULL, longMap);
-                styleMap.put(TextStyle.NARROW, narrowMap);
-            }
-
-            Map<Long, String> shortMap = new HashMap<>();
-            String[] shortMonths = symbols.getShortMonths();
-            for (int i = 0; i < shortMonths.length; ++i) {
-                if (!shortMonths[i].isEmpty()) {
-                    shortMap.put((long) i + 1, shortMonths[i]);
-                }
-            }
-            if (!shortMap.isEmpty()) {
-                styleMap.put(TextStyle.SHORT, shortMap);
-            }
-            return new LocaleStore(styleMap);
+      // Map<Long, String> longMap = new HashMap<>();
+      // Map<Long, String> narrowMap = new HashMap<>();
+      // String[] longMonths = symbols.getMonths();
+      // for (int i = 0; i < longMonths.length; ++i) {
+      //     if (!longMonths[i].isEmpty()) {
+      //         longMap.put((long) i + 1, longMonths[i]);
+      //         narrowMap.put((long) i + 1, firstCodePoint(longMonths[i]));
+      //     }
+      // }
+      // if (!longMap.isEmpty()) {
+      //     styleMap.put(TextStyle.FULL, longMap);
+      //     styleMap.put(TextStyle.NARROW, narrowMap);
+      // }
+      //
+      // Map<Long, String> shortMap = new HashMap<>();
+      // String[] shortMonths = symbols.getShortMonths();
+      // for (int i = 0; i < shortMonths.length; ++i) {
+      //     if (!shortMonths[i].isEmpty()) {
+      //         shortMap.put((long) i + 1, shortMonths[i]);
+      //     }
+      // }
+      // if (!shortMap.isEmpty()) {
+      //     styleMap.put(TextStyle.SHORT, shortMap);
+      // }
+      return new LocaleStore(styleMap);
         }
 
         if (field == DAY_OF_WEEK) {
@@ -460,42 +460,41 @@ class DateTimeTextProvider {
             DateFormatSymbols symbols = DateFormatSymbols.getInstance(locale);
 
       // For desugar: Include standalone formats.
-      DesugarDateTimeTextProviderHelper.fillWithStandaloneDayOfWeekStyleMap(
-          styleMap, symbols, locale);
+      DesugarDateTimeTextProviderHelper.populateDayOfWeekStyleMap(styleMap, symbols, locale);
 
-            Map<Long, String> longMap = new HashMap<>();
-            String[] longSymbols = symbols.getWeekdays();
-            // per getWeekdays() javadoc Calendar.MONDAY etc. are supposed to be present
-            longMap.put(1L, longSymbols[Calendar.MONDAY]);
-            longMap.put(2L, longSymbols[Calendar.TUESDAY]);
-            longMap.put(3L, longSymbols[Calendar.WEDNESDAY]);
-            longMap.put(4L, longSymbols[Calendar.THURSDAY]);
-            longMap.put(5L, longSymbols[Calendar.FRIDAY]);
-            longMap.put(6L, longSymbols[Calendar.SATURDAY]);
-            longMap.put(7L, longSymbols[Calendar.SUNDAY]);
-            styleMap.put(TextStyle.FULL, longMap);
-
-            Map<Long, String> narrowMap = new HashMap<>();
-            narrowMap.put(1L, firstCodePoint(longSymbols[Calendar.MONDAY]));
-            narrowMap.put(2L, firstCodePoint(longSymbols[Calendar.TUESDAY]));
-            narrowMap.put(3L, firstCodePoint(longSymbols[Calendar.WEDNESDAY]));
-            narrowMap.put(4L, firstCodePoint(longSymbols[Calendar.THURSDAY]));
-            narrowMap.put(5L, firstCodePoint(longSymbols[Calendar.FRIDAY]));
-            narrowMap.put(6L, firstCodePoint(longSymbols[Calendar.SATURDAY]));
-            narrowMap.put(7L, firstCodePoint(longSymbols[Calendar.SUNDAY]));
-            styleMap.put(TextStyle.NARROW, narrowMap);
-
-            Map<Long, String> shortMap = new HashMap<>();
-            String[] shortSymbols = symbols.getShortWeekdays();
-            shortMap.put(1L, shortSymbols[Calendar.MONDAY]);
-            shortMap.put(2L, shortSymbols[Calendar.TUESDAY]);
-            shortMap.put(3L, shortSymbols[Calendar.WEDNESDAY]);
-            shortMap.put(4L, shortSymbols[Calendar.THURSDAY]);
-            shortMap.put(5L, shortSymbols[Calendar.FRIDAY]);
-            shortMap.put(6L, shortSymbols[Calendar.SATURDAY]);
-            shortMap.put(7L, shortSymbols[Calendar.SUNDAY]);
-            styleMap.put(TextStyle.SHORT, shortMap);
-            return new LocaleStore(styleMap);
+      // Map<Long, String> longMap = new HashMap<>();
+      // String[] longSymbols = symbols.getWeekdays();
+      // // per getWeekdays() javadoc Calendar.MONDAY etc. are supposed to be present
+      // longMap.put(1L, longSymbols[Calendar.MONDAY]);
+      // longMap.put(2L, longSymbols[Calendar.TUESDAY]);
+      // longMap.put(3L, longSymbols[Calendar.WEDNESDAY]);
+      // longMap.put(4L, longSymbols[Calendar.THURSDAY]);
+      // longMap.put(5L, longSymbols[Calendar.FRIDAY]);
+      // longMap.put(6L, longSymbols[Calendar.SATURDAY]);
+      // longMap.put(7L, longSymbols[Calendar.SUNDAY]);
+      // styleMap.put(TextStyle.FULL, longMap);
+      //
+      // Map<Long, String> narrowMap = new HashMap<>();
+      // narrowMap.put(1L, firstCodePoint(longSymbols[Calendar.MONDAY]));
+      // narrowMap.put(2L, firstCodePoint(longSymbols[Calendar.TUESDAY]));
+      // narrowMap.put(3L, firstCodePoint(longSymbols[Calendar.WEDNESDAY]));
+      // narrowMap.put(4L, firstCodePoint(longSymbols[Calendar.THURSDAY]));
+      // narrowMap.put(5L, firstCodePoint(longSymbols[Calendar.FRIDAY]));
+      // narrowMap.put(6L, firstCodePoint(longSymbols[Calendar.SATURDAY]));
+      // narrowMap.put(7L, firstCodePoint(longSymbols[Calendar.SUNDAY]));
+      // styleMap.put(TextStyle.NARROW, narrowMap);
+      //
+      // Map<Long, String> shortMap = new HashMap<>();
+      // String[] shortSymbols = symbols.getShortWeekdays();
+      // shortMap.put(1L, shortSymbols[Calendar.MONDAY]);
+      // shortMap.put(2L, shortSymbols[Calendar.TUESDAY]);
+      // shortMap.put(3L, shortSymbols[Calendar.WEDNESDAY]);
+      // shortMap.put(4L, shortSymbols[Calendar.THURSDAY]);
+      // shortMap.put(5L, shortSymbols[Calendar.FRIDAY]);
+      // shortMap.put(6L, shortSymbols[Calendar.SATURDAY]);
+      // shortMap.put(7L, shortSymbols[Calendar.SUNDAY]);
+      // styleMap.put(TextStyle.SHORT, shortMap);
+      return new LocaleStore(styleMap);
         }
 
         if (field == AMPM_OF_DAY) {

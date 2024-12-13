@@ -33,7 +33,7 @@ import java.util.TimeZone;
 /** Utilities for {@link DateTimeTextProvider}. */
 public class DesugarDateTimeTextProviderHelper {
 
-  public static void fillWithStandaloneMonthStyleMap(
+  public static void populateMonthStyleMap(
       Map<TextStyle, Map<Long, String>> styleMapMap,
       DateFormatSymbols dateFormatSymbols,
       Locale loc) {
@@ -59,6 +59,10 @@ public class DesugarDateTimeTextProviderHelper {
       styleMapMap.put(TextStyle.FULL_STANDALONE, longStandAloneMap);
       styleMapMap.put(TextStyle.NARROW_STANDALONE, narrowStandAloneMap);
       styleMapMap.put(TextStyle.SHORT_STANDALONE, shortStandAloneMap);
+
+      styleMapMap.put(TextStyle.FULL, longStandAloneMap);
+      styleMapMap.put(TextStyle.NARROW, narrowStandAloneMap);
+      styleMapMap.put(TextStyle.SHORT, shortStandAloneMap);
     }
   }
 
@@ -83,7 +87,7 @@ public class DesugarDateTimeTextProviderHelper {
     return new StringBuilder().appendCodePoint(codePoint).toString();
   }
 
-  public static void fillWithStandaloneDayOfWeekStyleMap(
+  public static void populateDayOfWeekStyleMap(
       Map<TextStyle, Map<Long, String>> styleMapMap,
       DateFormatSymbols dateFormatSymbols,
       Locale loc) {
@@ -113,6 +117,10 @@ public class DesugarDateTimeTextProviderHelper {
       styleMapMap.put(TextStyle.FULL_STANDALONE, longStandAloneMap);
       styleMapMap.put(TextStyle.NARROW_STANDALONE, narrowStandAloneMap);
       styleMapMap.put(TextStyle.SHORT_STANDALONE, shortStandAloneMap);
+
+      styleMapMap.put(TextStyle.FULL, longStandAloneMap);
+      styleMapMap.put(TextStyle.NARROW, narrowStandAloneMap);
+      styleMapMap.put(TextStyle.SHORT, shortStandAloneMap);
     }
   }
 
