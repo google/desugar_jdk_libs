@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 2.1.4 *(2024-12-18)*
+----------------------------
+
+* Fix Narrow non Standalone Week Names on some locales. `SIMPLIFIED_CHINESE` and
+  `TRADITIONAL_CHINESE` is on the last code point convention for narrow format.
+  This is a follow up to 2.1.3 using the same values as Standalone Week Names.
+
 Version 2.1.3 *(2024-10-28)*
 ----------------------------
 
