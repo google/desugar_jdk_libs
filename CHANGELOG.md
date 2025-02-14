@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 2.1.5 *(2025-02-14)*
+----------------------------
+
+* Added support for `Stream.toList()`, which was added in JDK-16 and Android 14
+(API level 34).
+
 Version 2.1.4 *(2024-12-18)*
 ----------------------------
 
