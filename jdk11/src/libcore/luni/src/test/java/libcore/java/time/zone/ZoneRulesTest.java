@@ -15,9 +15,10 @@
  */
 package libcore.java.time.zone;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -25,9 +26,9 @@ import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.zone.ZoneRules;
 import java.util.Collections;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Additional tests for {@link ZoneRules}.
@@ -66,8 +67,8 @@ public class ZoneRulesTest {
         }
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_of_ZoneOffset_null() {
-        ZoneRules.of(null);
+  @Test
+  public void test_of_ZoneOffset_null() {
+    assertThrows(NullPointerException.class, () -> ZoneRules.of(null));
     }
 }

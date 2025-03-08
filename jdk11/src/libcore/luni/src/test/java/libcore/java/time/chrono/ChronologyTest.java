@@ -15,9 +15,9 @@
  */
 package libcore.java.time.chrono;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 import java.time.chrono.AbstractChronology;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.Chronology;
@@ -29,8 +29,9 @@ import java.time.temporal.ValueRange;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Additional tests for {@link Chronology}.
@@ -66,9 +67,9 @@ public class ChronologyTest {
                 chronologyResult == 0, c1.equals(c2));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_compareTo_null() {
-        IsoChronology.INSTANCE.compareTo(null);
+  @Test
+  public void test_compareTo_null() {
+    assertThrows(NullPointerException.class, () -> IsoChronology.INSTANCE.compareTo(null));
     }
 
     /** Fake chronology that supports only returning an id and a type. */

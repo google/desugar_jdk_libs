@@ -15,11 +15,11 @@
  */
 package libcore.java.time.chrono;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
 import static java.time.chrono.JapaneseEra.REIWA;
 import static java.time.chrono.JapaneseEra.SHOWA;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -60,14 +60,18 @@ public class JapaneseChronologyTest {
         assertEquals(ZoneOffset.ofHours(1), result.getOffset());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_zonedDateTime_nullInstant() {
-        JapaneseChronology.INSTANCE.zonedDateTime(null, ZoneOffset.UTC);
+  @Test
+  public void test_zonedDateTime_nullInstant() {
+    assertThrows(
+        NullPointerException.class,
+        () -> JapaneseChronology.INSTANCE.zonedDateTime(null, ZoneOffset.UTC));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_zonedDateTime_nullZone() {
-        JapaneseChronology.INSTANCE.zonedDateTime(Instant.EPOCH, null);
+  @Test
+  public void test_zonedDateTime_nullZone() {
+    assertThrows(
+        NullPointerException.class,
+        () -> JapaneseChronology.INSTANCE.zonedDateTime(Instant.EPOCH, null));
     }
 
     @Test

@@ -17,15 +17,15 @@ package libcore.java.time.chrono;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertThrows;
 
 import java.time.chrono.HijrahChronology;
 import java.time.chrono.HijrahDate;
 import java.time.chrono.HijrahEra;
 import java.time.temporal.ChronoField;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Additional tests for {@link HijrahDate}.
@@ -64,9 +64,9 @@ public class HijrahChronologyTest {
         assertSame(date1, date2);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_HijrahDate_withVariant_null() {
-        HijrahDate.now().withVariant(null);
+  @Test
+  public void test_HijrahDate_withVariant_null() {
+    assertThrows(NullPointerException.class, () -> HijrahDate.now().withVariant(null));
     }
 
     @Test

@@ -15,19 +15,17 @@
  */
 package libcore.java.time;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import java.time.LocalDate;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Additional tets for {@link ZonedDateTime}.
@@ -117,19 +115,22 @@ public class ZonedDateTimeTest {
         }
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_ofInstant_localDateTime_null() {
-        ZonedDateTime.ofInstant(null, OFFSET_P1, ZONE_VIENNA);
+  @Test
+  public void test_ofInstant_localDateTime_null() {
+    assertThrows(
+        NullPointerException.class, () -> ZonedDateTime.ofInstant(null, OFFSET_P1, ZONE_VIENNA));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_ofInstant_offset_null() {
-        ZonedDateTime.ofInstant(LDT_P1, null, ZONE_VIENNA);
+  @Test
+  public void test_ofInstant_offset_null() {
+    assertThrows(
+        NullPointerException.class, () -> ZonedDateTime.ofInstant(LDT_P1, null, ZONE_VIENNA));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_ofInstant_zone_null() {
-        ZonedDateTime.ofInstant(LDT_P1, OFFSET_P1, null);
+  @Test
+  public void test_ofInstant_zone_null() {
+    assertThrows(
+        NullPointerException.class, () -> ZonedDateTime.ofInstant(LDT_P1, OFFSET_P1, null));
     }
 
     @Test
@@ -180,13 +181,14 @@ public class ZonedDateTimeTest {
         assertEquals("localDateTime" + message, expectedDateTime, zonedDateTime.toLocalDateTime());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_ofLocal_localDateTime_null() {
-        ZonedDateTime.ofLocal(null, ZONE_VIENNA, OFFSET_P1);
+  @Test
+  public void test_ofLocal_localDateTime_null() {
+    assertThrows(
+        NullPointerException.class, () -> ZonedDateTime.ofLocal(null, ZONE_VIENNA, OFFSET_P1));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_ofLocal_zone_null() {
-        ZonedDateTime.ofLocal(LDT_P1, null, OFFSET_P1);
+  @Test
+  public void test_ofLocal_zone_null() {
+    assertThrows(NullPointerException.class, () -> ZonedDateTime.ofLocal(LDT_P1, null, OFFSET_P1));
     }
 }

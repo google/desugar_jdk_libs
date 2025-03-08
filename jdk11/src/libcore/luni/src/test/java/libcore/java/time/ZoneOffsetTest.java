@@ -15,15 +15,16 @@
  */
 package libcore.java.time;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.fail;
+
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 import java.time.temporal.UnsupportedTemporalTypeException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Additional tests for {@link ZoneOffset}.
@@ -51,9 +52,9 @@ public class ZoneOffsetTest {
                 OFFSET_P1.range(ChronoField.OFFSET_SECONDS));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_range_null() {
-        OFFSET_P1.range(null);
+  @Test
+  public void test_range_null() {
+    assertThrows(NullPointerException.class, () -> OFFSET_P1.range(null));
     }
 
     @Test

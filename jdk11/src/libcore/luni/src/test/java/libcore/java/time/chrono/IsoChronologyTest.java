@@ -15,9 +15,10 @@
  */
 package libcore.java.time.chrono;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.fail;
+
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -29,9 +30,9 @@ import java.time.ZonedDateTime;
 import java.time.chrono.IsoChronology;
 import java.time.chrono.IsoEra;
 import java.time.temporal.ChronoField;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * Additional tests for {@link IsoChronology}.
@@ -112,13 +113,17 @@ public class IsoChronologyTest {
         assertEquals(ZoneOffset.ofHours(1), result.getOffset());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_zonedDateTime_nullInstant() {
-        IsoChronology.INSTANCE.zonedDateTime(null, ZoneOffset.UTC);
+  @Test
+  public void test_zonedDateTime_nullInstant() {
+    assertThrows(
+        NullPointerException.class,
+        () -> IsoChronology.INSTANCE.zonedDateTime(null, ZoneOffset.UTC));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_zonedDateTime_nullZone() {
-        IsoChronology.INSTANCE.zonedDateTime(Instant.EPOCH, null);
+  @Test
+  public void test_zonedDateTime_nullZone() {
+    assertThrows(
+        NullPointerException.class,
+        () -> IsoChronology.INSTANCE.zonedDateTime(Instant.EPOCH, null));
     }
 }
