@@ -121,6 +121,7 @@ public final class JarFileClassEntrySelector {
     "java/util/concurrent/ConcurrentLinkedQueue",
     "java/util/concurrent/ConcurrentMap",
     "java/util/concurrent/ConcurrentNavigableMap",
+    "java/util/concurrent/CopyOnWriteArrayList",
     "java/util/concurrent/CountedCompleter",
     "java/util/concurrent/Desugar*",
     "java/util/concurrent/Exchanger",
