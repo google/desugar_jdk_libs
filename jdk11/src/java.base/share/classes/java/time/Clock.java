@@ -67,6 +67,7 @@ import static java.time.LocalTime.NANOS_PER_SECOND;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -519,6 +520,60 @@ public abstract class Clock implements InstantSource {
 
   // -----------------------------------------------------------------------
   /**
+   * An instant source that always returns the latest time from {@link System#currentTimeMillis()}
+   * or equivalent.
+   */
+  static final class SystemInstantSource implements InstantSource, Serializable {
+    private static final long serialVersionUID = 3232399674412L;
+    // this is a singleton, but the class is coded such that it is not a
+    // problem if someone hacks around and creates another instance
+    static final SystemInstantSource INSTANCE = new SystemInstantSource();
+
+    SystemInstantSource() {}
+
+    @Override
+    public Clock withZone(ZoneId zone) {
+      return Clock.system(zone);
+    }
+
+    @Override
+    public long millis() {
+      // System.currentTimeMillis() and VM.getNanoTimeAdjustment(offset)
+      // use the same time source - System.currentTimeMillis() simply
+      // limits the resolution to milliseconds.
+      // So we take the faster path and call System.currentTimeMillis()
+      // directly - in order to avoid the performance penalty of
+      // VM.getNanoTimeAdjustment(offset) which is less efficient.
+      return System.currentTimeMillis();
+    }
+
+    @Override
+    public Instant instant() {
+      return Instant.ofEpochMilli(millis());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return obj instanceof SystemInstantSource;
+    }
+
+    @Override
+    public int hashCode() {
+      return SystemInstantSource.class.hashCode();
+    }
+
+    @Override
+    public String toString() {
+      return "SystemInstantSource";
+    }
+
+    private Object readResolve() throws ObjectStreamException {
+      return SystemInstantSource.INSTANCE;
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  /**
    * Implementation of a clock that always returns the latest time from {@code
    * SystemInstantSource.INSTANCE}.
    */
@@ -787,5 +842,63 @@ public abstract class Clock implements InstantSource {
         public String toString() {
             return "TickClock[" + baseClock + "," + Duration.ofNanos(tickNanos) + "]";
         }
+  }
+
+  // -----------------------------------------------------------------------
+  /** Implementation of a clock based on an {@code InstantSource}. */
+  static final class SourceClock extends Clock implements Serializable {
+    private static final long serialVersionUID = 235386528762398L;
+
+    @SuppressWarnings("serial") // Not statically typed as Serializable
+    private final InstantSource baseSource;
+
+    private final ZoneId zone;
+
+    SourceClock(InstantSource baseSource, ZoneId zone) {
+      this.baseSource = baseSource;
+      this.zone = zone;
+    }
+
+    @Override
+    public ZoneId getZone() {
+      return zone;
+    }
+
+    @Override
+    public Clock withZone(ZoneId zone) {
+      if (zone.equals(this.zone)) { // intentional NPE
+        return this;
+      }
+      return new SourceClock(baseSource, zone);
+    }
+
+    @Override
+    public long millis() {
+      return baseSource.millis();
+    }
+
+    @Override
+    public Instant instant() {
+      return baseSource.instant();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj instanceof SourceClock) {
+        SourceClock other = (SourceClock) obj;
+        return zone.equals(other.zone) && baseSource.equals(other.baseSource);
+      }
+      return false;
+    }
+
+    @Override
+    public int hashCode() {
+      return baseSource.hashCode() ^ zone.hashCode();
+    }
+
+    @Override
+    public String toString() {
+      return "SourceClock[" + baseSource + "," + zone + "]";
+    }
   }
 }
