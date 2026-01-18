@@ -5,12 +5,11 @@ import static com.google.testing.apianalyzer.AndroidPlatformJdkApiGenerator.isJd
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.flogger.GoogleLogger;
+import com.google.devtools.build.java.JarTime;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
@@ -27,9 +26,6 @@ import org.objectweb.asm.commons.Remapper;
 /** Selects certain test jar entries in a given jar and packs into a new JAR. */
 public final class TestJarEntrySelector {
   private static final GoogleLogger logger = GoogleLogger.forEnclosingClass();
-
-  private static final LocalDateTime DEFAULT_LOCAL_TIME =
-      LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
   private final Path desugarLibSelectedJarPath;
   private final Path testInputJarPath;
@@ -117,7 +113,7 @@ public final class TestJarEntrySelector {
 
   private static JarEntry createJarEntry(String entryName, byte[] bytes) {
     JarEntry je = new JarEntry(entryName);
-    je.setTimeLocal(DEFAULT_LOCAL_TIME);
+    je.setTimeLocal(JarTime.DEFAULT_TIMESTAMP);
     je.setMethod(JarEntry.STORED);
     int byteLength = bytes.length;
     je.setSize(byteLength);

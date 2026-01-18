@@ -24,14 +24,13 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.devtools.build.java.JarTime;
 import org.objectweb.asm.Opcodes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -55,8 +54,6 @@ import org.objectweb.asm.tree.ClassNode;
  */
 public final class JarFileClassEntrySelector {
 
-  private static final LocalDateTime DEFAULT_LOCAL_TIME =
-      LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
   private static final String[] D8_ANDROID_JDK11_LIB_TOP_LEVEL_TYPE_PATTERNS = {
     // keep-sorted start
@@ -329,7 +326,7 @@ public final class JarFileClassEntrySelector {
 
   private static JarEntry createJarEntry(String entryName, byte[] bytes) {
     JarEntry je = new JarEntry(entryName);
-    je.setTimeLocal(DEFAULT_LOCAL_TIME);
+    je.setTimeLocal(JarTime.DEFAULT_TIMESTAMP);
     je.setMethod(JarEntry.STORED);
     int byteLength = bytes.length;
     je.setSize(byteLength);

@@ -21,13 +21,12 @@
 package wrapper;
 
 import com.google.common.collect.ImmutableList;
+import com.google.devtools.build.java.JarTime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
@@ -43,9 +42,6 @@ import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.Remapper;
 
 public final class TypeWrapperConverter {
-
-  private static final LocalDateTime DEFAULT_LOCAL_TIME =
-      LocalDateTime.of(2010, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
   private final ImmutableList<Path> inputJarPaths;
   private final Path outputJarPath;
@@ -102,7 +98,7 @@ public final class TypeWrapperConverter {
 
   private static JarEntry createJarEntry(String entryName, byte[] bytes) {
     JarEntry je = new JarEntry(entryName);
-    je.setTimeLocal(DEFAULT_LOCAL_TIME);
+    je.setTimeLocal(JarTime.DEFAULT_TIMESTAMP);
     je.setMethod(JarEntry.STORED);
     int byteLength = bytes.length;
     je.setSize(byteLength);
