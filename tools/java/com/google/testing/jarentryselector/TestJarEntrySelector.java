@@ -5,7 +5,7 @@ import static com.google.testing.apianalyzer.AndroidPlatformJdkApiGenerator.isJd
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.flogger.GoogleLogger;
-import com.google.devtools.build.java.JarTime;
+import com.google.devtools.build.android.JarTime;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

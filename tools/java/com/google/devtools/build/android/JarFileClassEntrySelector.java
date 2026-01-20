@@ -24,7 +24,6 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.devtools.build.java.JarTime;
 import org.objectweb.asm.Opcodes;
 import java.io.IOException;
 import java.io.InputStream;

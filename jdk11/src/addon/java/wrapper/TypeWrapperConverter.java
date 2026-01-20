@@ -21,7 +21,7 @@
 package wrapper;
 
 import com.google.common.collect.ImmutableList;
-import com.google.devtools.build.java.JarTime;
+import com.google.devtools.build.android.JarTime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
