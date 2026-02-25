@@ -1004,6 +1004,10 @@ public final class ZoneRules implements Serializable {
                     }
                     // Must be probe's year
                     transArray = findTransitionArray(year);
+          // For desugar: Answers null if no transitions.
+          if (transArray.length == 0) {
+            return null;
+          }
                     return transArray[0];
                 }
                 probeSec += (90L * 86400L);
@@ -1030,6 +1034,10 @@ public final class ZoneRules implements Serializable {
             // use first from following year
             if (year < Year.MAX_VALUE) {
                 transArray = findTransitionArray(year + 1);
+        // For desugar: Answers null if no transitions.
+        if (transArray.length == 0) {
+          return null;
+        }
                 return transArray[0];
             }
             return null;
@@ -1261,7 +1269,7 @@ public final class ZoneRules implements Serializable {
         if (timeZone != null) {
             return "ZoneRules[timeZone=" + timeZone.getID() + "]";
         }
-        return "ZoneRules[currentStandardOffset=" + standardOffsets[standardOffsets.length - 1] + "]";
+    return "ZoneRules[currentStandardOffset=" + standardOffsets[standardOffsets.length - 1] + "]";
     }
 
 }
