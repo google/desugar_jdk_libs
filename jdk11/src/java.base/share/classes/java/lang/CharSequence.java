@@ -107,6 +107,22 @@ public interface CharSequence {
      */
     CharSequence subSequence(int start, int end);
 
+    // FOR DESUGAR: Add isEmpty() method from JDK 15.
+    /**
+     * Returns {@code true} if this character sequence is empty.
+     *
+     * @implSpec
+     * The default implementation returns the result of calling {@code length() == 0}.
+     *
+     * @return {@code true} if {@link #length()} is {@code 0}, otherwise
+     * {@code false}
+     *
+     * @since 15
+     */
+    default boolean isEmpty() {
+        return this.length() == 0;
+    }
+
     /**
      * Returns a string containing the characters in this sequence in the same
      * order as this sequence.  The length of the string will be the length of
