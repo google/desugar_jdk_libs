@@ -81,6 +81,7 @@ public class CharacterTest {
     assertEquals(0xdbff, Character.highSurrogate(0x10ffff));
   }
 
+  @Test
   public void test_lowSurrogate() throws Exception {
     // The behavior for non-supplementary code points (like these two) is undefined.
     // These are the obvious results if you don't do anything special.
@@ -172,8 +173,12 @@ public class CharacterTest {
     assertEquals(Character.UnicodeBlock.BASIC_LATIN, Character.UnicodeBlock.forName("BASIC_LATIN"));
     assertEquals(Character.UnicodeBlock.BASIC_LATIN, Character.UnicodeBlock.forName("basic_LATIN"));
 
-    assertEquals(Character.UnicodeBlock.HANGUL_JAMO_EXTENDED_B, Character.UnicodeBlock.forName("HANGUL_JAMO_EXTENDED_B"));
-    assertEquals(Character.UnicodeBlock.HANGUL_JAMO_EXTENDED_B, Character.UnicodeBlock.forName("HANGUL JAMO EXTENDED-B"));
+    assertEquals(
+        Character.UnicodeBlock.HANGUL_JAMO_EXTENDED_B,
+        Character.UnicodeBlock.forName("HANGUL_JAMO_EXTENDED_B"));
+    assertEquals(
+        Character.UnicodeBlock.HANGUL_JAMO_EXTENDED_B,
+        Character.UnicodeBlock.forName("HANGUL JAMO EXTENDED-B"));
 
     // Failure cases.
     try {
@@ -190,13 +195,27 @@ public class CharacterTest {
     // Renamed blocks.
     assertEquals(Character.UnicodeBlock.GREEK, Character.UnicodeBlock.forName("Greek"));
     assertEquals(Character.UnicodeBlock.GREEK, Character.UnicodeBlock.forName("Greek And Coptic"));
-    assertEquals(Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS, Character.UnicodeBlock.forName("Combining Marks For Symbols"));
-    assertEquals(Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS, Character.UnicodeBlock.forName("Combining Diacritical Marks For Symbols"));
-    assertEquals(Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS, Character.UnicodeBlock.forName("COMBINING_MARKS_FOR_SYMBOLS"));
-    assertEquals(Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS, Character.UnicodeBlock.forName("Combining Marks for Symbols"));
-    assertEquals(Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS, Character.UnicodeBlock.forName("CombiningMarksforSymbols"));
-    assertEquals(Character.UnicodeBlock.CYRILLIC_SUPPLEMENTARY, Character.UnicodeBlock.forName("Cyrillic Supplementary"));
-    assertEquals(Character.UnicodeBlock.CYRILLIC_SUPPLEMENTARY, Character.UnicodeBlock.forName("Cyrillic Supplement"));
+    assertEquals(
+        Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS,
+        Character.UnicodeBlock.forName("Combining Marks For Symbols"));
+    assertEquals(
+        Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS,
+        Character.UnicodeBlock.forName("Combining Diacritical Marks For Symbols"));
+    assertEquals(
+        Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS,
+        Character.UnicodeBlock.forName("COMBINING_MARKS_FOR_SYMBOLS"));
+    assertEquals(
+        Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS,
+        Character.UnicodeBlock.forName("Combining Marks for Symbols"));
+    assertEquals(
+        Character.UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS,
+        Character.UnicodeBlock.forName("CombiningMarksforSymbols"));
+    assertEquals(
+        Character.UnicodeBlock.CYRILLIC_SUPPLEMENTARY,
+        Character.UnicodeBlock.forName("Cyrillic Supplementary"));
+    assertEquals(
+        Character.UnicodeBlock.CYRILLIC_SUPPLEMENTARY,
+        Character.UnicodeBlock.forName("Cyrillic Supplement"));
   }
 
   @Ignore("b/200171512") // Character.isAlphabetic is yet supported.
@@ -233,6 +252,8 @@ public class CharacterTest {
   }
 
   // http://b/9690863
+  @Ignore("b/503773471")
+  @Test
   public void test_isIdentifierIgnorable_against_icu4c() throws Exception {
     Method m = Character.class.getDeclaredMethod("isIdentifierIgnorable" + "Impl", int.class);
     m.setAccessible(true);
@@ -242,6 +263,8 @@ public class CharacterTest {
   }
 
   // http://b/9690863
+  @Ignore("b/503773471")
+  @Test
   public void test_isLetter_against_icu4c() throws Exception {
     Method m = Character.class.getDeclaredMethod("isLetter" + "Impl", int.class);
     m.setAccessible(true);
@@ -251,6 +274,8 @@ public class CharacterTest {
   }
 
   // http://b/9690863
+  @Ignore("b/503773471")
+  @Test
   public void test_isLetterOrDigit_against_icu4c() throws Exception {
     Method m = Character.class.getDeclaredMethod("isLetterOrDigit" + "Impl", int.class);
     m.setAccessible(true);
@@ -260,6 +285,8 @@ public class CharacterTest {
   }
 
   // http://b/9690863
+  @Ignore("b/503773471")
+  @Test
   public void test_isLowerCase_against_icu4c() throws Exception {
     Method m = Character.class.getDeclaredMethod("isLowerCase" + "Impl", int.class);
     m.setAccessible(true);
@@ -269,6 +296,8 @@ public class CharacterTest {
   }
 
   // http://b/9690863
+  @Ignore("b/503773471")
+  @Test
   public void test_isSpaceChar_against_icu4c() throws Exception {
     Method m = Character.class.getDeclaredMethod("isSpaceChar" + "Impl", int.class);
     m.setAccessible(true);
@@ -285,6 +314,8 @@ public class CharacterTest {
   }
 
   // http://b/9690863
+  @Ignore("b/503773471")
+  @Test
   public void test_isUpperCase_against_icu4c() throws Exception {
     Method m = Character.class.getDeclaredMethod("isUpperCase" + "Impl", int.class);
     m.setAccessible(true);
