@@ -30,7 +30,7 @@ public class MethodHandleCombinersTest extends TestCase {
 
     static final int TEST_THREAD_ITERATIONS = 1000;
 
-    public static void testThrowException() throws Throwable {
+    public void testThrowException() throws Throwable {
         MethodHandle handle = MethodHandles.throwException(String.class,
                 IllegalArgumentException.class);
 
@@ -55,7 +55,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(42l, message2);
     }
 
-    public static void testDropArguments() throws Throwable {
+    public void testDropArguments() throws Throwable {
         MethodHandle delegate = MethodHandles.lookup().findStatic(MethodHandleCombinersTest.class,
                 "dropArguments_delegate",
                 MethodType.methodType(void.class, new Class<?>[]{String.class, long.class}));
@@ -121,7 +121,7 @@ public class MethodHandleCombinersTest extends TestCase {
         }
     }
 
-    public static void testDropArguments_List() throws Throwable {
+    public void testDropArguments_List() throws Throwable {
         MethodHandle delegate = MethodHandles.lookup().findStatic(MethodHandleCombinersTest.class,
                 "dropArguments_delegate",
                 MethodType.methodType(void.class, new Class<?>[]{String.class, long.class}));
@@ -169,7 +169,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return "handler2";
     }
 
-    public static void testCatchException() throws Throwable {
+    public void testCatchException() throws Throwable {
         MethodHandle target = MethodHandles.lookup().findStatic(MethodHandleCombinersTest.class,
                 "testCatchException_target",
                 MethodType
@@ -253,7 +253,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return "fallback";
     }
 
-    public static void testGuardWithTest() throws Throwable {
+    public void testGuardWithTest() throws Throwable {
         MethodHandle test = MethodHandles.lookup().findStatic(MethodHandleCombinersTest.class,
                 "testGuardWithTest_test",
                 MethodType.methodType(boolean.class, new Class<?>[]{String.class, long.class}));
@@ -289,7 +289,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals("target", returnVal);
     }
 
-    public static void testArrayElementGetter() throws Throwable {
+    public void testArrayElementGetter() throws Throwable {
         MethodHandle getter = MethodHandles.arrayElementGetter(int[].class);
 
         {
@@ -382,7 +382,7 @@ public class MethodHandleCombinersTest extends TestCase {
         }
     }
 
-    public static void testArrayElementSetter() throws Throwable {
+    public void testArrayElementSetter() throws Throwable {
         MethodHandle setter = MethodHandles.arrayElementSetter(int[].class);
 
         {
@@ -467,7 +467,7 @@ public class MethodHandleCombinersTest extends TestCase {
         }
     }
 
-    public static void testIdentity() throws Throwable {
+    public void testIdentity() throws Throwable {
         {
             MethodHandle identity = MethodHandles.identity(boolean.class);
             boolean value = (boolean) identity.invoke(false);
@@ -523,7 +523,7 @@ public class MethodHandleCombinersTest extends TestCase {
         }
     }
 
-    public static void testConstant() throws Throwable {
+    public void testConstant() throws Throwable {
         // int constants.
         {
             MethodHandle constant = MethodHandles.constant(int.class, 56);
@@ -620,7 +620,7 @@ public class MethodHandleCombinersTest extends TestCase {
         }
     }
 
-    public static void testBindTo() throws Throwable {
+    public void testBindTo() throws Throwable {
         MethodHandle stringCharAt = MethodHandles.lookup().findVirtual(
                 String.class, "charAt", MethodType.methodType(char.class, int.class));
 
@@ -681,7 +681,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return 42;
     }
 
-    public static void testFilterReturnValue() throws Throwable {
+    public void testFilterReturnValue() throws Throwable {
         // A target that returns a reference.
         {
             final MethodHandle target = MethodHandles.lookup().findStatic(MethodHandleCombinersTest.class,
@@ -749,7 +749,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(Integer.valueOf(42), b);
     }
 
-    public static void testPermuteArguments() throws Throwable {
+    public void testPermuteArguments() throws Throwable {
         {
             final MethodHandle target = MethodHandles.lookup().findStatic(
                     MethodHandleCombinersTest.class, "permuteArguments_callee",
@@ -838,7 +838,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return "bar";
     }
 
-    public static void testInvokers() throws Throwable {
+    public void testInvokers() throws Throwable {
         final MethodType targetType = MethodType.methodType(String.class, String.class);
         final MethodHandle target = MethodHandles.lookup().findVirtual(
                 String.class, "concat", targetType);
@@ -879,7 +879,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return 43;
     }
 
-    public static void testSpreaders_reference() throws Throwable {
+    public void testSpreaders_reference() throws Throwable {
         MethodType methodType = MethodType.methodType(int.class,
                 new Class<?>[]{String.class, String.class, String.class});
         MethodHandle delegate = MethodHandles.lookup().findStatic(
@@ -1072,7 +1072,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return 51;
     }
 
-    public static void testSpreaders_primitive() throws Throwable {
+    public void testSpreaders_primitive() throws Throwable {
         // boolean[]
         // ---------------------
         MethodType type = MethodType.methodType(int.class,
@@ -1206,7 +1206,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(51, ret);
     }
 
-    public static void testInvokeWithArguments() throws Throwable {
+    public void testInvokeWithArguments() throws Throwable {
         MethodType methodType = MethodType.methodType(int.class,
                 new Class<?>[]{String.class, String.class, String.class});
         MethodHandle handle = MethodHandles.lookup().findStatic(
@@ -1318,7 +1318,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return 99;
     }
 
-    public static void testAsCollector() throws Throwable {
+    public void testAsCollector() throws Throwable {
         // Reference arrays.
         // -------------------
         MethodHandle trailingRef = MethodHandles.lookup().findStatic(
@@ -1413,7 +1413,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return 56;
     }
 
-    public static void testFilterArguments() throws Throwable {
+    public void testFilterArguments() throws Throwable {
         MethodHandle filter1 = MethodHandles.lookup().findStatic(
                 MethodHandleCombinersTest.class, "filter1", MethodType.methodType(String.class, char.class));
         MethodHandle filter2 = MethodHandles.lookup().findStatic(
@@ -1490,7 +1490,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return ("a: " + a + ", b: " + b + ", c: " + c);
     }
 
-    public static void testCollectArguments() throws Throwable {
+    public void testCollectArguments() throws Throwable {
         // Test non-void filters.
         MethodHandle filter = MethodHandles.lookup().findStatic(
                 MethodHandleCombinersTest.class, "filter",
@@ -1560,7 +1560,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return 73;
     }
 
-    public static void testInsertArguments() throws Throwable {
+    public void testInsertArguments() throws Throwable {
         MethodHandle target = MethodHandles.lookup().findStatic(
                 MethodHandleCombinersTest.class, "insertReceiver",
                 MethodType.methodType(int.class,
@@ -1624,7 +1624,7 @@ public class MethodHandleCombinersTest extends TestCase {
         return null;
     }
 
-    public static void testFoldArguments() throws Throwable {
+    public void testFoldArguments() throws Throwable {
         // Test non-void filters.
         MethodHandle filter = MethodHandles.lookup().findStatic(
                 MethodHandleCombinersTest.class, "foldFilter",
@@ -1707,7 +1707,7 @@ public class MethodHandleCombinersTest extends TestCase {
         }
     }
 
-    public static void testDropInsertArgumentsMultithreaded() throws Throwable {
+    public void testDropInsertArgumentsMultithreaded() throws Throwable {
         MethodHandle delegate = MethodHandles.lookup().findStatic(MethodHandleCombinersTest.class,
                 "dropArguments_delegate",
                 MethodType.methodType(void.class, new Class<?>[]{String.class, long.class}));
@@ -1725,7 +1725,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(z, 20000000000l);
     }
 
-    public static void testThrowCatchExceptionMultiThreaded() throws Throwable {
+    public void testThrowCatchExceptionMultiThreaded() throws Throwable {
         MethodHandle thrower = MethodHandles.throwException(void.class,
                                                             NumberFormatException.class);
         thrower = MethodHandles.dropArguments(thrower, 0, int.class, int.class, long.class);
@@ -1747,7 +1747,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals("fallback", actual);
     }
 
-    public static void testGuardWithTestMultiThreaded() throws Throwable {
+    public void testGuardWithTestMultiThreaded() throws Throwable {
         MethodHandle test =
                 MethodHandles.lookup().findStatic(MethodHandleCombinersTest.class,
                                                   "testGuardWithTest_test",
@@ -1782,7 +1782,7 @@ public class MethodHandleCombinersTest extends TestCase {
         }
     }
 
-    public static void testReferenceArrayGetterMultiThreaded() throws Throwable {
+    public void testReferenceArrayGetterMultiThreaded() throws Throwable {
         MethodHandle getter = MethodHandles.arrayElementGetter(int[].class);
         MethodHandle setter = MethodHandles.arrayElementSetter(int[].class);
         MethodHandle mh = MethodHandles.lookup().findStatic(
@@ -1798,7 +1798,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(mh.invoke(), value);
     }
 
-    public static void testConstantMultithreaded() throws Throwable {
+    public void testConstantMultithreaded() throws Throwable {
         final double value = 7.77e77;
         MethodHandle constant = MethodHandles.constant(double.class, value);
         MethodHandle mh = MethodHandles.lookup().findStatic(
@@ -1812,7 +1812,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(mh.invoke(value), value);
     }
 
-    public static void testIdentityMultiThreaded() throws Throwable {
+    public void testIdentityMultiThreaded() throws Throwable {
         final char value = 'z';
         MethodHandle identity = MethodHandles.identity(char.class);
         MethodHandle mh = MethodHandles.lookup().findStatic(
@@ -1828,7 +1828,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(mh.invoke(value), value);
     }
 
-    public static void testFilterReturnValueMultiThreaded() throws Throwable {
+    public void testFilterReturnValueMultiThreaded() throws Throwable {
         MethodHandle target = MethodHandles.lookup().findStatic(
             MethodHandleCombinersTest.class, "multiplyByTwo",
             MethodType.methodType(int.class, int.class));
@@ -1847,7 +1847,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(s, Float.toString(f));
     }
 
-    public static void testPermuteArgumentsMultiThreaded() throws Throwable {
+    public void testPermuteArgumentsMultiThreaded() throws Throwable {
         MethodHandle mh = MethodHandles.lookup().findStatic(
             MethodHandleCombinersTest.class, "compareStringAndFloat",
             MethodType.methodType(void.class, String.class, float.class));
@@ -1856,7 +1856,7 @@ public class MethodHandleCombinersTest extends TestCase {
         invokeMultiThreaded(MethodHandles.insertArguments(mh, 0, 2.22f, "2.22"));
     }
 
-    public static void testSpreadInvokerMultiThreaded() throws Throwable {
+    public void testSpreadInvokerMultiThreaded() throws Throwable {
         MethodType methodType = MethodType.methodType(
             int.class, new Class<?>[]{String.class, String.class, String.class});
         MethodHandle delegate = MethodHandles.lookup().findStatic(
@@ -1866,7 +1866,7 @@ public class MethodHandleCombinersTest extends TestCase {
         invokeMultiThreaded(mh);
     }
 
-    public static void testCollectorMultiThreaded() throws Throwable {
+    public void testCollectorMultiThreaded() throws Throwable {
         MethodHandle trailingRef = MethodHandles.lookup().findStatic(
                 MethodHandleCombinersTest.class, "collectCharSequence",
                 MethodType.methodType(int.class, String.class, CharSequence[].class));
@@ -1875,7 +1875,7 @@ public class MethodHandleCombinersTest extends TestCase {
         invokeMultiThreaded(mh);
     }
 
-    public static void testFilterArgumentsMultiThreaded() throws Throwable {
+    public void testFilterArgumentsMultiThreaded() throws Throwable {
         MethodHandle filter1 = MethodHandles.lookup().findStatic(
             MethodHandleCombinersTest.class, "filter1",
             MethodType.methodType(String.class, char.class));
@@ -1894,7 +1894,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(mh.invoke(), expected);
     }
 
-    public static void testCollectArgumentsMultiThreaded() throws Throwable {
+    public void testCollectArgumentsMultiThreaded() throws Throwable {
         MethodHandle filter = MethodHandles.lookup().findStatic(
             MethodHandleCombinersTest.class, "filter",
             MethodType.methodType(String.class, char.class, char.class));
@@ -1909,7 +1909,7 @@ public class MethodHandleCombinersTest extends TestCase {
         invokeMultiThreaded(MethodHandles.insertArguments(mh, 0, collect, "a: a, b: b, c: c+d"));
     }
 
-    public static void testFoldArgumentsMultiThreaded() throws Throwable {
+    public void testFoldArgumentsMultiThreaded() throws Throwable {
         MethodHandle target = MethodHandles.lookup().findStatic(
             MethodHandleCombinersTest.class, "foldTarget",
             MethodType.methodType(String.class, String.class,
@@ -2049,7 +2049,7 @@ public class MethodHandleCombinersTest extends TestCase {
         assertEquals(Double.valueOf(v), d);
     }
 
-    public static void testExplicitCastArguments() throws Throwable {
+    public void testExplicitCastArguments() throws Throwable {
         MethodHandle target = MethodHandles.lookup().findStatic(
             MethodHandleCombinersTest.class, "checkBooleanCast_delegate",
             MethodType.methodType(void.class, boolean.class, boolean.class, boolean.class,
@@ -2251,7 +2251,7 @@ public class MethodHandleCombinersTest extends TestCase {
 
     static Boolean returnBooleanObject(boolean b) { return b; }
 
-    public static void testExplicitCastReturnValues() throws Throwable {
+    public void testExplicitCastReturnValues() throws Throwable {
         MethodHandle target = MethodHandles.lookup().findStatic(
             MethodHandleCombinersTest.class, "returnVoid", MethodType.methodType(void.class));
         assertEquals(false,
