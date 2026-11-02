@@ -396,10 +396,8 @@ class DateTimeTextProvider {
             //         styleMap.put(textStyle, map);
             //     }
             // }
-            DateFormatSymbols symbols = DateFormatSymbols.getInstance(locale);
-
       // For desugar: Include standalone formats.
-      DesugarDateTimeTextProviderHelper.populateMonthStyleMap(styleMap, symbols, locale);
+      DesugarDateTimeTextProviderHelper.populateMonthStyleMap(styleMap, locale);
 
       // Map<Long, String> longMap = new HashMap<>();
       // Map<Long, String> narrowMap = new HashMap<>();

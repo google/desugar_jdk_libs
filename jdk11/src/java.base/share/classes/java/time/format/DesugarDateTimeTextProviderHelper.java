@@ -21,9 +21,9 @@
 
 package java.time.format;
 
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -36,10 +36,9 @@ public class DesugarDateTimeTextProviderHelper {
 
   public static void populateMonthStyleMap(
       Map<TextStyle, Map<Long, String>> styleMapMap,
-      DateFormatSymbols dateFormatSymbols,
       Locale loc) {
 
-    int numMonth = dateFormatSymbols.getMonths().length;
+    int numMonth = Month.values().length;
 
     Map<Long, String> longStandAloneMap = new LinkedHashMap<>();
     Map<Long, String> narrowStandAloneMap = new LinkedHashMap<>();
@@ -51,7 +50,8 @@ public class DesugarDateTimeTextProviderHelper {
     for (long i = 1; i <= numMonth; i++) {
       String longName = computeStandaloneMonthName(i, longMonth, loc);
       longStandAloneMap.put(i, longName);
-      narrowStandAloneMap.put(i, firstCodePoint(longName));
+      String narrowName = computeNarrowMonthName(i, longName, loc);
+      narrowStandAloneMap.put(i, narrowName);
       String shortName = computeStandaloneMonthName(i, shortMonth, loc);
       shortStandAloneMap.put(i, shortName);
     }
@@ -65,6 +65,19 @@ public class DesugarDateTimeTextProviderHelper {
       styleMapMap.put(TextStyle.NARROW, narrowStandAloneMap);
       styleMapMap.put(TextStyle.SHORT, shortStandAloneMap);
     }
+  }
+
+  private static String computeNarrowMonthName(long id, String longName, Locale loc) {
+    String narrowMonth = "LLLLL";
+    String narrowName = computeStandaloneMonthName(id, narrowMonth, loc);
+    if (!narrowName.equals(longName)) {
+      return narrowName;
+    }
+    // Fallback for Android API < 19 where "LLLLL" is not supported and returns the long name.
+    if ("zh".equals(loc.getLanguage())) {
+      return String.valueOf(id);
+    }
+    return firstCodePoint(longName);
   }
 
   private static String computeStandaloneMonthName(long id, String standalonePattern, Locale loc) {
