@@ -23,6 +23,7 @@ package java.time.format;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -89,10 +90,9 @@ public class DesugarDateTimeTextProviderHelper {
 
   public static void populateDayOfWeekStyleMap(
       Map<TextStyle, Map<Long, String>> styleMapMap,
-      DateFormatSymbols dateFormatSymbols,
       Locale loc) {
 
-    int numDaysOfWeek = dateFormatSymbols.getWeekdays().length;
+    int numDaysOfWeek = DayOfWeek.values().length;
 
     Map<Long, String> longStandAloneMap = new LinkedHashMap<>();
     Map<Long, String> narrowStandAloneMap = new LinkedHashMap<>();
@@ -101,14 +101,11 @@ public class DesugarDateTimeTextProviderHelper {
     String longDay = "cccc";
     String shortDay = "ccc";
 
-    boolean useLastCodePointAsNarrowName =
-        loc == Locale.SIMPLIFIED_CHINESE || loc == Locale.TRADITIONAL_CHINESE;
-
     for (long i = 1; i <= numDaysOfWeek; i++) {
       String longName = computeStandaloneDayOfWeekName(i, longDay, loc);
       longStandAloneMap.put(i, longName);
-      narrowStandAloneMap.put(
-          i, useLastCodePointAsNarrowName ? lastCodePoint(longName) : firstCodePoint(longName));
+      String narrowName = computeNarrowDayOfWeekName(i, longName, loc);
+      narrowStandAloneMap.put(i, narrowName);
       String shortName = computeStandaloneDayOfWeekName(i, shortDay, loc);
       shortStandAloneMap.put(i, shortName);
     }
@@ -122,6 +119,16 @@ public class DesugarDateTimeTextProviderHelper {
       styleMapMap.put(TextStyle.NARROW, narrowStandAloneMap);
       styleMapMap.put(TextStyle.SHORT, shortStandAloneMap);
     }
+  }
+
+  private static String computeNarrowDayOfWeekName(long id, String longName, Locale loc) {
+    String narrowDay = "ccccc";
+    String narrowName = computeStandaloneDayOfWeekName(id, narrowDay, loc);
+    if (!narrowName.equals(longName)) {
+      return narrowName;
+    }
+    // Fallback for Android API < 19 where "ccccc" is not supported and returns the long name.
+    return "zh".equals(loc.getLanguage()) ? lastCodePoint(longName) : firstCodePoint(longName);
   }
 
   private static String computeStandaloneDayOfWeekName(

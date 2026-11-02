@@ -457,10 +457,8 @@ class DateTimeTextProvider {
             //         styleMap.put(textStyle, map);
             //     }
             // }
-            DateFormatSymbols symbols = DateFormatSymbols.getInstance(locale);
-
       // For desugar: Include standalone formats.
-      DesugarDateTimeTextProviderHelper.populateDayOfWeekStyleMap(styleMap, symbols, locale);
+      DesugarDateTimeTextProviderHelper.populateDayOfWeekStyleMap(styleMap, locale);
 
       // Map<Long, String> longMap = new HashMap<>();
       // String[] longSymbols = symbols.getWeekdays();
